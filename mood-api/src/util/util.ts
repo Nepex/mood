@@ -1,0 +1,64 @@
+import { BadRequestException } from '@nestjs/common';
+import { Logger } from './logger';
+
+const logger = new Logger('Util');
+
+export class Util {
+  public static getRegex(type: string): RegExp {
+    switch (type) {
+      case 'alphanumeric':
+        return new RegExp('^[a-zA-Z0-9_]*$');
+      case 'hashtag':
+        return new RegExp('(#+[a-zA-Z0-9(_)]{1,})');
+      case 'name':
+        return new RegExp('^[a-zA-Z0-9]*$');
+      case 'email':
+        return new RegExp('^[^@]+@[^@]+.[^@]+$');
+    }
+  }
+
+  public static sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  public static isNewEntity(entity: any): boolean {
+    if (!entity.id && !entity.uid) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public static removeObjProps(object: any, propsToRemove: string[]): any {
+    const newObject = { ...object };
+    const keys = Object.keys(object);
+
+    for (const propToRemove of propsToRemove) {
+      if (keys.includes(propToRemove)) {
+        delete newObject[propToRemove];
+      }
+    }
+  }
+
+  public static checkRequiredFields(object: any, props: string[]) {
+    const keys = Object.keys(object);
+
+    for (const prop of props) {
+      if (!keys.includes(prop)) {
+        throw new BadRequestException(`Missing required field: ${prop}`);
+      }
+    }
+  }
+}
+
+export class TypeUtil<T> {
+  type: T;
+
+  constructor(value: T) {
+    this.type = value;
+  }
+
+  getGenericName(): string {
+    return this.type.constructor.name;
+  }
+}
