@@ -17,7 +17,7 @@ import {
 
 import { UidValidator } from '../util';
 import { UserRolesEntity } from '../user-roles/user-roles.entity';
-import { UserSettings } from '../user-settings/user-settings.entity';
+import { UserSettingsEntity } from '../user-settings/user-settings.entity';
 
 @Entity()
 export class UserEntity {
@@ -50,8 +50,8 @@ export class UserEntity {
   @JoinColumn({
     name: 'user_settings_id',
   })
-  @OneToOne(() => UserSettings)
-  userSettings: UserSettings;
+  @OneToOne(() => UserSettingsEntity)
+  userSettings: UserSettingsEntity;
 
   @Column({ nullable: false, length: 60, unique: true, update: false })
   @IsEmail()
