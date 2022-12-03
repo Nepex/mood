@@ -1,18 +1,19 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Logger } from './logger';
+import { RegexType } from './types';
 
 const logger = new Logger('Util');
 
 export class Util {
-  public static getRegex(type: string): RegExp {
+  public static getRegex(type: RegexType): RegExp {
     switch (type) {
-      case 'alphanumeric':
+      case RegexType.Alphanumeric:
         return new RegExp('^[a-zA-Z0-9_]*$');
-      case 'hashtag':
+      case RegexType.LeadingHashtag:
         return new RegExp('(#+[a-zA-Z0-9(_)]{1,})');
-      case 'name':
+      case RegexType.Name:
         return new RegExp('^[a-zA-Z0-9]*$');
-      case 'email':
+      case RegexType.Email:
         return new RegExp('^[^@]+@[^@]+.[^@]+$');
     }
   }
@@ -47,6 +48,15 @@ export class Util {
       if (!keys.includes(prop)) {
         throw new BadRequestException(`Missing required field: ${prop}`);
       }
+    }
+  }
+
+  public static validateUserSelfUpdate(
+    reqUserId: number,
+    entityUserId: number,
+  ) {
+    if (reqUserId !== entityUserId) {
+      throw new UnauthorizedException('Incorrect user');
     }
   }
 }

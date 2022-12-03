@@ -1,20 +1,27 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
 import { BaseService } from '../base.service';
-import { ENTITY } from '../util';
 import { QueryService } from '../query/query.service';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { UserModel } from './user.model';
+import { UserRolesService } from '../user-roles/user-roles.service';
+import { UserSettingsService } from '../user-settings/user-settings.service';
 
 @Injectable()
-export class UserService extends BaseService<User> {
+export class UserService extends BaseService<UserEntity> {
   constructor(
-    @InjectRepository(User)
-    public userRepository: Repository<ENTITY<User>>,
+    @InjectRepository(UserEntity)
+    public userRepository: Repository<UserEntity>,
+
+    @Inject(forwardRef(() => UserRolesService))
+    public userRolesService: UserRolesService,
+
+    @Inject(forwardRef(() => UserSettingsService))
+    public userSettingsService: UserSettingsService,
 
     @Inject(forwardRef(() => QueryService))
     public queryService: QueryService,
@@ -22,8 +29,8 @@ export class UserService extends BaseService<User> {
     super(userRepository, queryService);
   }
 
-  async toModel(entity: User): Promise<UserModel> {
-    let model = plainToClass(UserModel, entity);
+  async toModel(entity: UserEntity): Promise<UserModel> {
+    let model = plainToInstance(UserModel, entity);
     const userRoles = entity.userRolesId
       ? await this.userRolesService.findById(entity.userRolesId)
       : null;
@@ -40,7 +47,7 @@ export class UserService extends BaseService<User> {
     return model;
   }
 
-  async toModelArray(entities: User[]): Promise<UserModel[]> {
+  async toModelArray(entities: UserEntity[]): Promise<UserModel[]> {
     return await Promise.all(entities.map((entity) => this.toModel(entity)));
   }
 }

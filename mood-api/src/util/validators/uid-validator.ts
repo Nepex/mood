@@ -2,13 +2,15 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
+import { RegexType } from '../types';
 import { Util } from '../util';
 
 @ValidatorConstraint({ name: 'uidValidator', async: false })
 export class UidValidator implements ValidatorConstraintInterface {
   validate(text: string) {
-    const alphaRegex = Util.getRegex('alphanumeric');
-    return alphaRegex.test(text) && text.length === 32;
+    return (
+      Util.getRegex(RegexType.Alphanumeric).test(text) && text.length === 32
+    );
   }
 
   defaultMessage() {

@@ -25,10 +25,10 @@ export class UserModel {
   readonly settings: UserSettingsModel;
 
   @Expose()
-  readonly createdTs: Date;
+  readonly createdAt: Date;
 
   @Expose()
-  readonly updatedTs: Date;
+  readonly updatedAt: Date;
 
   constructor(model?: Partial<UserModel>) {
     if (model) {

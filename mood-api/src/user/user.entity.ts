@@ -15,12 +15,12 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { UidValidator } from '../util/validators/uid-validator';
-import { UserRoles } from '../user-roles/user-roles.entity';
+import { UidValidator } from '../util';
+import { UserRolesEntity } from '../user-roles/user-roles.entity';
 import { UserSettings } from '../user-settings/user-settings.entity';
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -38,8 +38,8 @@ export class User {
   @JoinColumn({
     name: 'user_roles_id',
   })
-  @OneToOne(() => UserRoles)
-  userRoles: UserRoles;
+  @OneToOne(() => UserRolesEntity)
+  userRoles: UserRolesEntity;
 
   @Column({ name: 'user_settings_id', nullable: true, unique: true })
   @IsNumber()
@@ -50,7 +50,7 @@ export class User {
   @JoinColumn({
     name: 'user_settings_id',
   })
-  @OneToOne((type) => UserSettings)
+  @OneToOne(() => UserSettings)
   userSettings: UserSettings;
 
   @Column({ nullable: false, length: 60, unique: true, update: false })
@@ -74,7 +74,7 @@ export class User {
   })
   @IsDate()
   @IsOptional()
-  createdTs: Date;
+  createdAt: Date;
 
   @Column({
     type: 'timestamptz',
@@ -84,9 +84,9 @@ export class User {
   })
   @IsDate()
   @IsOptional()
-  updatedTs: Date;
+  updatedAt: Date;
 
-  constructor(entity?: Partial<User>) {
+  constructor(entity?: Partial<UserEntity>) {
     if (entity) {
       Object.assign(this, entity);
     }

@@ -1,22 +1,22 @@
-// import { Injectable } from '@nestjs/common';
-// import { PassportStrategy } from '@nestjs/passport';
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 
-// import { ExtractJwt, Strategy } from 'passport-jwt';
-// import { Role } from '../user-roles/user-roles.model';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Role } from '../user-roles/user-roles.model';
 
-// import { jwtConstants } from './utils';
+import { jwtConstants } from './util';
 
-// @Injectable()
-// export class UserStrategy extends PassportStrategy(Strategy) {
-//   constructor() {
-//     super({
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       ignoreExpiration: false,
-//       secretOrKey: jwtConstants.secret,
-//     });
-//   }
+@Injectable()
+export class UserStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: jwtConstants.secret,
+    });
+  }
 
-//   async validate(payload: { id: string; email: string; roles: Role[] }) {
-//     return { id: payload.id, email: payload.email, roles: payload.roles };
-//   }
-// }
+  async validate(payload: { id: string; email: string; roles: Role[] }) {
+    return { id: payload.id, email: payload.email, roles: payload.roles };
+  }
+}

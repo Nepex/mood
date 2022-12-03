@@ -38,3 +38,10 @@ export interface PagedResponse<T> {
 export interface KeyVals {
   [key: string]: any;
 }
+
+export enum RegexType {
+  Alphanumeric = 'alphanumeric',
+  LeadingHashtag = 'leading-hashtag',
+  Name = 'name',
+  Email = 'email',
+}

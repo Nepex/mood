@@ -31,7 +31,7 @@ export abstract class BaseService<ENTITY> {
     public queryService: QueryService,
   ) {}
 
-  // Returns a paged response of target entity matching provided filters
+  /** Returns a paged response of target entity matching provided filters */
   async search(
     query: FilterQueryOpts<ENTITY> | string,
   ): Promise<PagedResponse<ENTITY>> {
@@ -57,7 +57,7 @@ export abstract class BaseService<ENTITY> {
     };
   }
 
-  // Returns an array of target entity matching provided filters
+  /** Returns an array of target entity matching provided filters */
   async findAll(
     query: FilterQueryOpts<ENTITY> | string,
   ): Promise<ENTITY[] | number> {
@@ -87,13 +87,13 @@ export abstract class BaseService<ENTITY> {
     return res;
   }
 
-  // Returns a number / count of target entity matching provided filters
+  /** Returns a number / count of target entity matching provided filters */
   async count(filters: FilterOpts<ENTITY>): Promise<number> {
     // execute query, return result
     return (await this.findAll({ filters, countOnly: true })) as number;
   }
 
-  // Returns a single record of target entity matching provided filters
+  /** Returns a single record of target entity matching provided filters */
   async findOne(filters: FilterOpts<ENTITY>): Promise<ENTITY> {
     // build filters, execute query, return result
     const findOptions = await this.queryService.buildFindOptions<ENTITY>({
@@ -106,7 +106,7 @@ export abstract class BaseService<ENTITY> {
     return res;
   }
 
-  // Returns a single record of target entity by id
+  /** Returns a single record of target entity by id */
   async findById(id: number): Promise<ENTITY> {
     const res = await this.repo.findOne({
       where: { id: id } as ENTITY,
@@ -117,7 +117,7 @@ export abstract class BaseService<ENTITY> {
     return res;
   }
 
-  // Returns a single record of target entity by uid
+  /** Returns a single record of target entity by uid */
   async findByUid(uid: string): Promise<ENTITY> {
     const res = await this.repo.findOne({
       where: {
@@ -130,10 +130,13 @@ export abstract class BaseService<ENTITY> {
     return res;
   }
 
+  /** Saves new OR updates existing entity based on passed in data
+   *  Include id or uid to perform an update, otherwise save a new entity
+   */
   async save(entity: Partial<ENTITY>): Promise<ENTITY> {
     let entityToSave: ENTITY;
 
-    // validate
+    // perform additional validation
     entity = await this.validate(entity as ENTITY);
 
     if (Util.isNewEntity(entity)) {
@@ -152,9 +155,7 @@ export abstract class BaseService<ENTITY> {
       }
 
       // tag 'updatedAt' with a current timestamp
-      if ((<Base<ENTITY>>entityToSave).updatedAt) {
-        (<Base<ENTITY>>entityToSave).updatedAt = new Date();
-      }
+      (<Base<ENTITY>>entityToSave).updatedAt = new Date();
 
       // merge in the provided update
       entityToSave = { ...entityToSave, ...entity };
@@ -171,7 +172,7 @@ export abstract class BaseService<ENTITY> {
     return savedEntity;
   }
 
-  // Deletes a single record of target entity
+  /** Deletes a single record of target entity */
   async remove(entity: ENTITY) {
     // execute query
     await this.repo.remove(entity);
@@ -182,16 +183,18 @@ export abstract class BaseService<ENTITY> {
     );
   }
 
-  // Deletes a single record of target entity by id
+  /** Deletes a single record of target entity by id */
   async removeById(id: number) {
+    // find entity, then call remove
     const entity = await this.repo.findOne({
       where: { id } as ENTITY,
     } as FindOneOptions<ENTITY>);
     await this.remove(entity);
   }
 
-  // Deletes a single record of target entity by uid
+  /** Deletes a single record of target entity by uid */
   async removeByUid(uid: string) {
+    // find entity, then call remove
     const entity = await this.repo.findOne({
       where: {
         uid: uid,
@@ -201,8 +204,9 @@ export abstract class BaseService<ENTITY> {
     await this.remove(entity);
   }
 
-  // Runs additional validation on target entity
+  /** Runs additional validation on target entity */
   async validate(entity: Partial<ENTITY>) {
+    // TODO
     return entity;
   }
 }

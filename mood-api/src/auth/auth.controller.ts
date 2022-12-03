@@ -10,15 +10,11 @@ import {
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { Credentials, RequestToken, Session } from '../utils/types';
-import { Logger } from '../utils/logger';
-import { RequestValidationService } from './request-validation.service';
-import { User } from '../user/user.entity';
+import { Credentials, Logger, Session } from '../util';
 import { UserGuard } from './user.guard';
-import { UserJwtPayload } from './utils';
+import { UserJwtPayload } from './util';
 import { UserModel } from '../user/user.model';
 import { UserService } from '../user/user.service';
-import { Util } from '../utils/util';
 
 const logger = new Logger('AuthController');
 
@@ -29,9 +25,6 @@ export class AuthController {
 
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
-
-    @Inject(forwardRef(() => RequestValidationService))
-    private readonly validationService: RequestValidationService,
   ) {}
 
   @UseGuards(UserGuard)
@@ -50,7 +43,7 @@ export class AuthController {
 
   @Post('register')
   async create(@Body() user: Partial<UserModel>) {
-    await this.authService.register(user as User | any);
-    logger.success(`${user.email} registered`);
+    await this.authService.register(user);
+    logger.success(`create(): ${user.email} registered`);
   }
 }

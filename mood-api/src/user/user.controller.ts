@@ -1,8 +1,9 @@
-import { Controller, forwardRef, Inject, UseGuards } from '@nestjs/common';
+import { Body, Controller, Put, Request, UseGuards } from '@nestjs/common';
 
-import { Logger } from '../../utils/logger';
-import { RequestValidationService } from '../auth/request-validation.service';
+import { Logger, Util } from '../util';
 import { UserGuard } from '../auth/user.guard';
+import { UserJwtPayload } from '../auth/util';
+import { UserModel } from './user.model';
 import { UserService } from './user.service';
 
 const logger = new Logger('UserController');
@@ -10,10 +11,17 @@ const logger = new Logger('UserController');
 @UseGuards(UserGuard)
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
+  constructor(private readonly userService: UserService) {}
 
-    @Inject(forwardRef(() => RequestValidationService))
-    private readonly validationService: RequestValidationService,
-  ) {}
+  @Put(':uid')
+  async update(
+    @Request() req: UserJwtPayload,
+    @Body() payload: Partial<UserModel>,
+  ): Promise<UserModel> {
+    const user = await this.userService.findByUid(payload.uid);
+    Util.validateUserSelfUpdate(req.user.id, user.id);
+
+    const entity = await this.userService.save(payload);
+    return await this.userService.toModel(entity);
+  }
 }
