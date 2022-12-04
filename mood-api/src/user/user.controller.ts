@@ -21,7 +21,6 @@ const logger = new Logger('UserController');
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(UserGuard)
   @Get('me')
   async me(@Request() req: UserJwtPayload): Promise<UserModel> {
     return await this.userService.toModel(
@@ -36,6 +35,7 @@ export class UserController {
     @Param() params: KeyVals,
   ): Promise<UserModel> {
     let userEntity = await this.userService.findByUid(params.uid);
+    Util.validateExists(userEntity);
     Util.validateUserSelfUpdate(req.user.id, userEntity.id);
 
     userEntity = await this.userService.save(payload);

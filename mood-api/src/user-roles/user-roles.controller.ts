@@ -30,6 +30,7 @@ export class UserRolesController {
   ): Promise<UserRolesModel> {
     Util.checkRequiredFields(payload, ['uid']);
     const userRolesEntity = await this.userRolesService.save(payload);
+    Util.validateExists(userRolesEntity);
     return this.userRolesService.toModel(userRolesEntity);
   }
 }

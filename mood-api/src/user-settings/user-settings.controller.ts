@@ -35,6 +35,7 @@ export class UserSettingsController {
     @Param() params: KeyVals,
   ): Promise<UserSettingsModel> {
     let settings = await this.userSettingsService.findByUid(params.uid);
+    Util.validateExists(settings);
     Util.validateUserSelfUpdate(req.user.id, settings.userId);
 
     settings = await this.userSettingsService.save(payload);

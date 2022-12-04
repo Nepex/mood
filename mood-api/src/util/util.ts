@@ -59,6 +59,12 @@ export class Util {
       throw new UnauthorizedException('Incorrect user');
     }
   }
+
+  public static validateExists(entity: any) {
+    if (!entity) {
+      throw new BadRequestException('Unable to find record');
+    }
+  }
 }
 
 export class TypeUtil<T> {
