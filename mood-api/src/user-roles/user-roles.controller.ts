@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Put, UseGuards, Request } from '@nestjs/common';
-import { AdminGuard } from '../auth/admin-guard';
+import { AdminGuard } from '../auth/guards/admin-guard';
 import { UserJwtPayload } from '../auth/util';
 
-import { Logger } from '../util';
-import { UserGuard } from '../auth/user.guard';
+import { Logger, Util } from '../util';
+import { UserGuard } from '../auth/guards/user.guard';
 import { UserRolesModel } from './user-roles.model';
 import { UserRolesService } from './user-roles.service';
 
@@ -28,8 +28,8 @@ export class UserRolesController {
   async update(
     @Body() payload: Partial<UserRolesModel>,
   ): Promise<UserRolesModel> {
-    // Must be an admin to update, so no need to validate
-    const entity = await this.userRolesService.save(payload);
-    return this.userRolesService.toModel(entity);
+    Util.checkRequiredFields(payload, ['uid']);
+    const userRolesEntity = await this.userRolesService.save(payload);
+    return this.userRolesService.toModel(userRolesEntity);
   }
 }

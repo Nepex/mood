@@ -22,7 +22,7 @@ import { UserRolesModule } from './user-roles/user-roles.module';
       // password: 'root',
       database: 'mood',
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      // synchronize: true
     }),
   ],
   controllers: [AppController],

@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -38,10 +39,10 @@ export class AuthService {
       throw new BadRequestException('Invalid email or password');
     }
 
-    const isCorrectPassword = await bcrypt.compare(password, user?.password);
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (!isCorrectPassword) {
-      throw new BadRequestException('Invalid email or password');
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     return user;
@@ -49,8 +50,8 @@ export class AuthService {
 
   async login(user: UserEntity): Promise<Session> {
     const userRoles = await this.userRolesService.findOne({ userId: user.id });
-
     const payload = { email: user.email, id: user.id, roles: userRoles.roles };
+
     return {
       token: this.jwtService.sign(payload),
     };
@@ -59,46 +60,34 @@ export class AuthService {
   async register(user: Partial<UserEntity>) {
     user.email = user.email.toLocaleLowerCase();
 
-    if (await this.doesEmailAlreadyExist(user.email)) {
+    if (
+      await this.userService.findOne({
+        email: user.email,
+      })
+    ) {
       throw new BadRequestException('Email already exists');
     }
 
-    const newUser = new UserEntity({
-      email: user.email,
-      password: await bcrypt.hash(user.password, 10),
-    });
-
-    await this.createUser(newUser);
-  }
-
-  async doesEmailAlreadyExist(email: string): Promise<boolean> {
-    const existingEmail = await this.userService.findOne({
-      email,
-    });
-
-    return existingEmail ? true : false;
+    await this.createUser(
+      new UserEntity({
+        email: user.email,
+        password: await bcrypt.hash(user.password, 10),
+      }),
+    );
   }
 
   async createUser(newUser: UserEntity) {
     const user = await this.userService.save(newUser);
 
-    const userRoles = await this.userRolesService.save(
+    await this.userRolesService.save(
       new UserRolesEntity({
         userId: user.id,
       }),
     );
 
-    const userSettings = await this.userSettingsService.save(
+    await this.userSettingsService.save(
       new UserSettingsEntity({
         userId: user.id,
-      }),
-    );
-
-    await this.userService.save(
-      new UserEntity({
-        id: user.id,
-        userRolesId: userRoles.id,
-        userSettingsId: userSettings.id,
       }),
     );
   }

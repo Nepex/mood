@@ -31,12 +31,12 @@ export class UserService extends BaseService<UserEntity> {
 
   async toModel(entity: UserEntity): Promise<UserModel> {
     let model = plainToInstance(UserModel, entity);
-    const userRoles = entity.userRolesId
-      ? await this.userRolesService.findById(entity.userRolesId)
-      : null;
-    const userSettings = entity.userSettingsId
-      ? await this.userSettingsService.findById(entity.userSettingsId)
-      : null;
+    const userRoles = await this.userRolesService.findOne({
+      userId: entity.id,
+    });
+    const userSettings = await this.userSettingsService.findOne({
+      userId: entity.id,
+    });
 
     model = new UserModel({
       ...model,

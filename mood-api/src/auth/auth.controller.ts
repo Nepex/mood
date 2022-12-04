@@ -1,39 +1,14 @@
-import {
-  Body,
-  Controller,
-  forwardRef,
-  Get,
-  Inject,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { Credentials, Logger, Session } from '../util';
-import { UserGuard } from './user.guard';
-import { UserJwtPayload } from './util';
 import { UserModel } from '../user/user.model';
-import { UserService } from '../user/user.service';
 
 const logger = new Logger('AuthController');
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-
-    @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService,
-  ) {}
-
-  @UseGuards(UserGuard)
-  @Get('me')
-  async me(@Request() req: UserJwtPayload): Promise<UserModel> {
-    return await this.userService.toModel(
-      await this.userService.findById(req.user.id),
-    );
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   async login(@Body() req: Credentials): Promise<Session> {

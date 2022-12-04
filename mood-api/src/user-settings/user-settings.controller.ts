@@ -1,7 +1,15 @@
-import { Body, Controller, Get, Put, Request, UseGuards } from '@nestjs/common';
-import { Util } from 'src/util';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 
-import { UserGuard } from '../auth/user.guard';
+import { KeyVals, Util } from '../util';
+import { UserGuard } from '../auth/guards/user.guard';
 import { UserJwtPayload } from '../auth/util';
 import { UserSettingsModel } from './user-settings.model';
 import { UserSettingsService } from './user-settings.service';
@@ -24,11 +32,12 @@ export class UserSettingsController {
   async update(
     @Request() req: UserJwtPayload,
     @Body() payload: Partial<UserSettingsModel>,
+    @Param() params: KeyVals,
   ): Promise<UserSettingsModel> {
-    const settings = await this.userSettingsService.findByUid(payload.uid);
+    let settings = await this.userSettingsService.findByUid(params.uid);
     Util.validateUserSelfUpdate(req.user.id, settings.userId);
 
-    const entity = await this.userSettingsService.save(payload);
-    return this.userSettingsService.toModel(entity);
+    settings = await this.userSettingsService.save(payload);
+    return this.userSettingsService.toModel(settings);
   }
 }

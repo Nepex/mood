@@ -7,9 +7,9 @@ import { Util } from '../util';
 
 @ValidatorConstraint({ name: 'uidValidator', async: false })
 export class UidValidator implements ValidatorConstraintInterface {
-  validate(text: string) {
+  validate(value: string) {
     return (
-      Util.getRegex(RegexType.Alphanumeric).test(text) && text.length === 32
+      Util.getRegex(RegexType.Alphanumeric).test(value) && value.length === 32
     );
   }
 

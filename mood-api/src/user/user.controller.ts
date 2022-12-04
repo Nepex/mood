@@ -1,7 +1,15 @@
-import { Body, Controller, Put, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 
-import { Logger, Util } from '../util';
-import { UserGuard } from '../auth/user.guard';
+import { KeyVals, Logger, Util } from '../util';
+import { UserGuard } from '../auth/guards/user.guard';
 import { UserJwtPayload } from '../auth/util';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
@@ -9,19 +17,28 @@ import { UserService } from './user.service';
 const logger = new Logger('UserController');
 
 @UseGuards(UserGuard)
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(UserGuard)
+  @Get('me')
+  async me(@Request() req: UserJwtPayload): Promise<UserModel> {
+    return await this.userService.toModel(
+      await this.userService.findById(req.user.id),
+    );
+  }
 
   @Put(':uid')
   async update(
     @Request() req: UserJwtPayload,
     @Body() payload: Partial<UserModel>,
+    @Param() params: KeyVals,
   ): Promise<UserModel> {
-    const user = await this.userService.findByUid(payload.uid);
-    Util.validateUserSelfUpdate(req.user.id, user.id);
+    let userEntity = await this.userService.findByUid(params.uid);
+    Util.validateUserSelfUpdate(req.user.id, userEntity.id);
 
-    const entity = await this.userService.save(payload);
-    return await this.userService.toModel(entity);
+    userEntity = await this.userService.save(payload);
+    return await this.userService.toModel(userEntity);
   }
 }
