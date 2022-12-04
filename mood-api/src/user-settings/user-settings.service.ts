@@ -28,4 +28,8 @@ export class UserSettingsService extends BaseService<UserSettingsEntity> {
   toModelArray(entities: UserSettingsEntity[]): UserSettingsModel[] {
     return entities.map((entity) => this.toModel(entity));
   }
+
+  async validate(entity: UserSettingsEntity) {
+    return entity;
+  }
 }

@@ -50,4 +50,8 @@ export class UserService extends BaseService<UserEntity> {
   async toModelArray(entities: UserEntity[]): Promise<UserModel[]> {
     return await Promise.all(entities.map((entity) => this.toModel(entity)));
   }
+
+  async validate(entity: UserEntity) {
+    return entity;
+  }
 }
