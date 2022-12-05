@@ -75,3 +75,22 @@ create table public.journal_entry (
 		references public.user (id) on delete cascade
 );
 create index ix_journal_entry_user_id on public.journal_entry (user_id);
+
+
+-- Create journal day settings
+create table public.journal_day_settings (
+	id serial not null primary key,
+	uid varchar(32) not null default public.uid(),
+	user_id integer not null,
+	notes varchar(1500) default null,
+	color varchar(7) not null,
+	day varchar(10) not null,
+	created_at timestamptz not null default CURRENT_TIMESTAMP,
+	updated_at timestamptz not null default CURRENT_TIMESTAMP,
+
+	constraint "uq_journal_day_settings_uid" unique (uid),
+	constraint "uq_journal_day_settings_user_id_day" unique (user_id, day),
+	constraint "fk_journal_day_settings_user_id" foreign key (user_id) 
+		references public.user (id) on delete cascade
+);
+create index ix_journal_day_settings_user_id on public.journal_day_settings (user_id);

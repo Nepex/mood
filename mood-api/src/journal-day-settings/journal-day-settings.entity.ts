@@ -1,36 +1,43 @@
 import {
   IsDate,
-  IsEmail,
+  IsHexColor,
   IsNumber,
   IsOptional,
+  IsString,
   MaxLength,
-  MinLength,
   Validate,
 } from 'class-validator';
 import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm';
 
-import { UidValidator } from '../util';
+import { DayDateValidator, UidValidator } from '../util';
 
-@Entity('user')
-export class UserEntity {
+@Entity('journal_day_settings')
+export class JournalDaySettingsEntity {
   @IsNumber()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Validate(UidValidator)
+  @IsString()
   @IsOptional()
   uid: string;
 
-  @IsEmail()
-  @MinLength(5)
-  @MaxLength(60)
+  @Column({ name: 'user_id' })
+  @IsNumber()
   @IsOptional()
-  email: string;
+  userId: number;
 
-  @MinLength(8)
-  @MaxLength(255)
+  @Validate(DayDateValidator)
   @IsOptional()
-  password: string;
+  day: string;
+
+  @MaxLength(1500)
+  @IsOptional()
+  notes: string;
+
+  @IsHexColor()
+  @IsOptional()
+  color: string;
 
   @Column({ name: 'created_at' })
   @IsDate()
@@ -42,7 +49,7 @@ export class UserEntity {
   @IsOptional()
   updatedAt: Date;
 
-  constructor(entity?: Partial<UserEntity>) {
+  constructor(entity?: Partial<JournalDaySettingsEntity>) {
     if (entity) {
       Object.assign(this, entity);
     }

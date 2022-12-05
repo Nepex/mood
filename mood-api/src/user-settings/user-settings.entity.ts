@@ -5,21 +5,22 @@ import {
   IsNumber,
   IsEnum,
 } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { UidValidator } from '../util';
 import { ColorTheme } from './user-settings.model';
 
 @Entity('user_settings')
 export class UserSettingsEntity {
-  @PrimaryGeneratedColumn()
   @IsNumber()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
 
+  @Column({ name: 'user_id' })
   @IsNumber()
   @IsOptional()
   userId: number;
@@ -28,10 +29,12 @@ export class UserSettingsEntity {
   @IsEnum(ColorTheme)
   colorTheme: ColorTheme;
 
+  @Column({ name: 'created_at' })
   @IsDate()
   @IsOptional()
   createdAt: Date;
 
+  @Column({ name: 'updated_at' })
   @IsDate()
   @IsOptional()
   updatedAt: Date;

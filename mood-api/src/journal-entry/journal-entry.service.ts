@@ -13,12 +13,12 @@ import { QueryService } from '../query/query.service';
 export class JournalEntryService extends BaseService<JournalEntryEntity> {
   constructor(
     @InjectRepository(JournalEntryEntity)
-    public userSettingsRepository: Repository<JournalEntryEntity>,
+    public journalEntryRepository: Repository<JournalEntryEntity>,
 
     @Inject(forwardRef(() => QueryService))
     public queryService: QueryService,
   ) {
-    super(userSettingsRepository, queryService);
+    super(journalEntryRepository, queryService);
   }
 
   toModel(entity: JournalEntryEntity): JournalEntryModel {

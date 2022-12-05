@@ -5,21 +5,22 @@ import {
   IsOptional,
   Validate,
 } from 'class-validator';
-import { PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm';
 
 import { Role } from './user-roles.model';
 import { UidValidator } from '../util';
 
 @Entity('user_roles')
 export class UserRolesEntity {
-  @PrimaryGeneratedColumn()
   @IsNumber()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
 
+  @Column({ name: 'user_id' })
   @IsNumber()
   @IsOptional()
   userId: number;
@@ -28,10 +29,12 @@ export class UserRolesEntity {
   @IsEnum(Role, { each: true })
   roles: Role[];
 
+  @Column({ name: 'created_at' })
   @IsDate()
   @IsOptional()
   createdAt: Date;
 
+  @Column({ name: 'updated_at' })
   @IsDate()
   @IsOptional()
   updatedAt: Date;

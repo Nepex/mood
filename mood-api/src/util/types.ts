@@ -44,4 +44,5 @@ export enum RegexType {
   LeadingHashtag = 'leading-hashtag',
   Name = 'name',
   Email = 'email',
+  DayDate = 'day-date',
 }

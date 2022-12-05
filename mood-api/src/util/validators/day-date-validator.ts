@@ -5,17 +5,15 @@ import {
 import { RegexType } from '../types';
 import { Util } from '../util';
 
-@ValidatorConstraint({ name: 'uidValidator', async: false })
-export class UidValidator implements ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'dayDateValidator', async: false })
+export class DayDateValidator implements ValidatorConstraintInterface {
   validate(value: string) {
     if (typeof value !== 'string') return false;
 
-    return (
-      Util.getRegex(RegexType.Alphanumeric).test(value) && value.length === 32
-    );
+    return Util.getRegex(RegexType.DayDate).test(value);
   }
 
   defaultMessage() {
-    return 'Uid is not a valid uid';
+    return 'Day is not proper MM/DD/YYYY format';
   }
 }

@@ -9,21 +9,22 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm';
 
 import { Emoji } from './journal-entry.model';
 import { UidValidator } from '../util';
 
 @Entity('journal_entry')
 export class JournalEntryEntity {
-  @PrimaryGeneratedColumn()
   @IsNumber()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
 
+  @Column({ name: 'user_id' })
   @IsNumber()
   @IsOptional()
   userId: number;
@@ -47,14 +48,17 @@ export class JournalEntryEntity {
   @IsOptional()
   entry: string;
 
+  @Column({ name: 'entry_at' })
   @IsDate()
   @IsOptional()
   entryAt: Date;
 
+  @Column({ name: 'created_at' })
   @IsDate()
   @IsOptional()
   createdAt: Date;
 
+  @Column({ name: 'updated_at' })
   @IsDate()
   @IsOptional()
   updatedAt: Date;
