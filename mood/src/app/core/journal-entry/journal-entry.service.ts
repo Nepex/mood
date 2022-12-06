@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { BaseService } from '../base.service';
-import { UserRolesModel } from './user-roles.model';
+import { JournalEntryModel } from './journal-entry.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserRolesService extends BaseService<UserRolesModel> {
+export class JournalEntryService extends BaseService<JournalEntryModel> {
   constructor(public override http: HttpClient) {
-    super('user-roles', http);
+    super('journal-entries', http);
   }
 }

@@ -1,18 +1,21 @@
-import { LoadingOptions } from '../types';
+import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 import { BaseController } from './base.controller';
 import { BaseControllerService } from './base.controller.service';
+import { KeyValPairs, LoadingOptions, NotifType } from '../types';
 import { Logger } from '../logger';
+import { Util } from '../util';
 
 const logger = new Logger('FormController');
 
-export abstract class FormController<MODEL = any> extends BaseController {
+export abstract class FormController extends BaseController {
   isDisabled = false;
   isSubmitting = false;
 
-  form: Form<MODEL>;
+  form: Form;
 
-  protected constructor(public baseService: BaseControllerService) {
+  protected constructor(public override baseService: BaseControllerService) {
     super(baseService);
   }
 
@@ -51,5 +54,31 @@ export abstract class FormController<MODEL = any> extends BaseController {
     return !reverse
       ? content.replace(/\n\r?/g, '\\n')
       : content.replace(/\\n/g, '\n');
+  }
+}
+
+export class Form extends FormGroup {
+  showErrors: boolean;
+
+  /** Shows an error toast message for the form, then toggles showing validation messages above inputs. */
+  notifyErrors(notificationService: MessageService) {
+    Util.notify(
+      notificationService,
+      NotifType.Error,
+      'Please fill out the required fields'
+    );
+
+    this.showErrors = true;
+  }
+
+  /** Parses form field values off of Form model. */
+  getValues(): any {
+    const formData: KeyValPairs = {};
+
+    for (const key of Object.keys(this.controls)) {
+      formData[key] = this.controls[key].value;
+    }
+
+    return formData;
   }
 }

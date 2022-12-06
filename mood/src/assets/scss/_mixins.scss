@@ -1,0 +1,70 @@
+@mixin actionable {
+  transition: 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+@mixin color-transition($color, $transitionColor) {
+  color: $color;
+
+  &:hover,
+  &:active {
+    color: $transitionColor;
+    transition: 0.2s;
+  }
+}
+
+@mixin bg-transition($color, $transitionColor) {
+  background-color: $color;
+
+  &:hover,
+  &:active {
+    background-color: $transitionColor;
+    transition: 0.2s;
+  }
+}
+
+@mixin border-transition($color, $transitionColor) {
+  border-color: $color;
+  outline: $color;
+
+  &:hover,
+  &:active {
+    border-color: $transitionColor;
+    outline: $transitionColor;
+    transition: 0.2s;
+  }
+}
+
+@mixin svg-transition($color, $transitionColor) {
+  circle {
+    stroke: $color !important;
+    transition: 0.2s !important;
+  }
+  path {
+    fill: $color !important;
+    transition: 0.2s !important;
+  }
+
+  &:hover,
+  &:active {
+    circle {
+      stroke: $transitionColor !important;
+      transition: 0.2s !important;
+    }
+    path {
+      fill: $transitionColor !important;
+      transition: 0.2s !important;
+    }
+  }
+}
+
+@mixin border-boxshadow($color) {
+  border: solid 1px transparentize($color, 0.35);
+  box-shadow: 0 0 0 2px transparentize($color, 0.85);
+}
+
+@mixin border-boxshadow-strong($color) {
+  border: solid 1px transparentize($color, 0.1);
+  box-shadow: 0 0 0 2px transparentize($color, 0.5);
+}

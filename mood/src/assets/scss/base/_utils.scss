@@ -1,0 +1,26 @@
+// Use this to supplement utility classes missing from PrimeFlex
+// Ref: https://www.primefaces.org/primeflex
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-pad {
+  padding: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-pad-margin {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}

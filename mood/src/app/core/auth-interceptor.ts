@@ -10,11 +10,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap } from 'rxjs/operators';
 
-import { AuthService } from '.';
+import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   intercept(
     req: HttpRequest<any>,

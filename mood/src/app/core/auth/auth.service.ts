@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { Logger } from '@shared';
+import { Logger, Util } from '@shared';
 
 import { AuthState, Credentials, Session } from './auth.model';
 import { BaseService } from '../base.service';
-import { Role } from '../user-roles/user-roles.model';
-import { User } from '../user/user.model';
+import { UserModel } from '../user/user.model';
 import { UserRolesService } from '../user-roles/user-roles.service';
 
 const logger = new Logger('AuthService');
@@ -22,7 +21,7 @@ export class AuthService extends BaseService {
   state: Partial<AuthState> = {};
 
   constructor(
-    public http: HttpClient,
+    public override http: HttpClient,
     private readonly localStorage: LocalStorageService,
     private readonly userRolesService: UserRolesService
   ) {
@@ -70,7 +69,7 @@ export class AuthService extends BaseService {
 
       this.loadStoredSession();
     } catch (err) {
-      return Promise.reject(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -83,7 +82,7 @@ export class AuthService extends BaseService {
       );
       return lastValueFrom(response);
     } catch (err) {
-      throw new Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -94,16 +93,16 @@ export class AuthService extends BaseService {
   }
 
   /** Gets current user if session exists. */
-  async me(): Promise<User> {
+  async me(): Promise<UserModel | null> {
     if (!this.isAuthenticated()) {
       return null;
     }
 
     try {
-      const response = this.http.get<User>(`${this.baseUrl}/me`);
+      const response = this.http.get<UserModel>(`${this.baseUrl}/me`);
       return lastValueFrom(response);
     } catch (err) {
-      throw new Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 }

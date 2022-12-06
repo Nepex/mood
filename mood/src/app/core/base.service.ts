@@ -1,8 +1,19 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { environment } from '@env';
-import { FilterOpts, FilterQueryOpts, Logger, PagedResponse } from '@shared';
+import {
+  FilterOpts,
+  FilterQueryOpts,
+  Logger,
+  PagedResponse,
+  Util,
+} from '@shared';
 
 import { BaseModel } from './base.model';
 
@@ -26,7 +37,7 @@ export enum QueryOperator {
   MoreThan = '>',
 }
 
-export abstract class BaseService<MODEL extends BaseModel = any> {
+export abstract class BaseService<MODEL extends { uid?: string } = any> {
   baseUrl: string;
   headers = new HttpHeaders();
 
@@ -48,7 +59,7 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       );
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -62,7 +73,7 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       });
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -85,7 +96,7 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       });
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -104,7 +115,7 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       const response = this.http.post<MODEL>(`${this.baseUrl}`, model);
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -117,16 +128,16 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       );
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
   /** Deletes a record. */
   async remove(model: Partial<MODEL>) {
     try {
-      return await this.removeByUid(model.uid);
+      return await this.removeByUid(model.uid as string);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
@@ -136,30 +147,29 @@ export abstract class BaseService<MODEL extends BaseModel = any> {
       const response = this.http.delete<MODEL>(`${this.baseUrl}/${uid}`);
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
   /**
-   * Get properties associated with current user - Doesn't work with party services.
-   * User settings, player, player appearance, player professions.
+   * Get properties associated with current user.
    */
   async mine(): Promise<MODEL> {
     try {
       const response = this.http.get<MODEL>(`${this.baseUrl}/mine`);
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 
-  /** Gets array of property associated with current used. Player inventory, party members. */
+  /** Gets array of property associated with current used. */
   async allOfMine(): Promise<MODEL[]> {
     try {
       const response = this.http.get<MODEL[]>(`${this.baseUrl}/all-of-mine`);
       return lastValueFrom(response);
     } catch (err) {
-      throw Error(err);
+      throw new Error(Util.errorToString(err as HttpErrorResponse));
     }
   }
 }

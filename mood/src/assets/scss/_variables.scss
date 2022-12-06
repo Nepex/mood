@@ -1,0 +1,29 @@
+$FONT_PRIMARY: "Jost", sans-serif;
+$FONT_SIZE: 14px;
+
+$TEXT_PRIMARY: #111111;
+$TEXT_MUTED: #666666;
+
+$PRIMARY: #00aff0;
+$PRIMARY_DARKEN: darken($PRIMARY, 5%);
+$PRIMARY_LIGHTEN: lighten($PRIMARY, 5%);
+$PRIMARY_PASTEL: #dbf5f4;
+
+$SECONDARY: #ff8ba5;
+$SECONDARY_DARKEN: darken($SECONDARY, 5%);
+$SECONDARY_LIGHTEN: lighten($SECONDARY, 5%);
+$SECONDARY_PASTEL: #ffced9;
+
+$GRAY_ONE: #eee;
+$GRAY_TWO: #ddd;
+$GRAY_THREE: rgb(179, 179, 179);
+$GRAY_FOUR: #545454;
+$GRAY_FIVE: #ffeeee;
+
+$BROWN: #b07d17;
+$GREEN: rgb(76, 201, 76);
+$DARK_GREEN: rgb(0, 226, 0);
+$RED: rgb(253, 105, 105);
+$WHITE: #ffffff;
+$BLACK: #000000;
+$OFF_BLACK: #111111;

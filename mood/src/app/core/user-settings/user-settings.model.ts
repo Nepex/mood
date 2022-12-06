@@ -1,12 +1,17 @@
-export class UserSettings {
+export enum ColorTheme {
+  Light = 'light',
+  Dark = 'dark',
+}
+
+export class UserSettingsModel {
   uid: string;
-  isMusicOn: boolean;
+  colorTheme: ColorTheme;
   createdTs: Date;
   updatedTs: Date;
 
-  constructor(model: Partial<UserSettings>) {
-    for (const key of Object.keys(model)) {
-      this[key] = model[key];
+  constructor(model?: Partial<UserSettingsModel>) {
+    if (model) {
+      Object.assign(this, model);
     }
   }
 }

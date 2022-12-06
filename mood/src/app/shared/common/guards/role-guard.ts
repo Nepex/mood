@@ -27,6 +27,8 @@ export class RoleGuard implements CanActivate {
     const expectedRole: Role = route.data.role;
     const user = await this.authService.me();
 
+    if (!user) return false;
+
     if (user?.roles?.indexOf(expectedRole) < 0) {
       Util.notify(
         this.notificationService,

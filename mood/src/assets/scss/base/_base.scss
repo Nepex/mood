@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+  font-size: $FONT_SIZE;
+}
+
+body {
+  font-family: $FONT_PRIMARY;
+  color: $TEXT_PRIMARY;
+
+  @media (max-width: 991px) {
+    font-size: 90%;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 85%;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 80%;
+  }
+}
+
+label {
+  font-size: 1.3rem;
+}
+
+textarea {
+  resize: none !important;
+}
+
+a {
+  @include actionable();
+  @include color-transition($SECONDARY, $SECONDARY_LIGHTEN);
+}
+
+::selection {
+  background: $SECONDARY_PASTEL;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: $WHITE;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $GRAY_TWO;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $PRIMARY;
+}
