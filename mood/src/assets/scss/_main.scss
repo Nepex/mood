@@ -6,11 +6,7 @@
 @import "variables";
 
 // Base
-@import "base/animations";
-@import "base/base";
-@import "base/utils";
-
-// Shared
-
-// Vendor
-@import "vendor/prime-ng";
+@import "styles/animations";
+@import "styles/base";
+@import "styles/utils";
+@import "styles/overrides";

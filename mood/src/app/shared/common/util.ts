@@ -11,7 +11,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { KeyValPairs, NameValPair, NotifType } from './types';
+import { NotifType } from './types';
 export const { version: appVersion } = require('../../../../package.json');
 
 /** General Helpers and Parsers */
@@ -83,27 +83,6 @@ export class Util {
       .join(' ');
   }
 
-  /** Converts pixels string to number (42px -> 42). */
-  static pxStrToNumber(pixelsString: string): number {
-    return +pixelsString.substring(0, pixelsString.length - 2);
-  }
-
-  /** Converts number to pixels string. (42 -> 42px) */
-  static numberToPxStr(numVal: number): string {
-    return `${numVal}px`;
-  }
-
-  /** Parses from { key: value } object from { name: , value: } array */
-  static parseKeyValPairs(map: NameValPair[]): KeyValPairs {
-    const keyValPairs: KeyValPairs = {};
-
-    for (const obj of map) {
-      keyValPairs[obj.value] = obj.name;
-    }
-
-    return keyValPairs;
-  }
-
   /** Parses a string error from an HttpErrorReponse */
   static errorToString(err: HttpErrorResponse | string): string {
     return typeof err === 'string'
@@ -140,7 +119,7 @@ export class Util {
     return (control: AbstractControl): ValidationErrors | null => {
       return !!control.parent &&
         !!control.parent.value &&
-        control.value === control.parent.controls[matchTo].value
+        control.value === (<any>control).parent.controls[matchTo].value
         ? null
         : { isntMatch: matchTo };
     };
@@ -150,7 +129,7 @@ export class Util {
   static getAni(
     animationSlug: string,
     optionalStyle?: string
-  ): AnimationTriggerMetadata {
+  ): AnimationTriggerMetadata | undefined {
     switch (animationSlug) {
       case 'fadeInOut':
         return trigger('fadeInOut', [
@@ -179,6 +158,8 @@ export class Util {
           transition('show => hide', [animate('.25s')]),
           transition('hide => show', [animate('.25s')]),
         ]);
+      default:
+        return undefined;
     }
   }
 }

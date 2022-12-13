@@ -49,6 +49,7 @@ export class Logger {
         break;
       default:
         color = 'Black';
+        prependedInfo = '';
     }
 
     prependedInfo = this.className

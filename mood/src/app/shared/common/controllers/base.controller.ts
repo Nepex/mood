@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { BaseControllerService } from './base.controller.service';
-import { KeyValPairs, LoadingOptions, NameValPair, NotifType } from '../types';
+import { LoadingOptions, NotifType } from '../types';
 import { Util } from '../util';
 
 export abstract class BaseController {
@@ -68,11 +68,6 @@ export abstract class BaseController {
   /** Parses slug to titlecase (test-string -> Test String). */
   slugToTitlecase(str: string): string {
     return Util.slugToTitlecase(str);
-  }
-
-  /** Parses from { key: value } object from { name: , value: } array */
-  parseKeyValPairs(map: NameValPair[]): KeyValPairs {
-    return Util.parseKeyValPairs(map);
   }
 
   /** Capitalize first letter of string (hello there -> Hello there). */

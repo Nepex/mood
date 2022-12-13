@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 
 import { BaseController } from './base.controller';
 import { BaseControllerService } from './base.controller.service';
-import { KeyValPairs, LoadingOptions, NotifType } from '../types';
+import { GenericObject, LoadingOptions, NotifType } from '../types';
 import { Logger } from '../logger';
 import { Util } from '../util';
 
@@ -73,7 +73,7 @@ export class Form extends FormGroup {
 
   /** Parses form field values off of Form model. */
   getValues(): any {
-    const formData: KeyValPairs = {};
+    const formData: GenericObject = {};
 
     for (const key of Object.keys(this.controls)) {
       formData[key] = this.controls[key].value;
