@@ -16,10 +16,12 @@ import { UidValidator } from '../util';
 
 @Entity('journal_entry')
 export class JournalEntryEntity {
+  @Column({ name: 'id' })
   @IsNumber()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'uid' })
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
@@ -29,21 +31,25 @@ export class JournalEntryEntity {
   @IsOptional()
   userId: number;
 
+  @Column({ name: 'score' })
   @IsNumber()
   @Min(1)
   @Max(10)
   @IsOptional()
   score: number;
 
+  @Column({ name: 'mood' })
   @MinLength(1)
   @MaxLength(30)
   @IsOptional()
   mood: string;
 
+  @Column({ name: 'emoji' })
   @IsEnum(Emoji)
   @IsOptional()
   emoji: Emoji;
 
+  @Column({ name: 'entry' })
   @MaxLength(1500)
   @IsOptional()
   entry: string;

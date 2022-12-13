@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 import { FindOneOptions, Repository } from 'typeorm';
-import { uid } from 'uid';
 
 import { QueryService } from './query/query.service';
 import {
@@ -141,7 +140,7 @@ export abstract class BaseService<ENTITY> {
 
     if (Util.isNewEntity(entity)) {
       // if this is a new entity, attach a generated uid
-      entityToSave = { uid: uid(32), ...entity } as ENTITY;
+      entityToSave = { ...entity } as ENTITY;
     } else {
       // if we're updating an entity, find by full entity id or uid
       if ((<Base<ENTITY>>entity).id) {

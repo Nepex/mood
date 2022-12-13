@@ -13,9 +13,11 @@ import { ColorTheme } from './user-settings.model';
 @Entity('user_settings')
 export class UserSettingsEntity {
   @IsNumber()
+  @Column({ name: 'id' })
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'uid' })
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
@@ -25,6 +27,7 @@ export class UserSettingsEntity {
   @IsOptional()
   userId: number;
 
+  @Column({ name: 'color_theme' })
   @IsOptional()
   @IsEnum(ColorTheme)
   colorTheme: ColorTheme;

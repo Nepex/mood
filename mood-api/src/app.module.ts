@@ -9,6 +9,7 @@ import { JournalEntryModule } from './journal-entry/journal-entry.module';
 import { QueryModule } from './query/query.module';
 import { UserModule } from './user/user.module';
 import { UserRolesModule } from './user-roles/user-roles.module';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserRolesModule } from './user-roles/user-roles.module';
     QueryModule,
     UserModule,
     UserRolesModule,
+    UserSettingsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

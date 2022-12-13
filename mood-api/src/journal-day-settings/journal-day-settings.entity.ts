@@ -13,10 +13,12 @@ import { DayDateValidator, UidValidator } from '../util';
 
 @Entity('journal_day_settings')
 export class JournalDaySettingsEntity {
+  @Column({ name: 'id' })
   @IsNumber()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'uid' })
   @Validate(UidValidator)
   @IsString()
   @IsOptional()
@@ -27,14 +29,17 @@ export class JournalDaySettingsEntity {
   @IsOptional()
   userId: number;
 
+  @Column({ name: 'day' })
   @Validate(DayDateValidator)
   @IsOptional()
   day: string;
 
+  @Column({ name: 'notes' })
   @MaxLength(1500)
   @IsOptional()
   notes: string;
 
+  @Column({ name: 'color' })
   @IsHexColor()
   @IsOptional()
   color: string;

@@ -12,10 +12,12 @@ import { UidValidator } from '../util';
 
 @Entity('user_roles')
 export class UserRolesEntity {
+  @Column({ name: 'id' })
   @IsNumber()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'uid' })
   @Validate(UidValidator)
   @IsOptional()
   uid: string;
@@ -25,6 +27,7 @@ export class UserRolesEntity {
   @IsOptional()
   userId: number;
 
+  @Column('text', { name: 'roles', array: true })
   @IsOptional()
   @IsEnum(Role, { each: true })
   roles: Role[];

@@ -9,13 +9,15 @@ import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
 
-import { Session } from '../util';
+import { Logger, Session } from '../util';
 import { UserEntity } from '../user/user.entity';
 import { UserRolesEntity } from '../user-roles/user-roles.entity';
 import { UserRolesService } from '../user-roles/user-roles.service';
 import { UserService } from '../user/user.service';
 import { UserSettingsEntity } from '../user-settings/user-settings.entity';
 import { UserSettingsService } from '../user-settings/user-settings.service';
+
+const logger = new Logger('AuthService');
 
 @Injectable()
 export class AuthService {

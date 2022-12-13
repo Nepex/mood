@@ -102,6 +102,7 @@ export class QueryService {
       options.select = query.fields;
     }
 
+    logger.info('buildFindOptions(), options', options);
     return options;
   }
 
