@@ -1,0 +1,88 @@
+<mood-container type="full" wrapperClasses="flex-center flex-column">
+  <!-- Start New User -->
+  <section class="auth-step-container">
+    <div class="auth-step-form-container">
+      <!-- Start Title -->
+      <h2 class="pb-4">Create Your Account</h2>
+      <!-- End Title -->
+
+      <!-- Start Form -->
+      <form [formGroup]="form" (ngSubmit)="createUser()">
+        <!-- Start Fields -->
+        <div class="p-fluid">
+          <!-- Email -->
+          <div class="p-field">
+            <div class="flex justify-content-between">
+              <label>Email</label>
+              <mood-form-validation-msgs
+                [control]="form.controls.email"
+                [showErrors]="form.showErrors"
+              ></mood-form-validation-msgs>
+            </div>
+            <input
+              type="text"
+              formControlName="email"
+              pInputText
+              spellcheck="false"
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="p-field">
+            <div class="flex justify-content-between">
+              <label>Password</label>
+              <mood-form-validation-msgs
+                [control]="form.controls.password"
+                [showErrors]="form.showErrors"
+              ></mood-form-validation-msgs>
+            </div>
+            <input
+              type="password"
+              formControlName="password"
+              autocomplete="off"
+              pInputText
+            />
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="p-field">
+            <div class="flex justify-content-between">
+              <label>Confirm Password</label>
+              <mood-form-validation-msgs
+                [control]="form.controls.confirmPassword"
+                [showErrors]="form.showErrors"
+              ></mood-form-validation-msgs>
+            </div>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              autocomplete="off"
+              pInputText
+            />
+          </div>
+
+          <!-- Terms of Service -->
+          <div class="p-field">
+            By clicking 'Create' you agree to the
+            <span class="terms-link">Terms of Service</span>
+          </div>
+        </div>
+        <!-- End Fields-->
+
+        <!-- Start Form Actions -->
+        <div class="flex-center mt-4 pt-2">
+          <button
+            pButton
+            type="submit"
+            label="Create"
+            [loading]="isSubmitting"
+          ></button>
+        </div>
+        <!-- End Form Actions -->
+      </form>
+      <!-- End Form -->
+    </div>
+  </section>
+  <!-- End New User -->
+</mood-container>

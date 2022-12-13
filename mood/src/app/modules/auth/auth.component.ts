@@ -6,7 +6,7 @@ import { BaseControllerService, Logger } from '@shared';
 const logger = new Logger('AuthComponent');
 
 @Component({
-  selector: 'cascade-auth',
+  selector: 'mood-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
 })

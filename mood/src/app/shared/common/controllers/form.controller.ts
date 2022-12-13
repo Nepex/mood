@@ -9,7 +9,7 @@ import { Util } from '../util';
 
 const logger = new Logger('FormController');
 
-export abstract class FormController extends BaseController {
+export abstract class FormController<MODEL> extends BaseController {
   isDisabled = false;
   isSubmitting = false;
 
@@ -23,14 +23,10 @@ export abstract class FormController extends BaseController {
    * Sets isSubmitting while passed in code block runs
    * then notifies on resolve or reject. (See handleLoad())
    */
-  handleSubmit(
-    fn: Function,
-    options: LoadingOptions = {},
-    formOverwrite?: Form
-  ) {
+  handleSubmit(fn: Function, options: LoadingOptions = {}, formOveride?: Form) {
     this.isSubmitting = true;
 
-    const form = this.form ?? formOverwrite;
+    const form = this.form ?? formOveride;
 
     this.handleLoad(async () => {
       try {

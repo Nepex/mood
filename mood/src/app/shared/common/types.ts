@@ -1,5 +1,3 @@
-import { QueryOperator } from '@core';
-
 // Generic
 export enum NotifType {
   Success = 'success',
@@ -75,6 +73,25 @@ export interface TableCol {
   width?: string;
   field?: string;
   alignment?: 'right' | 'left' | 'center';
+}
+
+// Queries
+export enum QueryOperator {
+  JoinUid = '>>', // will look in joined table by uid (example >>player.uid)
+  Not = '!=',
+  LessThanOrEqual = '<=',
+  MoreThanOrEqual = '>=',
+  Between = '><',
+  InArray = '@>',
+  NotIn = '!|',
+  ILike = '%*',
+  Like = '%',
+  Any = '*',
+  In = '|',
+  IsNull = '!',
+  Equal = '=',
+  LessThan = '<',
+  MoreThan = '>',
 }
 
 // Menus

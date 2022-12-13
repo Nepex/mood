@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -11,12 +10,12 @@ import { SharedModule } from '@shared';
 
 import { AuthComponent } from './auth.component';
 import { AuthRoutingModule } from './auth-routing.module';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   imports: [
     AuthRoutingModule,
     ButtonModule,
-    CheckboxModule,
     CommonModule,
     FormsModule,
     InputTextModule,
@@ -24,6 +23,6 @@ import { AuthRoutingModule } from './auth-routing.module';
     SharedModule,
     TooltipModule,
   ],
-  declarations: [AuthComponent],
+  declarations: [AuthComponent, RegisterComponent],
 })
 export class AuthModule {}

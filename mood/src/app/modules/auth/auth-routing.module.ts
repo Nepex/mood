@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthComponent } from './auth.component';
+import { RegisterComponent } from './register/register.component';
 
 export const routes: Routes = [
   {
@@ -9,8 +10,7 @@ export const routes: Routes = [
     component: AuthComponent,
     children: [
       // { path: '', pathMatch: 'full', component: MainMenuComponent },
-      // { path: 'new-game', component: NewGameComponent },
-      // { path: 'continue', component: ContinueComponent },
+      { path: 'register', component: RegisterComponent },
     ],
   },
 ];

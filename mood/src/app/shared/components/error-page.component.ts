@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ErrorPageType } from '../common/types';
 
 @Component({
-  selector: 'cascade-page-not-found',
+  selector: 'mood-page-not-found',
   template: `
-    <cascade-container type="full" wrapperClasses="flex-center flex-column">
+    <mood-container type="full" wrapperClasses="flex-center flex-column">
       <i class="las la-sad-cry text-8xl mb-3"></i>
 
       <ng-container *ngIf="errorType === '404'">
@@ -23,7 +23,7 @@ import { ErrorPageType } from '../common/types';
           soon as possible.
         </div>
       </ng-container>
-    </cascade-container>
+    </mood-container>
   `,
   styleUrls: [],
 })

@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Util } from '../common/util';
 
 @Component({
-  selector: 'cascade-page-loader',
+  selector: 'mood-page-loader',
   template: `
     <div class="page-loading-mask flex-center" [@fadeInOut] *ngIf="loading">
       <p-progressSpinner></p-progressSpinner>

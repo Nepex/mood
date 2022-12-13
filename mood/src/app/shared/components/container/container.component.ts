@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'cascade-container',
+  selector: 'mood-container',
   template: `
     <section
       class="{{ wrapperClasses }}"

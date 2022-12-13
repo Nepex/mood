@@ -15,27 +15,7 @@ import {
   Util,
 } from '@shared';
 
-import { BaseModel } from './base.model';
-
 const logger = new Logger('BaseService');
-
-export enum QueryOperator {
-  JoinUid = '>>', // will look in joined table by uid (example >>player.uid)
-  Not = '!=',
-  LessThanOrEqual = '<=',
-  MoreThanOrEqual = '>=',
-  Between = '><',
-  InArray = '@>',
-  NotIn = '!|',
-  ILike = '%*',
-  Like = '%',
-  Any = '*',
-  In = '|',
-  IsNull = '!',
-  Equal = '=',
-  LessThan = '<',
-  MoreThan = '>',
-}
 
 export abstract class BaseService<MODEL extends { uid?: string } = any> {
   baseUrl: string;

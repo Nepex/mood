@@ -4,7 +4,7 @@ import { AbstractControl } from '@angular/forms';
 import { Util } from '../common/util';
 
 @Component({
-  selector: 'cascade-form-validation-msgs',
+  selector: 'mood-form-validation-msgs',
   template: `
     <span
       *ngIf="(control.errors && control.touched) || showErrors"
