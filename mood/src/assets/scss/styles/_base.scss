@@ -15,15 +15,15 @@ body {
   font-family: $FONT_PRIMARY;
   color: $TEXT_PRIMARY;
 
-  @media (max-width: 991px) {
+  @media (max-width: $LG_BREAKPOINT) {
     font-size: 90%;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $MD_BREAKPOINT) {
     font-size: 85%;
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: $SM_BREAKPOINT) {
     font-size: 80%;
   }
 }
@@ -42,7 +42,7 @@ a {
 }
 
 ::selection {
-  background: $SECONDARY_PASTEL;
+  background: $SECONDARY;
 }
 
 ::-webkit-scrollbar {
