@@ -1,14 +1,14 @@
 <mood-container type="full" wrapperClasses="flex-center flex-column">
-  <!-- Start New User -->
+  <!-- Start Continue -->
   <section class="auth-step-container">
     <div class="auth-step-form-container">
       <!-- Start Title -->
-      <h2 class="pb-4">Create Your Account</h2>
+      <h2 class="pb-4">Continue</h2>
       <!-- End Title -->
 
       <!-- Start Form -->
-      <form [formGroup]="form" (ngSubmit)="createUser()">
-        <!-- Start Fields -->
+      <form [formGroup]="form" (ngSubmit)="attemptLogin()">
+        <!-- Start Form Fields -->
         <div class="p-fluid">
           <!-- Email -->
           <div class="p-field">
@@ -23,7 +23,6 @@
               type="text"
               formControlName="email"
               pInputText
-              spellcheck="false"
               autocomplete="off"
             />
           </div>
@@ -40,43 +39,26 @@
             <input
               type="password"
               formControlName="password"
-              autocomplete="off"
               pInputText
-            />
-          </div>
-
-          <!-- Confirm Password -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Confirm Password</label>
-              <mood-form-validation-msgs
-                [control]="form.controls.confirmPassword"
-                [showErrors]="form.showErrors"
-              ></mood-form-validation-msgs>
-            </div>
-            <input
-              type="password"
-              formControlName="confirmPassword"
               autocomplete="off"
-              pInputText
             />
           </div>
         </div>
-        <!-- End Fields-->
+        <!-- End Form Fields -->
 
         <!-- Start Form Actions -->
-        <div class="flex-center mt-4 pt-2">
+        <div class="flex-center">
           <button
             pButton
             type="submit"
-            label="Create"
+            label="Login"
             [loading]="isSubmitting"
           ></button>
         </div>
         <!-- End Form Actions -->
       </form>
-      <!-- End Form -->
+      <!-- Start Form -->
     </div>
   </section>
-  <!-- End New User -->
+  <!-- End Continue -->
 </mood-container>

@@ -10,6 +10,7 @@ import { SharedModule } from '@shared';
 
 import { AuthComponent } from './auth.component';
 import { AuthRoutingModule } from './auth-routing.module';
+import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 
 @NgModule({
@@ -23,6 +24,6 @@ import { RegisterComponent } from './register/register.component';
     SharedModule,
     TooltipModule,
   ],
-  declarations: [AuthComponent, RegisterComponent],
+  declarations: [AuthComponent, LoginComponent, RegisterComponent],
 })
 export class AuthModule {}

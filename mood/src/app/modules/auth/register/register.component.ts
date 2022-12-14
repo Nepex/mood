@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 
 import { AuthService, UserModel } from '@core';
-import { FormController, BaseControllerService, Logger } from '@shared';
+import { FormController, BaseControllerService, Logger, Util } from '@shared';
 
 import { registerForm } from './form';
 
@@ -32,10 +32,11 @@ export class RegisterComponent extends FormController<
         const { email, password } = this.form.getValues();
 
         await this.authService.register({ email, password });
-        // await this.authService.login({ email, password });
+        await this.authService.login({ email, password });
 
-        // logger.success('User created! Logging in...');
-        // await this.sleep(Util.SOFT_DELAY);
+        logger.success('User created! Logging in...');
+        await this.sleep(Util.SOFT_DELAY);
+        await this.baseService.router.navigateByUrl('/');
       },
       {
         successMessage: 'Account created successfully!',

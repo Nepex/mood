@@ -53,7 +53,7 @@ export abstract class FormController<MODEL> extends BaseController {
   }
 }
 
-export class Form extends FormGroup {
+export class Form<T = any> extends FormGroup {
   showErrors: boolean;
 
   /** Shows an error toast message for the form, then toggles showing validation messages above inputs. */
