@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from '@shared';
+import { CalendarComponent } from './calendar/calendar.component';
 
 import { MainComponent } from './main.component';
 
@@ -11,8 +12,8 @@ export const routes: Routes = [
     component: MainComponent,
     canActivate: [AuthGuard],
     children: [
-      // { path: '', pathMatch: 'full', component: MainMenuComponent },
-      // { path: 'register', component: RegisterComponent },
+      { path: '', pathMatch: 'full', component: CalendarComponent },
+      { path: 'calendar', component: CalendarComponent },
     ],
   },
 ];

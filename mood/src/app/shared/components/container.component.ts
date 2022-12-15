@@ -43,7 +43,6 @@ import { Component, Input } from '@angular/core';
       <ng-content></ng-content>
     </section>
   `,
-  styleUrls: ['./container.component.scss'],
 })
 export class ContainerComponent {
   @Input() wrapperClasses = '';

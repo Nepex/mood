@@ -7,9 +7,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { SharedModule } from '@shared';
-
-import { MainComponent } from './main.component';
 import { MainRoutingModule } from './main-routing.module';
+
+import { CalendarComponent } from './calendar/calendar.component';
+import { MainComponent } from './main.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { MainRoutingModule } from './main-routing.module';
     SharedModule,
     TooltipModule,
   ],
-  declarations: [MainComponent],
+  declarations: [MainComponent, CalendarComponent],
 })
 export class MainModule {}
