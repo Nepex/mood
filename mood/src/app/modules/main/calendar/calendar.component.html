@@ -1,2 +1,17 @@
-<mood-container type="full" wrapperClasses="flex-center flex-column">
+<mood-container wrapperClasses="flex-center flex-column">
+  <!-- Start Calendar -->
+  <section class="calendar">
+    <div class="calendar-title">
+      <a (click)="loadMonth(selectedMonthIndex - 1)"><</a>
+      {{ currentMonth.monthName }} {{ currentMonth.yearNumber }}
+      <a (click)="loadMonth(selectedMonthIndex + 1)">></a>
+    </div>
+
+    <div class="calendar-days">
+      <div class="day cursor-pointer" *ngFor="let day of currentMonth.days">
+        {{ day.dayNumber }}
+      </div>
+    </div>
+  </section>
+  <!-- End Calendar -->
 </mood-container>

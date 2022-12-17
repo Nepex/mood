@@ -1,0 +1,36 @@
+@import "variables";
+
+.calendar {
+  width: $SM_BREAKPOINT;
+
+  @media (max-width: $SM_BREAKPOINT) {
+    max-width: 100%;
+  }
+
+  .calendar-title {
+    display: flex;
+    justify-content: center;
+
+    a {
+      margin: 0 1rem;
+    }
+  }
+
+  .calendar-days {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    height: 100%;
+
+    .day {
+      border: 1px solid $BLACK;
+      padding: 10px;
+      height: 100px;
+
+      @media (max-width: $SM_BREAKPOINT) {
+        height: 50px;
+      }
+    }
+  }
+}

@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 
-import { AuthService, Credentials } from '@core';
-import { BaseControllerService, FormController, Logger } from '@shared';
+import { BaseControllerService, ListController, Logger } from '@shared';
+import { JournalEntryModel, JournalEntryService } from '@core';
+
+import { CalendarDay, CalendarMonth } from './calendar.types';
+import { CalendarUtil } from './utils';
 
 const logger = new Logger('CalendarComponent');
 
@@ -10,11 +14,34 @@ const logger = new Logger('CalendarComponent');
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
-export class CalendarComponent extends FormController<Credentials> {
+export class CalendarComponent
+  extends ListController<JournalEntryModel>
+  implements OnInit
+{
+  currentMonth: CalendarMonth;
+  selectedMonthIndex: number;
+
+  selectedDay: CalendarDay;
+
   constructor(
     public baseService: BaseControllerService,
-    private readonly authService: AuthService
+    public journalEntryService: JournalEntryService
   ) {
-    super(baseService);
+    super(baseService, journalEntryService);
+  }
+
+  ngOnInit() {
+    // select current month by default
+    this.selectedMonthIndex = dayjs().month();
+    this.loadMonth(this.selectedMonthIndex);
+  }
+
+  loadMonth(monthIndex: number) {
+    if (this.selectedMonthIndex !== monthIndex) {
+      this.selectedMonthIndex = monthIndex;
+    }
+
+    this.currentMonth = CalendarUtil.createCalendarData(monthIndex);
+    logger.info('loadMonth(): currentMonth', this.currentMonth);
   }
 }
