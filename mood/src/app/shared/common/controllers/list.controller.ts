@@ -45,7 +45,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
     this.data = this.pagedResponse.data;
     this.totalItems = this.pagedResponse.totalItems;
     this.totalPages = this.pagedResponse.totalPages;
-    this.baseService.listFetched.emit();
+    this.baseService.listRefreshed.emit();
 
     if (this.scrollTopOnRefresh) {
       this.scrollToTop();

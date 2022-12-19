@@ -28,25 +28,26 @@ export class StoreService {
   }
 
   save(prop: keyof AppState, val: any) {
-    const existingData = this.state[prop];
+    const state = { ...this.state };
+    const existingData = state[prop];
 
-    this.state[prop] = Array.isArray(val)
+    state[prop] = Array.isArray(val)
       ? [...(existingData ?? ([] as any)), ...val]
       : { ...existingData, ...val };
 
-    this.state = { ...this.state };
+    this.state = { ...state };
   }
 
   remove(prop: keyof AppState, uid?: string) {
+    const state = { ...this.state };
+
     if (!uid) {
-      this.state[prop] = undefined;
-    } else if (uid && Array.isArray(this.state[prop])) {
-      this.state[prop] = (<any>this.state[prop]).filter(
-        (s: any) => s.uid !== uid
-      );
+      state[prop] = undefined;
+    } else if (uid && Array.isArray(state[prop])) {
+      state[prop] = (<any>state[prop]).filter((s: any) => s.uid !== uid);
     }
 
-    this.state = { ...this.state };
+    this.state = { ...state };
   }
 
   clear() {

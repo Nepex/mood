@@ -14,12 +14,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   loadingListener: Subscription;
   loadingProcesses = 0;
 
-  constructor(private readonly baseService: BaseControllerService) {
-    this.loadingListener = this.baseService.toggleLoading.subscribe(
-      (isLoading) =>
-        isLoading ? this.loadingProcesses++ : this.loadingProcesses--
-    );
-  }
+  constructor(private readonly baseService: BaseControllerService) {}
 
   ngOnDestroy() {
     this.loadingListener.unsubscribe();

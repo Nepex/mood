@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { Breadcrumb } from '../types';
+import { ColorTheme, LayoutState } from '../types';
 import { Logger } from '../logger';
 
 const logger = new Logger('BaseControllerService');
@@ -11,15 +11,26 @@ const logger = new Logger('BaseControllerService');
 @Injectable({ providedIn: 'root' })
 export class BaseControllerService {
   @Output() toggleLoading = new EventEmitter<boolean>(true);
-  @Output() listFetched = new EventEmitter<null>();
-  @Output() popOverConfirmed = new EventEmitter<string>();
+
+  // Events from layout component to communicate to child componenets
   @Output() searchTriggered = new EventEmitter<string>();
-  @Output() breadcrumbsSet = new EventEmitter<Breadcrumb[]>(true);
+  @Output() actionTriggered = new EventEmitter<any>();
+  @Output() colorThemeChanged = new EventEmitter<ColorTheme>();
+  @Output() layoutIsScrolled = new EventEmitter<boolean>();
+  @Output() layoutIsMobile = new EventEmitter<boolean>();
+  @Output() listRefreshed = new EventEmitter<boolean | undefined>();
 
   notificationService: MessageService;
   confirmationService: ConfirmationService;
   route: ActivatedRoute;
   router: Router;
+
+  layoutState: Partial<LayoutState> = {
+    isMobile: undefined,
+    isScrolled: undefined,
+    isMobileMenuOpen: undefined,
+    colorTheme: ColorTheme.Dark,
+  };
 
   queryParams: Params;
 
@@ -30,5 +41,15 @@ export class BaseControllerService {
     this.router = this.injector.get(Router);
 
     this.queryParams = this.route.snapshot.queryParams;
+  }
+
+  setLayoutScrolled(val: boolean) {
+    this.layoutState.isScrolled = val;
+    this.layoutIsScrolled.emit(val);
+  }
+
+  setLayoutIsMobile(val: boolean) {
+    this.layoutState.isMobile = val;
+    this.layoutIsMobile.emit(val);
   }
 }
