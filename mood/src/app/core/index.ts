@@ -21,3 +21,4 @@ export * from './user-settings/user-settings.model';
 export * from './user-settings/user-settings.service';
 
 export * from './base.service';
+export * from './store.service';

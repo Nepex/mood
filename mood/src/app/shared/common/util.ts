@@ -84,7 +84,7 @@ export class Util {
   }
 
   /** Parses a string error from an HttpErrorReponse */
-  static errorToString(err: HttpErrorResponse | string): string {
+  static parseError(err: HttpErrorResponse | string): string {
     return typeof err === 'string'
       ? err
       : err?.error?.message

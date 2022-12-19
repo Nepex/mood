@@ -5,8 +5,9 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
-import { AuthService } from '@core';
+import { AuthService, StoreService } from '@core';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,14 @@ import { AuthService } from '@core';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly store: StoreService
   ) {}
 
-  canActivate(
+  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
+  ): Promise<boolean> {
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/auth/login'], {
         queryParams: {
@@ -28,6 +30,11 @@ export class AuthGuard implements CanActivate {
         },
       });
       return false;
+    }
+
+    const { me } = await firstValueFrom(this.store.state$);
+    if (!me) {
+      await this.authService.me();
     }
 
     return true;

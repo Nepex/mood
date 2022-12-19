@@ -14,6 +14,7 @@ import {
   PagedResponse,
   Util,
 } from '@shared';
+import { AppState, StoreService } from './store.service';
 
 const logger = new Logger('BaseService');
 
@@ -21,135 +22,204 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   baseUrl: string;
   headers = new HttpHeaders();
 
-  constructor(public endpoint: string, public http: HttpClient) {
+  constructor(
+    public endpoint: string,
+    public http: HttpClient,
+    public store: StoreService
+  ) {
     this.baseUrl = `${environment.apiBaseUrl}/${endpoint}`;
     this.headers.append('Content-Type', 'application/json');
   }
 
   /** Gets an array of records by filters/sort/limit/offset. */
-  async search(query: FilterQueryOpts<MODEL>): Promise<PagedResponse<MODEL>> {
-    try {
-      const params = new HttpParams().set('findQuery', JSON.stringify(query));
+  async search(
+    query: FilterQueryOpts<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<PagedResponse<MODEL>> {
+    const params = new HttpParams().set('findQuery', JSON.stringify(query));
 
-      const response = this.http.get<PagedResponse<MODEL>>(
-        `${this.baseUrl}/search`,
-        {
-          params,
-        }
-      );
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+    const call = this.http.get<PagedResponse<MODEL>>(`${this.baseUrl}/search`, {
+      params,
+    });
+
+    try {
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result.data);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Gets an array of all records for that MODEL. */
-  async findAll(query: FilterQueryOpts<MODEL>): Promise<MODEL[]> {
-    try {
-      const params = new HttpParams().set('findQuery', JSON.stringify(query));
+  async findAll(
+    query: FilterQueryOpts<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<MODEL[]> {
+    const params = new HttpParams().set('findQuery', JSON.stringify(query));
+    const call = this.http.get<MODEL[]>(`${this.baseUrl}`, {
+      params,
+    });
 
-      const response = this.http.get<MODEL[]>(`${this.baseUrl}`, {
-        params,
-      });
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+    try {
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Uses findAll, but only returns a number count. */
-  async count(filters: FilterOpts<MODEL>): Promise<number> {
+  async count(
+    filters: FilterOpts<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<number> {
     const query: FilterQueryOpts<MODEL> = {
       filters,
       countOnly: true,
     };
 
-    return (await this.findAll(query)) as any | number;
+    return (await this.findAll(query, stateProp)) as any | number;
   }
 
   /** Gets a record by filters. */
-  async findOne(filters: FilterOpts<MODEL>): Promise<MODEL> {
+  async findOne(
+    filters: FilterOpts<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<MODEL> {
+    const params = new HttpParams().set('filters', JSON.stringify(filters));
+    const call = this.http.get<MODEL>(`${this.baseUrl}/find-one`, {
+      params,
+    });
+
     try {
-      const params = new HttpParams().set('filters', JSON.stringify(filters));
-      const response = this.http.get<MODEL>(`${this.baseUrl}/find-one`, {
-        params,
-      });
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Gets a record by UID. */
-  async findByUid(uid: string): Promise<MODEL> {
-    return await this.findOne({ uid } as MODEL);
+  async findByUid(uid: string, stateProp?: keyof AppState): Promise<MODEL> {
+    return await this.findOne({ uid } as MODEL, stateProp);
   }
 
   /** Creates a record, or if a uid is present - updates the record. */
-  async save(model: Partial<MODEL>): Promise<MODEL> {
+  async save(
+    model: Partial<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<MODEL> {
     if (model.uid) {
-      return await this.update(model);
+      return await this.update(model, stateProp);
     }
 
+    const call = this.http.post<MODEL>(`${this.baseUrl}`, model);
+
     try {
-      const response = this.http.post<MODEL>(`${this.baseUrl}`, model);
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Updates a record. */
-  async update(model: Partial<MODEL>): Promise<MODEL> {
+  async update(
+    model: Partial<MODEL>,
+    stateProp?: keyof AppState
+  ): Promise<MODEL> {
+    const call = this.http.put<MODEL>(`${this.baseUrl}/${model.uid}`, model);
+
     try {
-      const response = this.http.put<MODEL>(
-        `${this.baseUrl}/${model.uid}`,
-        model
-      );
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Deletes a record. */
-  async remove(model: Partial<MODEL>) {
-    try {
-      return await this.removeByUid(model.uid as string);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
-    }
+  async remove(model: Partial<MODEL>, stateProp?: keyof AppState) {
+    return await this.removeByUid(model.uid as string, stateProp).catch((e) => {
+      throw new Error(Util.parseError(e as HttpErrorResponse));
+    });
   }
 
   /** Deletes a record by UID. */
-  async removeByUid(uid: string) {
+  async removeByUid(uid: string, stateProp?: keyof AppState) {
+    const call = this.http.delete<MODEL>(`${this.baseUrl}/${uid}`);
+
     try {
-      const response = this.http.delete<MODEL>(`${this.baseUrl}/${uid}`);
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.remove(stateProp);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /**
    * Get properties associated with current user.
    */
-  async mine(): Promise<MODEL> {
+  async mine(stateProp?: keyof AppState): Promise<MODEL> {
+    const call = this.http.get<MODEL>(`${this.baseUrl}/mine`);
+
     try {
-      const response = this.http.get<MODEL>(`${this.baseUrl}/mine`);
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 
   /** Gets array of property associated with current used. */
-  async allOfMine(): Promise<MODEL[]> {
+  async allOfMine(stateProp?: keyof AppState): Promise<MODEL[]> {
+    const call = this.http.get<MODEL[]>(`${this.baseUrl}/all-of-mine`);
+
     try {
-      const response = this.http.get<MODEL[]>(`${this.baseUrl}/all-of-mine`);
-      return lastValueFrom(response);
-    } catch (err) {
-      throw new Error(Util.errorToString(err as HttpErrorResponse));
+      const result = await lastValueFrom(call);
+
+      if (stateProp) {
+        this.store.save(stateProp, result);
+      }
+
+      return result;
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
     }
   }
 }

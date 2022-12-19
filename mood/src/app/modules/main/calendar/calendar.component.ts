@@ -30,7 +30,7 @@ export class CalendarComponent
     super(baseService, journalEntryService);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     // select current month by default
     this.selectedMonthIndex = dayjs().month();
     this.loadMonth(this.selectedMonthIndex);

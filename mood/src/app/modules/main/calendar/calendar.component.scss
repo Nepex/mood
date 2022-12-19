@@ -18,19 +18,14 @@
 
   .calendar-days {
     display: grid;
-    grid-template-rows: repeat(6, 1fr);
     grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 6rem;
     width: 100%;
     height: 100%;
 
     .day {
       border: 1px solid $BLACK;
       padding: 10px;
-      height: 100px;
-
-      @media (max-width: $SM_BREAKPOINT) {
-        height: 50px;
-      }
     }
   }
 }

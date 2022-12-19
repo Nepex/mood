@@ -1,9 +1,11 @@
-export interface AuthState {
-  session: Session;
-}
-
-export interface Session {
+export class Session {
   token: string;
+
+  constructor(model?: Partial<Session>) {
+    if (model) {
+      Object.assign(this, model);
+    }
+  }
 }
 
 export interface Credentials {

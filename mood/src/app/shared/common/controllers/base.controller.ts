@@ -38,7 +38,7 @@ export abstract class BaseController {
           Util.notify(
             this.baseService.notificationService,
             NotifType.Error,
-            Util.errorToString(err)
+            Util.parseError(err)
           );
         }
       });
