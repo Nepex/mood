@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
-import { BaseControllerService, Logger } from '@shared';
+import { Logger } from '@shared';
 
 const logger = new Logger('AuthComponent');
 
@@ -10,15 +9,8 @@ const logger = new Logger('AuthComponent');
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
 })
-export class AuthComponent implements OnInit, OnDestroy {
-  loadingListener: Subscription;
-  loadingProcesses = 0;
-
-  constructor(private readonly baseService: BaseControllerService) {}
-
-  ngOnDestroy() {
-    this.loadingListener.unsubscribe();
-  }
+export class AuthComponent implements OnInit {
+  constructor() {}
 
   ngOnInit() {
     logger.success('Loaded AuthModule');

@@ -9,16 +9,16 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ContainerComponent } from './components/layout/container/container.component';
 import { ErrorPageComponent } from './components/error-page.component';
 import { FormValidationMsgsComponent } from './components/form-validation-msgs.component';
-import { MainLayoutComponent } from './components/layout/layout.component';
-import { MainHeaderComponent } from './components/layout/header/header.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { HeaderComponent } from './components/layout/header/header.component';
 import { PageLoaderComponent } from './components/page-loader.component';
 
 const declarations = [
   ContainerComponent,
   ErrorPageComponent,
   FormValidationMsgsComponent,
-  MainLayoutComponent,
-  MainHeaderComponent,
+  LayoutComponent,
+  HeaderComponent,
   PageLoaderComponent,
 ];
 

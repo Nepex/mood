@@ -1,1 +1,24 @@
-<p>main-header works!</p>
+<main class="header">
+  <mood-container wrapperClasses="inner-header">
+    <!-- Start Header Left -->
+    <div class="header-left">
+      <ng-container *ngIf="me">
+        <i class="las la-bars"></i>
+        <nav></nav>
+      </ng-container>
+    </div>
+    <!-- End Header Left -->
+
+    <!-- Start Header Center -->
+    <div class="header-center">
+      <div class="logo">
+        <img src="/assets/imgs/logo.png" />
+      </div>
+    </div>
+    <!-- End Header Center -->
+
+    <!-- Start Header Right -->
+    <div class="header-right"></div>
+    <!-- End Header Right-->
+  </mood-container>
+</main>

@@ -1,0 +1,30 @@
+@import "variables";
+
+.header {
+  height: 80px;
+  max-height: 80px;
+  width: 100vw;
+  background: $DARK_GRAY;
+  padding: 10px;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+}
+
+::ng-deep {
+  .inner-header {
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
+    grid-template-rows: 60px;
+    padding: 0px !important;
+  }
+}

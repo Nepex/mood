@@ -10,11 +10,11 @@ import { BaseController } from '../../common/controllers/base.controller';
 import { BaseControllerService } from '../../common/controllers/base.controller.service';
 
 @Component({
-  selector: 'mood-main-layout',
+  selector: 'mood-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class MainLayoutComponent
+export class LayoutComponent
   extends BaseController
   implements AfterViewInit, OnDestroy
 {

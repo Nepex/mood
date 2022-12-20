@@ -1,14 +1,14 @@
 <mood-page-loader [loading]="loadingProcesses > 0"></mood-page-loader>
 
-<main>
+<main class="layout">
   <!-- Start Header -->
   <header>
-    <mood-main-header></mood-main-header>
+    <mood-header></mood-header>
   </header>
   <!-- End Header -->
 
   <!-- Start Main Content -->
-  <section>
+  <section class="content">
     <ng-content></ng-content>
   </section>
   <!-- End Main Content -->
