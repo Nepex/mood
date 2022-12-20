@@ -29,6 +29,7 @@ import { Util } from '../common/util';
 
       .error {
         color: $RED;
+        font-size: 0.8rem;
       }
     `,
   ],

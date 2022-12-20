@@ -1,75 +1,82 @@
 <mood-container type="full" wrapperClasses="flex-center flex-column">
-  <!-- Start New User -->
-  <section class="auth-step-container">
-    <div class="auth-step-form-container">
-      <!-- Start Title -->
-      <h2 class="pb-4">Create Your Account</h2>
-      <!-- End Title -->
+  <!-- Start Title -->
+  <h1 class="pb-4">Create Your Account</h1>
+  <!-- End Title -->
 
+  <!-- Start Register -->
+  <section class="auth-container">
+    <div>
       <!-- Start Form -->
       <form [formGroup]="form" (ngSubmit)="createUser()">
         <!-- Start Fields -->
         <div class="p-fluid">
           <!-- Email -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Email</label>
+          <div class="p-field my-4">
+            <input
+              type="search"
+              formControlName="email"
+              pInputText
+              spellcheck="false"
+              autocomplete="off"
+              placeholder="Email"
+              autofocus
+            />
+            <div class="flex">
               <mood-form-validation-msgs
                 [control]="form.controls.email"
                 [showErrors]="form.showErrors"
               ></mood-form-validation-msgs>
             </div>
-            <input
-              type="text"
-              formControlName="email"
-              pInputText
-              spellcheck="false"
-              autocomplete="off"
-            />
           </div>
 
           <!-- Password -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Password</label>
-              <mood-form-validation-msgs
-                [control]="form.controls.password"
-                [showErrors]="form.showErrors"
-              ></mood-form-validation-msgs>
-            </div>
+          <div class="p-field my-4">
             <input
               type="password"
               formControlName="password"
               autocomplete="off"
               pInputText
+              placeholder="Password"
             />
-          </div>
-
-          <!-- Confirm Password -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Confirm Password</label>
+            <div class="flex">
               <mood-form-validation-msgs
-                [control]="form.controls.confirmPassword"
+                [control]="form.controls.password"
                 [showErrors]="form.showErrors"
               ></mood-form-validation-msgs>
             </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="p-field my-4">
             <input
               type="password"
               formControlName="confirmPassword"
               autocomplete="off"
               pInputText
+              placeholder="Confirm Password"
             />
+            <div class="flex">
+              <mood-form-validation-msgs
+                [control]="form.controls.confirmPassword"
+                [showErrors]="form.showErrors"
+              ></mood-form-validation-msgs>
+            </div>
+          </div>
+
+          <!-- Terms of Service -->
+          <div class="p-field my-4">
+            By registering, you agree to the
+            <a>Terms of Service</a>.
           </div>
         </div>
         <!-- End Fields-->
 
         <!-- Start Form Actions -->
-        <div class="flex-center mt-4 pt-2">
+        <div class="flex justify-content-end mt-4 pt-2">
           <button
             pButton
             type="submit"
-            label="Create"
+            label="Get Started!"
             [loading]="isSubmitting"
           ></button>
         </div>
@@ -78,5 +85,5 @@
       <!-- End Form -->
     </div>
   </section>
-  <!-- End New User -->
+  <!-- End Register -->
 </mood-container>

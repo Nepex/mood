@@ -13,7 +13,7 @@ body {
 
 body {
   font-family: $FONT_PRIMARY;
-  color: $TEXT_COLOR_PRIMARY;
+  color: $TEXT_COLOR;
   background: $BG_COLOR;
 
   @media (max-width: $LG_BREAKPOINT) {
@@ -29,8 +29,10 @@ body {
   }
 }
 
-label {
-  font-size: 1.3rem;
+h1 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: $WHITE;
 }
 
 textarea {
@@ -39,11 +41,11 @@ textarea {
 
 a {
   @include actionable();
-  @include color-transition($SECONDARY_COLOR, lighten($SECONDARY_COLOR, 10%));
+  @include color-transition($HIGHLIGHT_COLOR, lighten($HIGHLIGHT_COLOR, 10%));
 }
 
 ::selection {
-  background: $SECONDARY_COLOR;
+  background: $HIGHLIGHT_COLOR;
 }
 
 ::-webkit-scrollbar {
@@ -59,5 +61,5 @@ a {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: $SECONDARY_COLOR;
+  background: $HIGHLIGHT_COLOR;
 }

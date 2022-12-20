@@ -1,13 +1,3 @@
-.auth-step-form-container {
-  .terms-link {
-    font-weight: bold;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  @media (max-width: 768px) {
-    padding: 0 35px;
-  }
+.auth-container {
+  width: 300px;
 }
