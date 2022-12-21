@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'mood-root',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'mood';
+  constructor(private readonly primeNgConfig: PrimeNGConfig) {
+    this.primeNgConfig.ripple = true;
+  }
 }

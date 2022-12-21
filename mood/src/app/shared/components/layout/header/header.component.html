@@ -2,10 +2,10 @@
   <mood-container wrapperClasses="inner-header">
     <!-- Start Header Left -->
     <div class="header-left">
-      <ng-container *ngIf="me">
-        <i class="las la-bars"></i>
-        <nav></nav>
-      </ng-container>
+      <nav *ngIf="me">
+        <i class="las la-bars" (click)="navMenuItems.toggle($event)"></i>
+        <p-menu #navMenuItems [popup]="true" [model]="menuItems"></p-menu>
+      </nav>
     </div>
     <!-- End Header Left -->
 

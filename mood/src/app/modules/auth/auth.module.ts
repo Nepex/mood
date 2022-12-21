@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { SharedModule } from '@shared';
@@ -21,6 +22,7 @@ import { RegisterComponent } from './register/register.component';
     FormsModule,
     InputTextModule,
     ReactiveFormsModule,
+    RippleModule,
     SharedModule,
     TooltipModule,
   ],

@@ -3,7 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { ContainerComponent } from './components/layout/container/container.component';
@@ -24,11 +26,13 @@ const declarations = [
 
 @NgModule({
   imports: [
-    CommonModule,
     ButtonModule,
+    CommonModule,
     FormsModule,
+    MenuModule,
     ProgressSpinnerModule,
     TooltipModule,
+    RippleModule,
   ],
   declarations,
   exports: declarations,

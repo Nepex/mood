@@ -19,7 +19,7 @@ import { Util } from '../common/util';
         position: fixed;
         width: 100%;
         height: 100%;
-        background-color: transparentize($WHITE, 0.5);
+        background-color: transparentize($DARK_GRAY, 0.5);
         backdrop-filter: blur(3px);
         z-index: 9999;
       }

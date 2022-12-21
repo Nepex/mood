@@ -5,6 +5,59 @@
   z-index: 9999;
 }
 
+// Ripple
+.p-ink {
+  background: transparentize($WHITE, 0.6) !important;
+}
+
+// Menus
+.p-menu {
+  font-family: $FONT_PRIMARY !important;
+  color: $TEXT_COLOR !important;
+  padding: 0 !important;
+  margin-top: 10px;
+
+  border-radius: 10px !important;
+
+  &.p-menu-overlay {
+    background-color: $DARK_GRAY_2 !important;
+  }
+
+  li {
+    &:first-child {
+      .p-menuitem-link {
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+      }
+    }
+
+    &:last-child {
+      .p-menuitem-link {
+        border-bottom-left-radius: 10px !important;
+        border-bottom-right-radius: 10px !important;
+      }
+    }
+  }
+
+  .p-menuitem-link {
+    box-shadow: none !important;
+    border: none !important;
+    transition: 0.2s !important;
+
+    &:hover {
+      transition: 0.2s;
+      background-color: lighten($DARK_GRAY_2, 5%) !important;
+
+      box-shadow: none !important;
+      border: none !important;
+    }
+
+    .p-menuitem-text {
+      color: $WHITE !important;
+    }
+  }
+}
+
 // Buttons
 .p-button {
   background: darken($PRIMARY_COLOR, 15%) !important;
@@ -34,10 +87,6 @@
   @media (max-width: 767px) {
     max-width: 90%;
   }
-}
-
-.p-ink {
-  background: transparentize($WHITE, 0.3) !important;
 }
 
 // Forms

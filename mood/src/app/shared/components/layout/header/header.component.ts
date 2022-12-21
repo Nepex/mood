@@ -1,18 +1,40 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { StoreService, UserModel } from '@core';
+import { MenuItem as PngMenuItem } from 'primeng/api';
+
+import { AuthService, StoreService, UserModel } from '@core';
+import { BaseController } from '../../../common/controllers/base.controller';
+import { BaseControllerService } from '../../../common/controllers/base.controller.service';
 
 @Component({
   selector: 'mood-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent extends BaseController implements OnDestroy {
   me: UserModel | undefined;
   stateSub: Subscription;
 
-  constructor(private readonly store: StoreService) {
+  menuItems: PngMenuItem[] = [
+    {
+      label: 'Logout',
+      command: () => {
+        this.handleLoad(async () => {
+          this.authService.logout();
+          await this.sleep(250);
+          await this.baseService.router.navigateByUrl('/auth');
+        });
+      },
+    },
+  ];
+
+  constructor(
+    public baseService: BaseControllerService,
+    private readonly authService: AuthService,
+    private readonly store: StoreService
+  ) {
+    super(baseService);
     this.stateSub = this.store.state$.subscribe(
       (state) => (this.me = state.me)
     );

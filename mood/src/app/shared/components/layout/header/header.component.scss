@@ -7,19 +7,33 @@
   background: $DARK_GRAY;
   padding: 10px;
 
-  .logo {
+  .header-left {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
 
-    img {
-      height: auto;
-      width: auto;
-
-      max-height: 60px;
-      max-width: 100%;
+    i {
       cursor: pointer;
+      font-size: 2rem;
+    }
+  }
+
+  .header-center {
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 0 10px;
+
+      img {
+        height: auto;
+        width: auto;
+
+        max-height: 60px;
+        max-width: 100%;
+        cursor: pointer;
+      }
     }
   }
 }
