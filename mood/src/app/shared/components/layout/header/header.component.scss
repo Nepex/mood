@@ -7,15 +7,22 @@
   background: $DARK_GRAY;
   padding: 10px;
 
+  i {
+    cursor: pointer;
+    font-size: 2.5rem;
+    transition: 0.2s;
+    color: $WHITE;
+
+    &:hover {
+      transition: 0.2s;
+      color: $PRIMARY_COLOR;
+    }
+  }
+
   .header-left {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    i {
-      cursor: pointer;
-      font-size: 2rem;
-    }
   }
 
   .header-center {
@@ -35,6 +42,12 @@
         cursor: pointer;
       }
     }
+  }
+
+  .header-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 

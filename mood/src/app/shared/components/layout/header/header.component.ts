@@ -21,11 +21,20 @@ export class HeaderComponent extends BaseController implements OnDestroy {
       label: 'Logout',
       command: () => {
         this.handleLoad(async () => {
-          this.authService.logout();
           await this.sleep(250);
+          this.authService.logout();
           await this.baseService.router.navigateByUrl('/auth');
         });
       },
+    },
+  ];
+
+  addMenuItems: PngMenuItem[] = [
+    {
+      label: 'Add Mood',
+    },
+    {
+      label: 'Add Journal Entry',
     },
   ];
 

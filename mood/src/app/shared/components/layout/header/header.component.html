@@ -18,7 +18,12 @@
     <!-- End Header Center -->
 
     <!-- Start Header Right -->
-    <div class="header-right"></div>
+    <div class="header-right">
+      <nav *ngIf="me">
+        <i class="las la-plus" (click)="addNavMenuItems.toggle($event)"></i>
+        <p-menu #addNavMenuItems [popup]="true" [model]="addMenuItems"></p-menu>
+      </nav>
+    </div>
     <!-- End Header Right-->
   </mood-container>
 </main>
