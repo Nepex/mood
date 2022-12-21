@@ -1,64 +1,70 @@
 <mood-container type="full" wrapperClasses="flex-center flex-column">
-  <!-- Start Continue -->
-  <section>
-    <div>
-      <!-- Start Title -->
-      <h1 class="pb-4">Login</h1>
-      <!-- End Title -->
+  <!-- Start Title -->
+  <h1 class="pb-4">Login</h1>
+  <!-- End Title -->
 
+  <!-- Start Login -->
+  <section class="auth-container">
+    <div>
       <!-- Start Form -->
       <form [formGroup]="form" (ngSubmit)="attemptLogin()">
         <!-- Start Form Fields -->
         <div class="p-fluid">
           <!-- Email -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Email</label>
+          <div class="p-field my-4">
+            <input
+              type="search"
+              formControlName="email"
+              pInputText
+              autocomplete="off"
+              placeholder="Email"
+              autofocus
+            />
+            <div class="flex">
               <mood-form-validation-msgs
                 [control]="form.controls.email"
                 [showErrors]="form.showErrors"
               ></mood-form-validation-msgs>
             </div>
-            <input
-              type="text"
-              formControlName="email"
-              pInputText
-              autocomplete="off"
-            />
           </div>
 
           <!-- Password -->
-          <div class="p-field">
-            <div class="flex justify-content-between">
-              <label>Password</label>
-              <mood-form-validation-msgs
-                [control]="form.controls.password"
-                [showErrors]="form.showErrors"
-              ></mood-form-validation-msgs>
-            </div>
+          <div class="p-field my-4">
             <input
               type="password"
               formControlName="password"
               pInputText
               autocomplete="off"
+              placeholder="Password"
             />
+
+            <div class="flex">
+              <mood-form-validation-msgs
+                [control]="form.controls.password"
+                [showErrors]="form.showErrors"
+              ></mood-form-validation-msgs>
+            </div>
           </div>
         </div>
         <!-- End Form Fields -->
 
         <!-- Start Form Actions -->
-        <div class="flex-center">
+        <div class="flex flex-column align-items-center mt-6">
           <button
             pButton
             type="submit"
             label="Login"
             [loading]="isSubmitting"
           ></button>
+
+          <div class="mt-3 terms text-center">
+            Don't have an account? <a routerLink="../register">Sign up</a>
+          </div>
         </div>
         <!-- End Form Actions -->
       </form>
       <!-- Start Form -->
     </div>
   </section>
-  <!-- End Continue -->
+  <!-- End Login -->
 </mood-container>

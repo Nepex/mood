@@ -1,0 +1,13 @@
+@import "variables";
+
+.auth-container {
+  width: 300px;
+  max-width: 100%;
+
+  .terms {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: $MD_BREAKPOINT) {
+  }
+}

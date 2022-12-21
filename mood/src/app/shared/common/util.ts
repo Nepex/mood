@@ -87,9 +87,9 @@ export class Util {
   static parseError(err: HttpErrorResponse | string): string {
     return typeof err === 'string'
       ? err
-      : err?.error?.message
-      ? err.error.message
-      : 'Server error - Please check back later';
+      : err?.error?.message ??
+          err?.message ??
+          'Server error - Please check back later';
   }
 
   /** Truncates string to limited amount of characters. */

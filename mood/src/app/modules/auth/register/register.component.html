@@ -62,23 +62,21 @@
               ></mood-form-validation-msgs>
             </div>
           </div>
-
-          <!-- Terms of Service -->
-          <div class="p-field my-4">
-            By registering, you agree to the
-            <a>Terms of Service</a>.
-          </div>
         </div>
         <!-- End Fields-->
 
         <!-- Start Form Actions -->
-        <div class="flex justify-content-end mt-4 pt-2">
+        <div class="flex flex-column align-items-center mt-6">
           <button
             pButton
             type="submit"
             label="Get Started!"
             [loading]="isSubmitting"
           ></button>
+
+          <div class="mt-3 terms text-center">
+            Already have an account? <a routerLink="../login">Login</a>
+          </div>
         </div>
         <!-- End Form Actions -->
       </form>

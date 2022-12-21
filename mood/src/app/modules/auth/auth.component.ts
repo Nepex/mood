@@ -7,7 +7,7 @@ const logger = new Logger('AuthComponent');
 @Component({
   selector: 'mood-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss'],
+  styleUrls: ['./auth-shared.scss'],
 })
 export class AuthComponent implements OnInit {
   constructor() {}

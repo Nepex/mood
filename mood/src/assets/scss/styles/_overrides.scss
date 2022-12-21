@@ -1,7 +1,13 @@
 // PRIMENG
+// Loaders
+.p-progress-spinner-circle {
+  stroke: $PRIMARY_COLOR !important;
+  z-index: 9999;
+}
+
 // Buttons
 .p-button {
-  background: darken($HIGHLIGHT_COLOR, 15%) !important;
+  background: darken($PRIMARY_COLOR, 15%) !important;
   font-family: $FONT_PRIMARY !important;
   border: 0 !important;
   font-size: 1.15rem !important;
@@ -11,13 +17,17 @@
   transition: 0.2s;
   padding: 0.5rem 3rem !important;
 
+  &.w-100 {
+    width: 100% !important;
+  }
+
   &:focus {
     outline: 0 !important;
     box-shadow: 0 0 0 0 transparentize($BLACK, 1) !important;
   }
 
   &:hover {
-    background-color: lighten(darken($HIGHLIGHT_COLOR, 15%), 10%) !important;
+    background-color: lighten(darken($PRIMARY_COLOR, 15%), 10%) !important;
     transition: 0.2s;
   }
 
@@ -31,6 +41,12 @@
 }
 
 // Forms
+.ng-submitted {
+  .ng-invalid {
+    border-bottom: 1px solid $RED !important;
+  }
+}
+
 .p-field {
   input,
   .p-dropdown,
@@ -45,6 +61,7 @@
     height: 40px;
     min-width: 250px;
     outline: none;
+    box-shadow: none !important;
     border-radius: 0;
     margin-bottom: 5px;
 
@@ -56,14 +73,43 @@
       color: darken($WHITE, 50%) !important;
     }
 
-    &:focus,
-    &:active {
-      border-bottom: 1px solid $HIGHLIGHT_COLOR !important;
-      box-shadow: none !important;
+    &:focus:not(.ng-invalid.ng-touched),
+    &:active:not(.ng-invalid.ng-touched) {
+      border-bottom: 1px solid $PRIMARY_COLOR !important;
     }
 
     @media (max-width: 767px) {
       min-width: 80%;
+    }
+  }
+}
+
+// Toasts
+.p-toast {
+  .p-toast-message {
+    z-index: 11 !important;
+    font-family: $FONT_PRIMARY !important;
+
+    &.p-toast-message-success {
+      color: $WHITE !important;
+      background-color: darken($GREEN, 15%) !important;
+      border-left: none !important;
+    }
+
+    &.p-toast-message-error {
+      color: $WHITE !important;
+      background-color: darken($RED, 15%) !important;
+      border-left: none !important;
+    }
+
+    .p-toast-message-icon {
+      display: none;
+    }
+
+    .pi-times-circle,
+    .pi-times,
+    .pi {
+      color: $WHITE !important;
     }
   }
 }

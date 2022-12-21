@@ -11,7 +11,7 @@ import { Util } from '../common/util';
       class="error"
     >
       <div *ngIf="control.errors?.required">Required</div>
-      <div *ngIf="control.errors?.pattern">Invalid format</div>
+      <div *ngIf="control.errors?.pattern">Please enter a valid value</div>
       <div *ngIf="control.errors?.maxlength">
         Max {{ control.errors?.maxlength.requiredLength }} characters
       </div>
@@ -30,6 +30,8 @@ import { Util } from '../common/util';
       .error {
         color: $RED;
         font-size: 0.8rem;
+        position: relative;
+        left: 10px;
       }
     `,
   ],

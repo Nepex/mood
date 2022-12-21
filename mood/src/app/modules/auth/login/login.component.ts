@@ -9,7 +9,7 @@ const logger = new Logger('LoginComponent');
 @Component({
   selector: 'mood-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['../auth-shared.scss'],
 })
 export class LoginComponent extends FormController<Credentials> {
   constructor(
@@ -47,6 +47,6 @@ export class LoginComponent extends FormController<Credentials> {
       return await this.baseService.router.navigate([redirect]);
     }
 
-    this.baseService.router.navigateByUrl('/');
+    await this.baseService.router.navigateByUrl('/');
   }
 }

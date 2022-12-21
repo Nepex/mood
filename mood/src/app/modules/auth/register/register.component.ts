@@ -11,7 +11,7 @@ const logger = new Logger('RegisterComponent');
 @Component({
   selector: 'mood-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  styleUrls: ['../auth-shared.scss'],
 })
 export class RegisterComponent extends FormController<
   Pick<UserModel, 'email' | 'password'>

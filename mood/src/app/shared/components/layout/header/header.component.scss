@@ -14,8 +14,11 @@
     height: 100%;
 
     img {
-      height: 100%;
+      height: auto;
       width: auto;
+
+      max-height: 60px;
+      max-width: 100%;
       cursor: pointer;
     }
   }
@@ -24,7 +27,7 @@
 ::ng-deep {
   .inner-header {
     display: grid;
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 50px 1fr 50px;
     grid-template-rows: 60px;
     padding: 0px !important;
   }

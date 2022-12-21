@@ -30,6 +30,7 @@ body {
 }
 
 h1 {
+  text-align: center;
   font-size: 1.8rem;
   font-weight: 400;
   color: $WHITE;
@@ -41,11 +42,11 @@ textarea {
 
 a {
   @include actionable();
-  @include color-transition($HIGHLIGHT_COLOR, lighten($HIGHLIGHT_COLOR, 10%));
+  @include color-transition($PRIMARY_COLOR, lighten($PRIMARY_COLOR, 10%));
 }
 
 ::selection {
-  background: $HIGHLIGHT_COLOR;
+  background: $PRIMARY_COLOR;
 }
 
 ::-webkit-scrollbar {
@@ -61,5 +62,12 @@ a {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: $HIGHLIGHT_COLOR;
+  background: $PRIMARY_COLOR;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
 }
