@@ -68,7 +68,6 @@ export class LayoutComponent
         isMobile: true,
       });
     } else {
-      this.layoutState.isMobileMenuOpen = false;
       this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
         isMobile: false,
       });

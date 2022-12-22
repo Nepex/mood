@@ -20,7 +20,6 @@ export enum AppStateKey {
 export const defaultLayoutState: LayoutState = {
   isMobile: undefined,
   isScrolled: undefined,
-  isMobileMenuOpen: undefined,
   colorTheme: ColorTheme.Dark,
   loadingProcesses: 0,
   headerHeight: 80,
