@@ -12,7 +12,7 @@ export * from './common/guards/auth.guard';
 
 // Components
 export * from './components/form-validation-msgs.component';
-export * from './components/page-loader.component';
+export * from './components/load-spinner.component';
 export * from './components/container.component';
 export * from './components/error-page.component';
 

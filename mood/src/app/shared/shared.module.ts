@@ -11,17 +11,17 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ContainerComponent } from './components/container.component';
 import { ErrorPageComponent } from './components/error-page.component';
 import { FormValidationMsgsComponent } from './components/form-validation-msgs.component';
-import { LayoutComponent } from './components/layout/layout.component';
 import { HeaderComponent } from './components/layout/header/header.component';
-import { PageLoaderComponent } from './components/page-loader.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { LoadSpinnerComponent } from './components/load-spinner.component';
 
 const declarations = [
   ContainerComponent,
   ErrorPageComponent,
   FormValidationMsgsComponent,
-  LayoutComponent,
   HeaderComponent,
-  PageLoaderComponent,
+  LayoutComponent,
+  LoadSpinnerComponent,
 ];
 
 @NgModule({

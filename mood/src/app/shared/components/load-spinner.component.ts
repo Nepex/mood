@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Util } from '../common/util';
 
 @Component({
-  selector: 'mood-page-loader',
+  selector: 'mood-load-spinner',
   template: `
     <div
       class="load-container"
@@ -44,7 +44,7 @@ import { Util } from '../common/util';
   ],
   animations: [Util.getAni('fadeInOut')],
 })
-export class PageLoaderComponent {
+export class LoadSpinnerComponent {
   @Input() loading: boolean;
   @Input() positionStyle: 'absolute' | 'fixed' = 'fixed';
   @Input() size: 'sm' | 'lg' = 'lg';

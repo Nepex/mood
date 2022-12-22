@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ErrorPageType } from '../common/types';
 
 @Component({
-  selector: 'mood-page-not-found',
+  selector: 'mood-error-page',
   template: `
     <mood-container type="full" wrapperClasses="flex-center flex-column">
       <i class="las la-sad-cry text-8xl mb-3"></i>
