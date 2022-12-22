@@ -1,17 +1,36 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
+import { ColorTheme, LayoutState } from '../shared/common/types';
 import { Session } from './auth/auth.model';
 import { UserModel } from './user/user.model';
 
 export interface AppState {
   me: UserModel;
   session: Session;
+  layout: LayoutState;
 }
+
+export enum AppStateKey {
+  Me = 'me',
+  Session = 'session',
+  Layout = 'layout',
+}
+
+export const defaultLayoutState: LayoutState = {
+  isMobile: undefined,
+  isScrolled: undefined,
+  isMobileMenuOpen: undefined,
+  colorTheme: ColorTheme.Dark,
+  loadingProcesses: 0,
+  headerHeight: 80,
+};
 
 @Injectable({ providedIn: 'root' })
 export class StoreService {
-  private readonly _state = new BehaviorSubject<Partial<AppState>>({});
+  private readonly _state = new BehaviorSubject<Partial<AppState>>({
+    layout: defaultLayoutState,
+  });
   readonly state$ = this._state.asObservable();
 
   get state(): Partial<AppState> {
@@ -22,12 +41,12 @@ export class StoreService {
     this._state.next(val);
   }
 
-  async get(prop: keyof AppState): Promise<any> {
+  async get(prop: AppStateKey): Promise<any> {
     const state = await firstValueFrom(this.state$);
     return state[prop];
   }
 
-  save(prop: keyof AppState, val: any) {
+  set(prop: AppStateKey, val: any) {
     const state = { ...this.state };
     const existingData = state[prop];
 
@@ -38,7 +57,7 @@ export class StoreService {
     this.state = { ...state };
   }
 
-  remove(prop: keyof AppState, uid?: string) {
+  remove(prop: AppStateKey, uid?: string) {
     const state = { ...this.state };
 
     if (!uid) {

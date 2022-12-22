@@ -1,11 +1,5 @@
-export class Session {
+export interface Session {
   token: string;
-
-  constructor(model?: Partial<Session>) {
-    if (model) {
-      Object.assign(this, model);
-    }
-  }
 }
 
 export interface Credentials {

@@ -27,7 +27,7 @@ export class RegisterComponent extends FormController<
 
   /** Validates user form, registers the new user, logs in, emits step completion. */
   async createUser() {
-    this.handleSubmit(
+    await this.handleSubmit(
       async () => {
         const { email, password } = this.form.getValues();
 

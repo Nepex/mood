@@ -51,12 +51,12 @@ export enum ErrorPageType {
 }
 
 export interface LayoutState {
-  isMobile: boolean;
-  isScrolled: boolean;
-  isMobileMenuOpen: boolean;
-  isNavSideBarOpen: boolean;
+  isMobile: boolean | undefined;
+  isScrolled: boolean | undefined;
+  isMobileMenuOpen: boolean | undefined;
   colorTheme: ColorTheme;
-  globalLoadingMessage: string | undefined;
+  loadingProcesses: number;
+  headerHeight: number;
 }
 
 export enum ColorTheme {

@@ -7,8 +7,16 @@
 
   <!-- Start Main Content -->
   <section class="content">
-    <mood-page-loader [loading]="loadingProcesses > 0"></mood-page-loader>
+    <!-- Start Loader -->
+    <mood-page-loader
+      [loading]="layoutState.loadingProcesses > 0"
+      positionStyle="absolute"
+    ></mood-page-loader>
+    <!-- End Loader -->
+
+    <!-- Start Content -->
     <ng-content></ng-content>
+    <!-- End Content -->
   </section>
   <!-- End Main Content -->
 </main>

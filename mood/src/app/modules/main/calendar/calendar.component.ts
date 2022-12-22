@@ -31,9 +31,11 @@ export class CalendarComponent
   }
 
   async ngOnInit() {
-    // select current month by default
-    this.selectedMonthIndex = dayjs().month();
-    this.loadMonth(this.selectedMonthIndex);
+    await this.handleLoad(async () => {
+      // select current month by default
+      this.selectedMonthIndex = dayjs().month();
+      this.loadMonth(this.selectedMonthIndex);
+    });
   }
 
   loadMonth(monthIndex: number) {

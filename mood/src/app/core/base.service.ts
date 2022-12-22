@@ -14,7 +14,7 @@ import {
   PagedResponse,
   Util,
 } from '@shared';
-import { AppState, StoreService } from './store.service';
+import { AppState, AppStateKey, StoreService } from './store.service';
 
 const logger = new Logger('BaseService');
 
@@ -34,7 +34,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   /** Gets an array of records by filters/sort/limit/offset. */
   async search(
     query: FilterQueryOpts<MODEL>,
-    stateProp?: keyof AppState
+    stateProp?: AppStateKey
   ): Promise<PagedResponse<MODEL>> {
     const params = new HttpParams().set('findQuery', JSON.stringify(query));
 
@@ -46,7 +46,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result.data);
+        this.store.set(stateProp, result.data);
       }
 
       return result;
@@ -58,7 +58,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   /** Gets an array of all records for that MODEL. */
   async findAll(
     query: FilterQueryOpts<MODEL>,
-    stateProp?: keyof AppState
+    stateProp?: AppStateKey
   ): Promise<MODEL[]> {
     const params = new HttpParams().set('findQuery', JSON.stringify(query));
     const call = this.http.get<MODEL[]>(`${this.baseUrl}`, {
@@ -69,7 +69,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;
@@ -81,7 +81,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   /** Uses findAll, but only returns a number count. */
   async count(
     filters: FilterOpts<MODEL>,
-    stateProp?: keyof AppState
+    stateProp?: AppStateKey
   ): Promise<number> {
     const query: FilterQueryOpts<MODEL> = {
       filters,
@@ -94,7 +94,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   /** Gets a record by filters. */
   async findOne(
     filters: FilterOpts<MODEL>,
-    stateProp?: keyof AppState
+    stateProp?: AppStateKey
   ): Promise<MODEL> {
     const params = new HttpParams().set('filters', JSON.stringify(filters));
     const call = this.http.get<MODEL>(`${this.baseUrl}/find-one`, {
@@ -105,7 +105,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;
@@ -115,15 +115,12 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   }
 
   /** Gets a record by UID. */
-  async findByUid(uid: string, stateProp?: keyof AppState): Promise<MODEL> {
+  async findByUid(uid: string, stateProp?: AppStateKey): Promise<MODEL> {
     return await this.findOne({ uid } as MODEL, stateProp);
   }
 
   /** Creates a record, or if a uid is present - updates the record. */
-  async save(
-    model: Partial<MODEL>,
-    stateProp?: keyof AppState
-  ): Promise<MODEL> {
+  async save(model: Partial<MODEL>, stateProp?: AppStateKey): Promise<MODEL> {
     if (model.uid) {
       return await this.update(model, stateProp);
     }
@@ -134,7 +131,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;
@@ -144,17 +141,14 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   }
 
   /** Updates a record. */
-  async update(
-    model: Partial<MODEL>,
-    stateProp?: keyof AppState
-  ): Promise<MODEL> {
+  async update(model: Partial<MODEL>, stateProp?: AppStateKey): Promise<MODEL> {
     const call = this.http.put<MODEL>(`${this.baseUrl}/${model.uid}`, model);
 
     try {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;
@@ -164,14 +158,14 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   }
 
   /** Deletes a record. */
-  async remove(model: Partial<MODEL>, stateProp?: keyof AppState) {
+  async remove(model: Partial<MODEL>, stateProp?: AppStateKey) {
     return await this.removeByUid(model.uid as string, stateProp).catch((e) => {
       throw new Error(Util.parseError(e as HttpErrorResponse));
     });
   }
 
   /** Deletes a record by UID. */
-  async removeByUid(uid: string, stateProp?: keyof AppState) {
+  async removeByUid(uid: string, stateProp?: AppStateKey) {
     const call = this.http.delete<MODEL>(`${this.baseUrl}/${uid}`);
 
     try {
@@ -190,14 +184,14 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   /**
    * Get properties associated with current user.
    */
-  async mine(stateProp?: keyof AppState): Promise<MODEL> {
+  async mine(stateProp?: AppStateKey): Promise<MODEL> {
     const call = this.http.get<MODEL>(`${this.baseUrl}/mine`);
 
     try {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;
@@ -207,14 +201,14 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
   }
 
   /** Gets array of property associated with current used. */
-  async allOfMine(stateProp?: keyof AppState): Promise<MODEL[]> {
+  async allOfMine(stateProp?: AppStateKey): Promise<MODEL[]> {
     const call = this.http.get<MODEL[]>(`${this.baseUrl}/all-of-mine`);
 
     try {
       const result = await lastValueFrom(call);
 
       if (stateProp) {
-        this.store.save(stateProp, result);
+        this.store.set(stateProp, result);
       }
 
       return result;

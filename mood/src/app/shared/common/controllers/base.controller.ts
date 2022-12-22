@@ -1,27 +1,35 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 
+import { AppStateKey } from '@core';
 import { BaseControllerService } from './base.controller.service';
-import { LoadingOptions, NotifType } from '../types';
+import { LayoutState, LoadingOptions, NotifType } from '../types';
+import { Logger } from '../logger';
 import { Util } from '../util';
+
+const logger = new Logger('BaseController');
 
 export abstract class BaseController {
   isLoading = false;
+  queryParams: Params | undefined;
   uid: string | undefined;
 
   messages = {
     requiredFields: 'Please fill out the required fields.',
   };
 
-  constructor(public baseService?: BaseControllerService) {}
+  constructor(public baseService?: BaseControllerService) {
+    this.queryParams =
+      this.baseService?.route?.snapshot?.queryParams ?? undefined;
+  }
 
   /** Sets isLoading while passed in code block runs, then notifies on resolve or reject. */
-  handleLoad(fn: Function, options: LoadingOptions = {}) {
-    this.toggleLoadingSpinner(true, options);
+  async handleLoad(fn: Function, options: LoadingOptions = {}) {
+    await this.toggleLoadingSpinner(true, options);
 
-    fn()
-      .then(() => {
-        this.toggleLoadingSpinner(false, options);
+    await fn()
+      .then(async () => {
+        await this.toggleLoadingSpinner(false, options);
 
         if (options?.successMessage && this.baseService) {
           Util.notify(
@@ -31,8 +39,8 @@ export abstract class BaseController {
           );
         }
       })
-      .catch((err: HttpErrorResponse | string) => {
-        this.toggleLoadingSpinner(false, options);
+      .catch(async (err: HttpErrorResponse | string) => {
+        await this.toggleLoadingSpinner(false, options);
 
         if (!options?.suppressErrors && this.baseService) {
           Util.notify(
@@ -45,12 +53,20 @@ export abstract class BaseController {
   }
 
   /** Toggles input variables for loading spinners. */
-  toggleLoadingSpinner(isLoading: boolean, options: LoadingOptions) {
-    this.isLoading = isLoading;
-
+  async toggleLoadingSpinner(isLoading: boolean, options: LoadingOptions) {
     if (this.baseService && !options.disableLoadingEmits) {
-      this.baseService.toggleLoading.emit(isLoading);
+      const { loadingProcesses } = await this.baseService.store.get(
+        AppStateKey.Layout
+      );
+
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        loadingProcesses: isLoading
+          ? loadingProcesses + 1
+          : loadingProcesses - 1,
+      });
     }
+
+    this.isLoading = isLoading;
   }
 
   /** Displays a toast notification. */

@@ -6,6 +6,7 @@ import { MenuItem as PngMenuItem } from 'primeng/api';
 import { AuthService, StoreService, UserModel } from '@core';
 import { BaseController } from '../../../common/controllers/base.controller';
 import { BaseControllerService } from '../../../common/controllers/base.controller.service';
+import { Util } from '../../../common/util';
 
 @Component({
   selector: 'mood-header',
@@ -19,9 +20,9 @@ export class HeaderComponent extends BaseController implements OnDestroy {
   menuItems: PngMenuItem[] = [
     {
       label: 'Logout',
-      command: () => {
-        this.handleLoad(async () => {
-          await this.sleep(250);
+      command: async () => {
+        await this.handleLoad(async () => {
+          await this.sleep(Util.SOFT_DELAY);
           this.authService.logout();
           await this.baseService.router.navigateByUrl('/auth');
         });

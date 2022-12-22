@@ -1,11 +1,10 @@
 @import "variables";
 
 .header {
-  height: 80px;
-  max-height: 80px;
+  height: $HEADER_HEIGHT;
+  max-height: $HEADER_HEIGHT;
   width: 100vw;
   background: $DARK_GRAY;
-  padding: 10px;
 
   i {
     cursor: pointer;
@@ -16,6 +15,10 @@
     &:hover {
       transition: 0.2s;
       color: $PRIMARY_COLOR;
+    }
+
+    @media (max-width: $SM_BREAKPOINT) {
+      font-size: 2rem;
     }
   }
 
@@ -31,7 +34,7 @@
       justify-content: center;
       align-items: center;
       height: 100%;
-      padding: 0 10px;
+      padding: 0 15px;
 
       img {
         height: auto;
@@ -56,6 +59,6 @@
     display: grid;
     grid-template-columns: 50px 1fr 50px;
     grid-template-rows: 60px;
-    padding: 0px !important;
+    padding: 10px !important;
   }
 }

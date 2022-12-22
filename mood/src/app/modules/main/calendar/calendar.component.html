@@ -1,6 +1,6 @@
 <mood-container wrapperClasses="flex-center flex-column">
   <!-- Start Calendar -->
-  <section class="calendar">
+  <section class="calendar" *ngIf="currentMonth">
     <div class="calendar-title">
       <a (click)="loadMonth(selectedMonthIndex - 1)"><</a>
       {{ currentMonth.monthName }} {{ currentMonth.yearNumber }}

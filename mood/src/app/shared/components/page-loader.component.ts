@@ -5,7 +5,13 @@ import { Util } from '../common/util';
 @Component({
   selector: 'mood-page-loader',
   template: `
-    <div class="page-loading-mask flex-center" [@fadeInOut] *ngIf="loading">
+    <div
+      class="load-container"
+      [@fadeInOut]
+      *ngIf="loading"
+      [ngStyle]="{ position: positionStyle }"
+      [ngClass]="{ sm: size === 'sm' }"
+    >
       <p-progressSpinner></p-progressSpinner>
     </div>
   `,
@@ -13,15 +19,26 @@ import { Util } from '../common/util';
     `
       @import 'variables';
 
-      .page-loading-mask {
-        top: 0;
-        left: 0;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: transparentize($DARK_GRAY, 0.5);
-        backdrop-filter: blur(3px);
-        z-index: 9999;
+      ::ng-deep {
+        .load-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: transparentize($DARK_GRAY, 0.5);
+          backdrop-filter: blur(3px);
+          z-index: 9999;
+
+          &.sm {
+            .p-progress-spinner {
+              width: 50px;
+              height: 50px;
+            }
+          }
+        }
       }
     `,
   ],
@@ -29,4 +46,6 @@ import { Util } from '../common/util';
 })
 export class PageLoaderComponent {
   @Input() loading: boolean;
+  @Input() positionStyle: 'absolute' | 'fixed' = 'fixed';
+  @Input() size: 'sm' | 'lg' = 'lg';
 }

@@ -9,7 +9,7 @@ import { Logger, Util } from '@shared';
 import { Session, Credentials } from './auth.model';
 import { BaseService } from '../base.service';
 import { UserModel } from '../user/user.model';
-import { StoreService } from '../store.service';
+import { AppStateKey, StoreService } from '../store.service';
 
 const logger = new Logger('AuthService');
 
@@ -42,7 +42,7 @@ export class AuthService extends BaseService {
     );
 
     if (existingToken) {
-      this.store.save('session', new Session({ token: existingToken }));
+      this.store.set(AppStateKey.Session, <Session>{ token: existingToken });
     }
   }
 
@@ -91,8 +91,8 @@ export class AuthService extends BaseService {
 
   /** Logout user and clear local storage. */
   logout() {
-    this.store.remove('session');
-    this.store.remove('me');
+    this.store.remove(AppStateKey.Session);
+    this.store.remove(AppStateKey.Me);
     this.localStorage.clear(AuthService.STORAGE_KEYS.TOKEN);
   }
 
@@ -105,7 +105,7 @@ export class AuthService extends BaseService {
     const response = this.http.get<UserModel>(`${this.baseUrl}/me`);
     try {
       const me = await lastValueFrom(response);
-      this.store.save('me', me);
+      this.store.set(AppStateKey.Me, me);
       return me;
     } catch (e) {
       throw new Error(Util.parseError(e as HttpErrorResponse));

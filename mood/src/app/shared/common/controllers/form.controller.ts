@@ -23,12 +23,16 @@ export abstract class FormController<MODEL> extends BaseController {
    * Sets isSubmitting while passed in code block runs
    * then notifies on resolve or reject. (See handleLoad())
    */
-  handleSubmit(fn: Function, options: LoadingOptions = {}, formOveride?: Form) {
+  async handleSubmit(
+    fn: Function,
+    options: LoadingOptions = {},
+    formOveride?: Form
+  ) {
     this.isSubmitting = true;
 
     const form = this.form ?? formOveride;
 
-    this.handleLoad(async () => {
+    await this.handleLoad(async () => {
       try {
         if (!form.valid) {
           form.showErrors = true;

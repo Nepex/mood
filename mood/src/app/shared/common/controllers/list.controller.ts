@@ -14,6 +14,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
   totalItems = 0;
   totalPages = 0;
   scrollTopOnRefresh = true;
+  isListLoading = false;
 
   sort: SortOpts<MODEL>[] | undefined;
   filters: FilterOpts<MODEL> | FilterOpts<MODEL>[] | undefined;
@@ -31,7 +32,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
   }
 
   async fetchData() {
-    this.baseService.toggleLoading.emit(true);
+    this.isListLoading = true;
 
     this.pagedResponse = await this.dataService.search({
       filters: this.filters,
@@ -51,7 +52,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
       this.scrollToTop();
     }
 
-    this.baseService.toggleLoading.emit(false);
+    this.isListLoading = false;
   }
 
   async applyPageChange(pageNumber: number) {

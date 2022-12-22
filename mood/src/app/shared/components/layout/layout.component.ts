@@ -4,10 +4,15 @@ import {
   HostListener,
   OnDestroy,
 } from '@angular/core';
+import { AppStateKey, defaultLayoutState } from '@core';
 import { Subject, Subscription, throttleTime } from 'rxjs';
 
 import { BaseController } from '../../common/controllers/base.controller';
 import { BaseControllerService } from '../../common/controllers/base.controller.service';
+import { Logger } from '../../common/logger';
+import { LayoutState } from '../../common/types';
+
+const logger = new Logger('LayoutComponent');
 
 @Component({
   selector: 'mood-layout',
@@ -19,8 +24,8 @@ export class LayoutComponent
   implements AfterViewInit, OnDestroy
 {
   // Loader
-  loadingListener: Subscription;
-  loadingProcesses = 0;
+  stateListener: Subscription;
+  layoutState = defaultLayoutState;
 
   windowViewChanged = new Subject();
 
@@ -37,9 +42,10 @@ export class LayoutComponent
   constructor(public baseService: BaseControllerService) {
     super(baseService);
 
-    this.loadingListener = this.baseService.toggleLoading.subscribe(
-      (isLoading) =>
-        isLoading ? this.loadingProcesses++ : this.loadingProcesses--
+    this.stateListener = this.baseService.store.state$.subscribe(
+      async ({ layout }) => {
+        this.layoutState = layout ?? defaultLayoutState;
+      }
     );
   }
 
@@ -53,24 +59,32 @@ export class LayoutComponent
   }
 
   ngOnDestroy() {
-    this.loadingListener.unsubscribe();
+    this.stateListener.unsubscribe();
   }
 
   setLayoutState() {
     if (window.innerWidth <= 992) {
-      this.baseService.setLayoutIsMobile(true);
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isMobile: true,
+      });
     } else {
-      this.baseService.layoutState.isMobileMenuOpen = false;
-      this.baseService.setLayoutIsMobile(false);
+      this.layoutState.isMobileMenuOpen = false;
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isMobile: false,
+      });
     }
 
     if (
-      window.scrollY > 120 ||
-      (this.baseService.layoutState.isScrolled && window.scrollY > 0)
+      window.scrollY > this.layoutState.headerHeight ||
+      (this.layoutState.isScrolled && window.scrollY > 0)
     ) {
-      this.baseService.setLayoutScrolled(true);
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isScrolled: true,
+      });
     } else {
-      this.baseService.setLayoutScrolled(false);
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isScrolled: true,
+      });
     }
   }
 }

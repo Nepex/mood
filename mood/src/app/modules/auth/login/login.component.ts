@@ -27,8 +27,8 @@ export class LoginComponent extends FormController<Credentials> {
   }
 
   /** Validates user credentials, creates new session if valid, then redirects. */
-  attemptLogin() {
-    this.handleSubmit(async () => {
+  async attemptLogin() {
+    await this.handleSubmit(async () => {
       const { email, password } = this.form.getValues();
       await this.authService.login({ email, password });
 
@@ -41,7 +41,7 @@ export class LoginComponent extends FormController<Credentials> {
   /** Redirects user to appropriate screen depending on current registration step saved. */
   async handleRedirect() {
     logger.info('Determining redirect...');
-    const redirect = this.baseService.route.snapshot.queryParams.redirect;
+    const redirect = this.queryParams?.redirect;
 
     if (redirect) {
       return await this.baseService.router.navigate([redirect]);
