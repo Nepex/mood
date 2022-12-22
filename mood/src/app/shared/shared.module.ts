@@ -8,7 +8,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { ContainerComponent } from './components/layout/container/container.component';
+import { ContainerComponent } from './components/container.component';
 import { ErrorPageComponent } from './components/error-page.component';
 import { FormValidationMsgsComponent } from './components/form-validation-msgs.component';
 import { LayoutComponent } from './components/layout/layout.component';
