@@ -21,6 +21,7 @@ export class CalendarComponent
   currentMonth: CalendarMonth;
   selectedMonthIndex: number;
 
+  weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
   selectedDay: CalendarDay;
 
   constructor(

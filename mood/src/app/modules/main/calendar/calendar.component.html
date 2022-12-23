@@ -1,17 +1,53 @@
 <mood-container wrapperClasses="flex-center flex-column">
   <!-- Start Calendar -->
   <section class="calendar" *ngIf="currentMonth">
-    <div class="calendar-title">
-      <a (click)="loadMonth(selectedMonthIndex - 1)"><</a>
-      {{ currentMonth.monthName }} {{ currentMonth.yearNumber }}
-      <a (click)="loadMonth(selectedMonthIndex + 1)">></a>
-    </div>
+    <!-- Start Calendar Title -->
+    <div class="calendar-title-row">
+      <i
+        class="las la-angle-left"
+        (click)="loadMonth(selectedMonthIndex - 1)"
+      ></i>
 
+      <h3>{{ currentMonth.monthName }} {{ currentMonth.yearNumber }}</h3>
+
+      <i
+        class="las la-angle-right"
+        (click)="loadMonth(selectedMonthIndex + 1)"
+      ></i>
+    </div>
+    <!-- End Calendar Title -->
+
+    <!-- Start Calendar Days -->
     <div class="calendar-days">
-      <div class="day cursor-pointer" *ngFor="let day of currentMonth.days">
-        {{ day.dayNumber }}
+      <div
+        class="calendar-day-header-labels"
+        *ngFor="let headerLabel of weekdayHeaderLabels"
+      >
+        <div class="calendar-day-header-label">
+          {{ headerLabel }}
+        </div>
+      </div>
+
+      <div class="calendar-day-container" *ngFor="let day of currentMonth.days">
+        <div
+          class="calendar-day"
+          [ngClass]="{
+            'not-current-month-calendar-day': day.monthPosition !== 'current'
+          }"
+        >
+          {{ day.dayNumber }}
+        </div>
       </div>
     </div>
+    <!-- End Calendar Days -->
   </section>
   <!-- End Calendar -->
+
+  <!-- Start Moods -->
+  <!-- Start Today's Mood -->
+  <!-- End Today's Mood -->
+
+  <!-- Start Recent Moods -->
+  <!-- End Recent Moods -->
+  <!-- End Moods -->
 </mood-container>

@@ -1,7 +1,11 @@
 import * as dayjs from 'dayjs';
 import { CalendarMonth, MonthPosition } from './calendar.types';
 
+dayjs.extend(require('dayjs/plugin/localeData'));
+
 export class CalendarUtil {
+  static WEEKDAY_HEADER_LABELS: string[] = (<any>dayjs).weekdaysShort();
+
   static createCalendarData(monthIndex: number): CalendarMonth {
     const previousMonth = this.getMonthData(
       monthIndex - 1,

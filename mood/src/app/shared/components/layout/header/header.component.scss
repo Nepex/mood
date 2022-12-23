@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .header {
   height: $HEADER_HEIGHT;
@@ -7,15 +8,9 @@
   background: $DARK_GRAY;
 
   i {
-    cursor: pointer;
     font-size: 2.5rem;
-    transition: 0.2s;
-    color: $WHITE;
-
-    &:hover {
-      transition: 0.2s;
-      color: $PRIMARY_COLOR;
-    }
+    @include actionable();
+    @include color-transition($WHITE, $PRIMARY_COLOR);
 
     @media (max-width: $SM_BREAKPOINT) {
       font-size: 2rem;
