@@ -70,15 +70,3 @@ export class Util {
     }
   }
 }
-
-export class TypeUtil<T> {
-  type: T;
-
-  constructor(value: T) {
-    this.type = value;
-  }
-
-  getGenericName(): string {
-    return this.type.constructor.name;
-  }
-}

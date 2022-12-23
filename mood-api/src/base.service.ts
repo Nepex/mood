@@ -8,7 +8,6 @@ import {
   FilterQueryOpts,
   Logger,
   PagedResponse,
-  TypeUtil,
   Util,
 } from './util';
 
@@ -23,8 +22,6 @@ export type Base<T> = T & {
 
 @Injectable()
 export abstract class BaseService<ENTITY> {
-  entityName = new TypeUtil<ENTITY>({} as ENTITY).getGenericName();
-
   constructor(
     private readonly repo: Repository<ENTITY>,
     public queryService: QueryService,
@@ -34,7 +31,7 @@ export abstract class BaseService<ENTITY> {
   async search(
     query: FilterQueryOpts<ENTITY> | string,
   ): Promise<PagedResponse<ENTITY>> {
-    logger.info(`[search(): Executing ${this.entityName} search query]`, query);
+    logger.info(`[search(): Executing search query]`, query);
 
     // decode query if coming from query string params
     if (typeof query === 'string') {
@@ -45,7 +42,7 @@ export abstract class BaseService<ENTITY> {
     const findOptions = await this.queryService.buildFindOptions<ENTITY>(query);
     const [data, totalItems] = await this.repo.findAndCount(findOptions);
 
-    logger.info(`[search(): Found ${data.length} ${this.entityName} records]`);
+    logger.info(`[search(): Found ${data.length} records]`);
 
     return {
       data,
@@ -60,10 +57,7 @@ export abstract class BaseService<ENTITY> {
   async findAll(
     query: FilterQueryOpts<ENTITY> | string,
   ): Promise<ENTITY[] | number> {
-    logger.info(
-      `[findAll(): Executing ${this.entityName} findAll query]`,
-      query,
-    );
+    logger.info(`[findAll(): Executing findAll query]`, query);
 
     // decode query if coming from query string params
     if (typeof query === 'string') {
@@ -79,9 +73,7 @@ export abstract class BaseService<ENTITY> {
     }
     res = await this.repo.find(findOptions);
 
-    logger.info(
-      `[findAll(): Found ${res?.length ?? res} ${this.entityName} records]`,
-    );
+    logger.info(`[findAll(): Found ${res?.length ?? res} records]`);
 
     return res;
   }
@@ -100,7 +92,7 @@ export abstract class BaseService<ENTITY> {
     });
     const res = await this.repo.findOne(findOptions);
 
-    logger.info(`[findOne(): Found ${this.entityName} record]`, res);
+    logger.info(`[findOne(): Found record]`, res);
 
     return res;
   }
@@ -111,7 +103,7 @@ export abstract class BaseService<ENTITY> {
       where: { id: id } as ENTITY,
     } as FindOneOptions<ENTITY>);
 
-    logger.info(`[findById(): Found ${this.entityName} record]`, res);
+    logger.info(`[findById(): Found record]`, res);
 
     return res;
   }
@@ -124,7 +116,7 @@ export abstract class BaseService<ENTITY> {
       } as ENTITY,
     } as FindOneOptions<ENTITY>);
 
-    logger.info(`[findByUid(): Found ${this.entityName} record]`, res);
+    logger.info(`[findByUid(): Found record]`, res);
 
     return res;
   }
@@ -163,10 +155,7 @@ export abstract class BaseService<ENTITY> {
     // save the update, then return the updated entity
     const savedEntity = await this.repo.save(entityToSave);
 
-    logger.info(
-      `[save(): Successfully saved ${this.entityName} record!]`,
-      savedEntity,
-    );
+    logger.info(`[save(): Successfully saved record!]`, savedEntity);
 
     return savedEntity;
   }
@@ -177,7 +166,7 @@ export abstract class BaseService<ENTITY> {
     await this.repo.remove(entity);
 
     logger.info(
-      `[save(): Successfully deleted ${this.entityName} record! ID: ]`,
+      `[save(): Successfully deleted record! ID: ]`,
       (<Base<ENTITY>>entity).id,
     );
   }

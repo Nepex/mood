@@ -1,14 +1,35 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { Credentials, Logger, Session } from '../util';
+import { UserGuard } from './guards/user.guard';
+import { UserJwtPayload } from './util';
 import { UserModel } from '../user/user.model';
+import { UserService } from '../user/user.service';
 
 const logger = new Logger('AuthController');
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
+
+  @UseGuards(UserGuard)
+  @Get('me')
+  async me(@Request() req: UserJwtPayload): Promise<UserModel> {
+    return await this.userService.toModel(
+      await this.userService.findById(req.user.id),
+    );
+  }
 
   @Post('login')
   async login(@Body() req: Credentials): Promise<Session> {

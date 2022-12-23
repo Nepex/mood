@@ -45,7 +45,7 @@ create table public.user_settings (
 	id serial not null primary key,
 	uid varchar(32) not null default public.uid(),
 	user_id integer not null,
-	color_theme varchar(30) not null default 'light',
+	color_theme varchar(30) not null default 'dark',
 	created_at timestamptz not null default CURRENT_TIMESTAMP,
 	updated_at timestamptz not null default CURRENT_TIMESTAMP,
 
