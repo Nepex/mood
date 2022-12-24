@@ -17,10 +17,9 @@
     }
   }
 
-  .header-left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .header-left,
+  .header-right {
+    @include flex-center();
   }
 
   .header-center {
@@ -40,12 +39,6 @@
         cursor: pointer;
       }
     }
-  }
-
-  .header-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }
 

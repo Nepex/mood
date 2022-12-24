@@ -1,6 +1,6 @@
 <mood-container wrapperClasses="flex-center flex-column">
   <!-- Start Calendar -->
-  <section class="calendar" *ngIf="currentMonth">
+  <section class="calendar" *ngIf="calendarMonth">
     <!-- Start Calendar Title -->
     <div class="calendar-title-row">
       <i
@@ -8,7 +8,7 @@
         (click)="loadMonth(selectedMonthIndex - 1)"
       ></i>
 
-      <h3>{{ currentMonth.monthName }} {{ currentMonth.yearNumber }}</h3>
+      <h3>{{ calendarMonth.monthName }} {{ calendarMonth.yearNumber }}</h3>
 
       <i
         class="las la-angle-right"
@@ -28,13 +28,17 @@
         </div>
       </div>
 
-      <div class="calendar-day-container" *ngFor="let day of currentMonth.days">
-        <div
-          class="calendar-day"
-          [ngClass]="{
-            'not-current-month-calendar-day': day.monthPosition !== 'current'
-          }"
-        >
+      <div
+        class="calendar-day-container"
+        *ngFor="let day of calendarMonth.days; let i = index"
+        [ngClass]="{
+          'not-current-month-calendar-day': day.monthPosition !== 'current',
+          selected: i === selectedDayIndex
+        }"
+        (click)="selectDay(day)"
+        pRipple
+      >
+        <div class="calendar-day">
           {{ day.dayNumber }}
         </div>
       </div>
@@ -43,11 +47,18 @@
   </section>
   <!-- End Calendar -->
 
-  <!-- Start Moods -->
-  <!-- Start Today's Mood -->
-  <!-- End Today's Mood -->
+  <!-- Start Add Mood Button -->
+  <section class="my-6 w-full flex-center">
+    <button
+      pButton
+      type="button"
+      label="Create Entry"
+      routerLink="/entry/create/{{ selectedDayDate }}"
+      pRipple
+    ></button>
+  </section>
+  <!-- End Add Mood Button -->
 
-  <!-- Start Recent Moods -->
-  <!-- End Recent Moods -->
-  <!-- End Moods -->
+  <!-- Start Mood List -->
+  <!-- End Mood List -->
 </mood-container>

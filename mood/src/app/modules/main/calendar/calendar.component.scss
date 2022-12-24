@@ -46,14 +46,35 @@
     }
 
     .calendar-day-container {
-      padding: 20px 10px 0 10px;
+      @include flex-center();
+      @include actionable();
+
+      &:hover {
+        @include bg-transition(transparent, transparentize($DARK_GRAY, 0.75));
+      }
 
       .calendar-day {
-        display: flex;
+        display: inline-flex;
         justify-content: center;
+        align-items: center;
+        transition: 0.2s;
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+      }
 
-        &.not-current-month-calendar-day {
+      &.not-current-month-calendar-day {
+        .calendar-day {
           color: transparentize($TEXT_COLOR, 0.5);
+        }
+      }
+
+      &.selected {
+        .calendar-day {
+          color: $BLACK;
+          background: $PRIMARY_COLOR;
+          transition: 0.2s;
+          font-weight: bold;
         }
       }
     }

@@ -5,6 +5,7 @@ import { AuthGuard } from '@shared';
 import { CalendarComponent } from './calendar/calendar.component';
 
 import { MainComponent } from './main.component';
+import { ManageJournalEntryComponent } from './manage-journal-entry/manage-journal-entry.component';
 
 export const routes: Routes = [
   {
@@ -12,8 +13,14 @@ export const routes: Routes = [
     component: MainComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', pathMatch: 'full', component: CalendarComponent },
+      {
+        path: '',
+        redirectTo: '/calendar',
+        pathMatch: 'full',
+      },
       { path: 'calendar', component: CalendarComponent },
+      { path: 'entry/create/:date', component: ManageJournalEntryComponent },
+      { path: 'entry/edit/:uid', component: ManageJournalEntryComponent },
     ],
   },
 ];

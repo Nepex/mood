@@ -12,6 +12,7 @@ import { MainRoutingModule } from './main-routing.module';
 
 import { CalendarComponent } from './calendar/calendar.component';
 import { MainComponent } from './main.component';
+import { ManageJournalEntryComponent } from './manage-journal-entry/manage-journal-entry.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { MainComponent } from './main.component';
     SharedModule,
     TooltipModule,
   ],
-  declarations: [MainComponent, CalendarComponent],
+  declarations: [MainComponent, CalendarComponent, ManageJournalEntryComponent],
 })
 export class MainModule {}

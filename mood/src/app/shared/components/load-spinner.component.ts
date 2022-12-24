@@ -18,12 +18,11 @@ import { Util } from '../common/util';
   styles: [
     `
       @import 'variables';
+      @import 'mixins';
 
       ::ng-deep {
         .load-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          @include flex-center();
           top: 0;
           left: 0;
           width: 100%;

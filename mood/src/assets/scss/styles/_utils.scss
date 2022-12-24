@@ -2,9 +2,7 @@
 // Ref: https://www.primefaces.org/primeflex
 
 .flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center();
 }
 
 .no-pad {

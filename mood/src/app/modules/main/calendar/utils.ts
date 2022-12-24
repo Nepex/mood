@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { CalendarMonth, MonthPosition } from './calendar.types';
+import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
 
 dayjs.extend(require('dayjs/plugin/localeData'));
 
@@ -66,5 +66,19 @@ export class CalendarUtil {
     }
 
     return calendarMonth;
+  }
+
+  static getDayIdx(
+    calendarMonth: CalendarMonth,
+    calendarDay?: CalendarDay
+  ): number {
+    // fall back to current date if no day is provided
+    const dayNumber = calendarDay?.dayNumber ?? dayjs().date();
+
+    return calendarMonth.days.findIndex(
+      (day) =>
+        day.dayNumber === dayNumber &&
+        day.monthPosition === MonthPosition.Current
+    );
   }
 }

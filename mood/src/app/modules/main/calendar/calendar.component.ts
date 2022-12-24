@@ -4,7 +4,7 @@ import * as dayjs from 'dayjs';
 import { BaseControllerService, ListController, Logger } from '@shared';
 import { JournalEntryModel, JournalEntryService } from '@core';
 
-import { CalendarDay, CalendarMonth } from './calendar.types';
+import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
 import { CalendarUtil } from './utils';
 
 const logger = new Logger('CalendarComponent');
@@ -18,11 +18,11 @@ export class CalendarComponent
   extends ListController<JournalEntryModel>
   implements OnInit
 {
-  currentMonth: CalendarMonth;
+  calendarMonth: CalendarMonth;
   selectedMonthIndex: number;
+  selectedDayIndex: number;
 
   weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
-  selectedDay: CalendarDay;
 
   constructor(
     public baseService: BaseControllerService,
@@ -31,11 +31,20 @@ export class CalendarComponent
     super(baseService, journalEntryService);
   }
 
+  get selectedDayDate(): string {
+    if (!this.calendarMonth) return '';
+    const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
+    return dayjs(selectedDay.dayObject).format('MM-DD-YYYY');
+  }
+
   async ngOnInit() {
     await this.handleLoad(async () => {
       // select current month by default
       this.selectedMonthIndex = dayjs().month();
       this.loadMonth(this.selectedMonthIndex);
+
+      // select current day by default
+      this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth);
     });
   }
 
@@ -44,7 +53,17 @@ export class CalendarComponent
       this.selectedMonthIndex = monthIndex;
     }
 
-    this.currentMonth = CalendarUtil.createCalendarData(monthIndex);
-    logger.info('loadMonth(): currentMonth', this.currentMonth);
+    this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
+    logger.info('loadMonth(): currentMonth', this.calendarMonth);
+  }
+
+  selectDay(day: CalendarDay) {
+    if (day.monthPosition === MonthPosition.Previous) {
+      this.loadMonth(this.selectedMonthIndex - 1);
+    } else if (day.monthPosition === MonthPosition.Next) {
+      this.loadMonth(this.selectedMonthIndex + 1);
+    }
+
+    this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth, day);
   }
 }
