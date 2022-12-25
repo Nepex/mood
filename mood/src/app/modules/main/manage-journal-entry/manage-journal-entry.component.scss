@@ -49,6 +49,22 @@
     }
   }
 
+  .moods-header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50px 1fr 50px;
+    align-items: center;
+
+    i {
+      @include actionable();
+      @include color-transition($WHITE, $PRIMARY_COLOR);
+      margin-left: auto;
+      margin-right: 0.25rem;
+      font-size: 2rem;
+      color: $WHITE;
+    }
+  }
+
   .moods-container {
     padding-top: 1.5rem;
 
@@ -75,9 +91,119 @@
         }
       }
     }
+
+    .add-mood-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      input {
+        margin-top: 1rem;
+      }
+
+      button {
+        margin: 1rem 0.5rem 0 0.5rem;
+      }
+    }
   }
 
   .journal-entry-container {
     padding-top: 1.5rem;
+  }
+}
+
+::ng-deep {
+  .journal-entry-container {
+    .p-editor-container {
+      display: flex;
+      flex-direction: column-reverse;
+
+      .p-editor-toolbar {
+        background-color: $DARK_GRAY_3;
+        border-radius: 0 0 25px 25px;
+        border: none;
+        // margin: 0 auto;
+
+        // hide attachments and font select
+        .ql-formats {
+          &:first-child {
+            display: none;
+          }
+
+          &:nth-child(5) {
+            display: none;
+          }
+        }
+
+        .ql-stroke {
+          transition: 0.2s;
+          stroke: $TEXT_COLOR;
+        }
+
+        .ql-fill {
+          transition: 0.2s;
+          fill: $TEXT_COLOR;
+        }
+
+        .ql-picker {
+          transition: 0.2s;
+          color: $TEXT_COLOR;
+        }
+
+        .ql-active {
+          .ql-stroke {
+            stroke: $PRIMARY_COLOR !important;
+          }
+
+          .ql-fill {
+            fill: $PRIMARY_COLOR !important;
+          }
+
+          .ql-picker {
+            color: $PRIMARY_COLOR !important;
+          }
+        }
+
+        button,
+        span svg {
+          &:hover {
+            .ql-stroke {
+              transition: 0.2s;
+              stroke: $PRIMARY_COLOR !important;
+            }
+
+            .ql-fill {
+              transition: 0.2s;
+              fill: $PRIMARY_COLOR !important;
+            }
+
+            .ql-picker {
+              transition: 0.2s;
+              color: $PRIMARY_COLOR !important;
+            }
+          }
+        }
+      }
+    }
+
+    .p-editor-container .p-editor-content .ql-editor {
+      font-family: $FONT_PRIMARY;
+      font-size: 1rem;
+      background: $DARK_GRAY_3;
+      color: $TEXT_COLOR;
+      border-radius: 25px 25px 0 0;
+    }
+
+    .p-editor-container .p-editor-content {
+      width: 500px;
+
+      @media (max-width: $SM_BREAKPOINT) {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      border: none;
+    }
   }
 }

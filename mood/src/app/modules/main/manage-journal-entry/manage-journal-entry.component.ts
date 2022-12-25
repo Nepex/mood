@@ -43,6 +43,8 @@ export class ManageJournalEntryComponent
     'Content',
     'Joyful',
   ];
+  showAddPresetMoodInput = false;
+  customPresetMood = '';
   hoveredScore: number | null;
 
   constructor(
@@ -68,6 +70,43 @@ export class ManageJournalEntryComponent
 
   onEditorCreated(e: any) {
     this.editor = e.editor;
-    logger.info('onEditorCreated(): editor', this.editor);
+  }
+
+  combineDateWithTime(date: Date, time: Date) {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      time.getSeconds(),
+      time.getMilliseconds()
+    );
+  }
+
+  submitCustomMood() {
+    this.presetMoods.push(this.customPresetMood);
+    this.journalEntry.mood = this.customPresetMood;
+
+    this.customPresetMood = '';
+    this.showAddPresetMoodInput = false;
+  }
+
+  async submit() {
+    await this.handleSubmit(
+      async () => {
+        // assign a timestamp if creating a new entry
+        if (!this.journalEntry.uid) {
+          this.journalEntry.entryAt = this.combineDateWithTime(
+            new Date(this.date),
+            new Date()
+          );
+        }
+
+        await this.journalEntryService.save(this.journalEntry);
+        await this.baseService.router.navigateByUrl('/calendar');
+      },
+      { disableLoadingEmits: true, successMessage: 'Successfully saved entry!' }
+    );
   }
 }

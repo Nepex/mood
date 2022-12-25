@@ -30,7 +30,16 @@
     <hr />
 
     <!-- Start Mood Selection -->
-    <h3>How are you feeling?</h3>
+    <div class="moods-header">
+      <div></div>
+      <h3>How are you feeling?</h3>
+      <i
+        class="las la-plus"
+        pTooltip="Add your own"
+        *ngIf="!showAddPresetMoodInput"
+        (click)="showAddPresetMoodInput = true"
+      ></i>
+    </div>
 
     <section class="moods-container">
       <div class="moods">
@@ -44,6 +53,36 @@
           {{ presetMood }}
         </div>
       </div>
+
+      <div class="add-mood-container p-field" *ngIf="showAddPresetMoodInput">
+        <input
+          type="text"
+          pInputText
+          autocomplete="off"
+          placeholder="Add a custom mood"
+          [(ngModel)]="customPresetMood"
+          (keyup.enter)="submitCustomMood()"
+        />
+
+        <div>
+          <button
+            pButton
+            type="button"
+            label="Add"
+            class="sm"
+            pRipple
+            (click)="submitCustomMood()"
+          ></button>
+          <button
+            pButton
+            type="button"
+            label="Cancel"
+            class="sm"
+            pRipple
+            (click)="showAddPresetMoodInput = false"
+          ></button>
+        </div>
+      </div>
     </section>
     <!-- End Mood Selection -->
 
@@ -55,9 +94,10 @@
     <section class="journal-entry-container">
       <p-editor
         (onInit)="onEditorCreated($event)"
-        [ngModel]="journalEntry.entry"
+        [(ngModel)]="journalEntry.entry"
         [style]="{ height: '320px' }"
-      ></p-editor>
+      >
+      </p-editor>
     </section>
     <!-- End Journal Entry -->
 
@@ -68,6 +108,7 @@
         type="button"
         label="Save"
         [loading]="isSubmitting"
+        (click)="submit()"
         pRipple
       ></button>
     </section>

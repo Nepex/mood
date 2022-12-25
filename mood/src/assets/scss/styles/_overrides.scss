@@ -74,6 +74,11 @@
     width: 100% !important;
   }
 
+  &.sm {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1.5rem !important;
+  }
+
   &:focus {
     outline: 0 !important;
     box-shadow: 0 0 0 0 transparentize($BLACK, 1) !important;
@@ -141,13 +146,13 @@
 
     &.p-toast-message-success {
       color: $WHITE !important;
-      background-color: darken($GREEN, 15%) !important;
+      background-color: darken($GREEN, 40%) !important;
       border-left: none !important;
     }
 
     &.p-toast-message-error {
       color: $WHITE !important;
-      background-color: darken($RED, 15%) !important;
+      background-color: darken($RED, 25%) !important;
       border-left: none !important;
     }
 
@@ -160,5 +165,32 @@
     .pi {
       color: $WHITE !important;
     }
+  }
+}
+
+// Tooltip
+.p-tooltip-left {
+  padding-right: 2rem !important;
+}
+
+.p-tooltip-top,
+.p-tooltip-bottom {
+  padding: 1rem !important;
+  text-align: center;
+  width: max-content !important;
+}
+
+.p-tooltip {
+  max-width: 250px !important;
+
+  .p-tooltip-text {
+    font-family: $FONT_PRIMARY;
+    background: transparentize($DARK_GRAY_3, 0.4) !important;
+    font-size: 0.9rem;
+    border: 1px solid transparentize($DARK_GRAY_3, 0.8);
+  }
+
+  .p-tooltip-arrow {
+    border: none !important;
   }
 }

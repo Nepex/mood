@@ -34,7 +34,7 @@ export abstract class FormController<MODEL> extends BaseController {
 
     await this.handleLoad(async () => {
       try {
-        if (!form.valid) {
+        if (form && !form.valid) {
           form.showErrors = true;
           this.isSubmitting = false;
           return Promise.reject(this.messages.requiredFields);
