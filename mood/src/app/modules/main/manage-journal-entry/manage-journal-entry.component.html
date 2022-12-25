@@ -20,6 +20,7 @@
           (click)="journalEntry.score = i + 1"
           (mouseenter)="hoveredScore = i"
           (mouseleave)="hoveredScore = null"
+          pRipple
         ></div>
         {{ i + 1 }}
       </div>
@@ -62,7 +63,13 @@
 
     <!-- Start Actions -->
     <section class="mt-6 w-full flex-center">
-      <button pButton type="button" label="Save" pRipple></button>
+      <button
+        pButton
+        type="button"
+        label="Save"
+        [loading]="isSubmitting"
+        pRipple
+      ></button>
     </section>
     <!-- End Actions -->
   </main>

@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { JournalEntryModel, JournalEntryService } from '@core';
-import { BaseController, BaseControllerService, Logger } from '@shared';
+import {
+  BaseController,
+  BaseControllerService,
+  FormController,
+  Logger,
+} from '@shared';
 
 const logger = new Logger('ManageJournalEntryComponent');
 
@@ -12,7 +17,7 @@ const logger = new Logger('ManageJournalEntryComponent');
   styleUrls: ['./manage-journal-entry.component.scss'],
 })
 export class ManageJournalEntryComponent
-  extends BaseController
+  extends FormController<JournalEntryModel>
   implements OnInit
 {
   date: string;

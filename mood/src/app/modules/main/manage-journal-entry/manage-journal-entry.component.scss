@@ -29,7 +29,7 @@
 
       .mood-score-bubble {
         @include actionable();
-        background: transparentize($WHITE, 0.8);
+        background: $DARK_GRAY_3;
         border-radius: 50%;
         width: 25px;
         height: 25px;
@@ -42,7 +42,7 @@
 
         &:not(.active) {
           &:hover {
-            @include bg-transition(transparentize($WHITE, 0.8), $WHITE);
+            @include bg-transition($DARK_GRAY_3, $PRIMARY_COLOR_DARK);
           }
         }
       }
