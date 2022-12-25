@@ -31,10 +31,10 @@ export class CalendarComponent
     super(baseService, journalEntryService);
   }
 
-  get selectedDayDate(): string {
-    if (!this.calendarMonth) return '';
+  get selectedDayObj(): dayjs.Dayjs | null {
+    if (!this.calendarMonth) return null;
     const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
-    return dayjs(selectedDay.dayObject).format('MM-DD-YYYY');
+    return dayjs(selectedDay.dayObject);
   }
 
   async ngOnInit() {

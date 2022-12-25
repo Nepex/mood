@@ -40,6 +40,7 @@ export class RegisterComponent extends FormController<
       },
       {
         successMessage: 'Account created successfully!',
+        disableLoadingEmits: true,
       }
     );
   }

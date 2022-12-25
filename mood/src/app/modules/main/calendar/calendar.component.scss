@@ -71,10 +71,9 @@
 
       &.selected {
         .calendar-day {
-          color: $BLACK;
-          background: $PRIMARY_COLOR;
+          color: $WHITE;
+          background: $PRIMARY_COLOR_DARK;
           transition: 0.2s;
-          font-weight: bold;
         }
       }
     }

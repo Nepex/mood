@@ -2,11 +2,12 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 100vw;
+  grid-template-columns: 100%;
   grid-template-rows: auto, 1fr;
 
   .content {
-    padding: 2rem 0;
+    padding-top: calc($HEADER_HEIGHT + 2rem);
+    padding-bottom: 2rem;
     min-height: calc(100vh - $HEADER_HEIGHT);
     position: relative;
   }

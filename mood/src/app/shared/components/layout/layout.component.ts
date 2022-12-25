@@ -82,7 +82,7 @@ export class LayoutComponent
       });
     } else {
       this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
-        isScrolled: true,
+        isScrolled: false,
       });
     }
   }

@@ -1,3 +1,69 @@
 <mood-container wrapperClasses="flex-center flex-column">
-  hello
+  <main class="entry-container">
+    <h2>What is your current mood?</h2>
+
+    <!-- Start Mood Score Selection -->
+    <h3 class="mt-6">Mood score</h3>
+    <section class="mood-score-container">
+      <div
+        *ngFor="let bubble of [].constructor(10); let i = index"
+        class="mood-score"
+      >
+        <div
+          class="mood-score-bubble"
+          [ngClass]="{
+            active:
+              hoveredScore && hoveredScore > journalEntry.score
+                ? i + 1 <= hoveredScore
+                : i + 1 <= journalEntry.score
+          }"
+          (click)="journalEntry.score = i + 1"
+          (mouseenter)="hoveredScore = i"
+          (mouseleave)="hoveredScore = null"
+        ></div>
+        {{ i + 1 }}
+      </div>
+    </section>
+    <!-- End Mood Score Selection -->
+
+    <hr />
+
+    <!-- Start Mood Selection -->
+    <h3>How are you feeling?</h3>
+
+    <section class="moods-container">
+      <div class="moods">
+        <div
+          *ngFor="let presetMood of presetMoods"
+          class="mood"
+          (click)="journalEntry.mood = presetMood"
+          [ngClass]="{ active: journalEntry.mood === presetMood }"
+          pRipple
+        >
+          {{ presetMood }}
+        </div>
+      </div>
+    </section>
+    <!-- End Mood Selection -->
+
+    <hr />
+
+    <!-- Start Journal Entry -->
+    <h3>Add to your journal</h3>
+
+    <section class="journal-entry-container">
+      <p-editor
+        (onInit)="onEditorCreated($event)"
+        [ngModel]="journalEntry.entry"
+        [style]="{ height: '320px' }"
+      ></p-editor>
+    </section>
+    <!-- End Journal Entry -->
+
+    <!-- Start Actions -->
+    <section class="mt-6 w-full flex-center">
+      <button pButton type="button" label="Save" pRipple></button>
+    </section>
+    <!-- End Actions -->
+  </main>
 </mood-container>

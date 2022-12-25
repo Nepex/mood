@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
@@ -18,6 +19,7 @@ import { ManageJournalEntryComponent } from './manage-journal-entry/manage-journ
   imports: [
     ButtonModule,
     CommonModule,
+    EditorModule,
     FormsModule,
     InputTextModule,
     MainRoutingModule,

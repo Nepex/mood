@@ -1,3 +1,10 @@
+<!-- Start Loader -->
+<!-- Start Loader -->
+<mood-load-spinner
+  [loading]="layoutState.loadingProcesses > 0"
+></mood-load-spinner>
+<!-- End Loader -->
+
 <main class="layout">
   <!-- Start Header -->
   <header>
@@ -7,13 +14,6 @@
 
   <!-- Start Main Content -->
   <section class="content">
-    <!-- Start Loader -->
-    <mood-load-spinner
-      [loading]="layoutState.loadingProcesses > 0"
-      positionStyle="absolute"
-    ></mood-load-spinner>
-    <!-- End Loader -->
-
     <!-- Start Content -->
     <ng-content></ng-content>
     <!-- End Content -->

@@ -47,13 +47,15 @@
   </section>
   <!-- End Calendar -->
 
+  <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
+
   <!-- Start Add Mood Button -->
-  <section class="my-6 w-full flex-center">
+  <section class="my-4 w-full flex-center">
     <button
       pButton
       type="button"
-      label="Create Entry"
-      routerLink="/entry/create/{{ selectedDayDate }}"
+      label="Log your mood!"
+      routerLink="/entry/create/{{ selectedDayObj?.format('MM-DD-YYYY') }}"
       pRipple
     ></button>
   </section>

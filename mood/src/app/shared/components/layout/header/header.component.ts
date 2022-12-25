@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import * as dayjs from 'dayjs';
 
 import { MenuItem as PngMenuItem } from 'primeng/api';
 
@@ -7,6 +8,7 @@ import { AuthService, StoreService, UserModel } from '@core';
 import { BaseController } from '../../../common/controllers/base.controller';
 import { BaseControllerService } from '../../../common/controllers/base.controller.service';
 import { Util } from '../../../common/util';
+import { LayoutState } from 'src/app/shared/common/types';
 
 @Component({
   selector: 'mood-header',
@@ -14,10 +16,15 @@ import { Util } from '../../../common/util';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent extends BaseController implements OnDestroy {
-  me: UserModel | undefined;
   stateSub: Subscription;
+  me: UserModel | undefined;
+  layoutState: LayoutState | undefined;
 
   menuItems: PngMenuItem[] = [
+    {
+      label: 'Calendar',
+      routerLink: `/calendar`,
+    },
     {
       label: 'Logout',
       command: async () => {
@@ -32,10 +39,8 @@ export class HeaderComponent extends BaseController implements OnDestroy {
 
   addMenuItems: PngMenuItem[] = [
     {
-      label: 'Add Mood',
-    },
-    {
-      label: 'Add Journal Entry',
+      label: 'Create Mood Entry',
+      routerLink: `/entry/create/${dayjs().format('MM-DD-YYYY')}`,
     },
   ];
 
@@ -45,9 +50,10 @@ export class HeaderComponent extends BaseController implements OnDestroy {
     private readonly store: StoreService
   ) {
     super(baseService);
-    this.stateSub = this.store.state$.subscribe(
-      (state) => (this.me = state.me)
-    );
+    this.stateSub = this.store.state$.subscribe(({ me, layout }) => {
+      this.me = me;
+      this.layoutState = layout;
+    });
   }
 
   ngOnDestroy() {

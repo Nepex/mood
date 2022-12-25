@@ -60,7 +60,7 @@
 
 // Buttons
 .p-button {
-  background: darken($PRIMARY_COLOR, 15%) !important;
+  background: $PRIMARY_COLOR_DARK !important;
   font-family: $FONT_PRIMARY !important;
   border: 0 !important;
   font-size: 1.15rem !important;
@@ -80,7 +80,7 @@
   }
 
   &:hover {
-    background-color: lighten(darken($PRIMARY_COLOR, 15%), 10%) !important;
+    background-color: lighten($PRIMARY_COLOR_DARK, 10%) !important;
     transition: 0.2s;
   }
 

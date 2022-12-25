@@ -1,4 +1,7 @@
-<main class="header">
+<header
+  class="header"
+  [ngClass]="{ 'header-scrolled': layoutState?.isScrolled }"
+>
   <mood-container wrapperClasses="inner-header">
     <!-- Start Header Left -->
     <div class="header-left">
@@ -26,4 +29,4 @@
     </div>
     <!-- End Header Right-->
   </mood-container>
-</main>
+</header>
