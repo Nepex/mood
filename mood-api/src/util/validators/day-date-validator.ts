@@ -14,6 +14,6 @@ export class DayDateValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return 'Day is not proper MM/DD/YYYY format';
+    return 'Day is not proper MM-DD-YYYY format';
   }
 }

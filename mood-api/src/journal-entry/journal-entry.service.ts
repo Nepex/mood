@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
 
+import * as sanitizeHtml from 'sanitize-html';
+
 import { BaseService } from '../base.service';
 import { JournalEntryEntity } from './journal-entry.entity';
 import { JournalEntryModel } from './journal-entry.model';
@@ -30,6 +32,12 @@ export class JournalEntryService extends BaseService<JournalEntryEntity> {
   }
 
   async validate(entity: JournalEntryEntity) {
+    console.log(entity);
+
+    if (entity.entry) {
+      entity.entry = sanitizeHtml(entity.entry);
+    }
+
     return entity;
   }
 }

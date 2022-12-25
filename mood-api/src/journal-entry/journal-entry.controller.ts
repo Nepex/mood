@@ -14,6 +14,7 @@ import { JournalEntryService } from './journal-entry.service';
 import { KeyVals, Logger, Util } from '../util';
 import { UserGuard } from '../auth/guards/user.guard';
 import { UserJwtPayload } from '../auth/util';
+import { JournalEntryEntity } from './journal-entry.entity';
 
 const logger = new Logger('JournalEntryController');
 
@@ -35,7 +36,12 @@ export class JournalEntryController {
     @Request() req: UserJwtPayload,
     @Body() payload: Partial<JournalEntryModel>,
   ): Promise<JournalEntryModel> {
-    const journalEntryEntity = await this.journalEntryService.save(payload);
+    const journalEntryEntity = new JournalEntryEntity({
+      ...payload,
+      userId: req.user.id,
+    });
+
+    await this.journalEntryService.save(journalEntryEntity);
     return this.journalEntryService.toModel(journalEntryEntity);
   }
 
