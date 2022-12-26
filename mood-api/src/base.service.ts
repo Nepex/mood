@@ -79,13 +79,13 @@ export abstract class BaseService<ENTITY> {
   }
 
   /** Returns a number / count of target entity matching provided filters */
-  async count(filters: FilterOpts<ENTITY>): Promise<number> {
+  async count(filters: FilterOpts<ENTITY>[]): Promise<number> {
     // execute query, return result
     return (await this.findAll({ filters, countOnly: true })) as number;
   }
 
   /** Returns a single record of target entity matching provided filters */
-  async findOne(filters: FilterOpts<ENTITY>): Promise<ENTITY> {
+  async findOne(filters: FilterOpts<ENTITY>[]): Promise<ENTITY> {
     // build filters, execute query, return result
     const findOptions = await this.queryService.buildFindOptions<ENTITY>({
       filters,

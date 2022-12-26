@@ -22,9 +22,11 @@ export class UserSettingsController {
   @Get('mine')
   async mine(@Request() req: UserJwtPayload): Promise<UserSettingsModel> {
     return this.userSettingsService.toModel(
-      await this.userSettingsService.findOne({
-        userId: req.user.id,
-      }),
+      await this.userSettingsService.findOne([
+        {
+          userId: req.user.id,
+        },
+      ]),
     );
   }
 

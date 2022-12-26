@@ -10,7 +10,7 @@ export interface Session {
 }
 
 export interface FilterQueryOpts<T> {
-  filters?: FilterOpts<Partial<T>>; //  | FilterOpts<Partial<T>>[]
+  filters?: FilterOpts<Partial<T>>[];
   sort?: SortOpts<T>[];
   limit?: number;
   offset?: number;

@@ -31,12 +31,16 @@ export class UserService extends BaseService<UserEntity> {
 
   async toModel(entity: UserEntity): Promise<UserModel> {
     let model = plainToInstance(UserModel, entity);
-    let { roles } = await this.userRolesService.findOne({
-      userId: entity.id,
-    });
-    const userSettings = await this.userSettingsService.findOne({
-      userId: entity.id,
-    });
+    let { roles } = await this.userRolesService.findOne([
+      {
+        userId: entity.id,
+      },
+    ]);
+    const userSettings = await this.userSettingsService.findOne([
+      {
+        userId: entity.id,
+      },
+    ]);
 
     roles = (<any>roles).replace('{', '').replace('}', '').split(',');
 

@@ -17,9 +17,11 @@ export class UserRolesController {
   @Get('mine')
   async mine(@Request() req: UserJwtPayload): Promise<UserRolesModel> {
     return this.userRolesService.toModel(
-      await this.userRolesService.findOne({
-        userId: req.user.id,
-      }),
+      await this.userRolesService.findOne([
+        {
+          userId: req.user.id,
+        },
+      ]),
     );
   }
 

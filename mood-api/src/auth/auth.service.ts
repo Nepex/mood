@@ -35,7 +35,7 @@ export class AuthService {
   ) {}
 
   async validateLogin(email: string, password: string): Promise<UserEntity> {
-    const user = await this.userService.findOne({ email });
+    const user = await this.userService.findOne([{ email }]);
 
     if (!user) {
       throw new BadRequestException('Invalid email or password');
@@ -51,7 +51,9 @@ export class AuthService {
   }
 
   async login(user: UserEntity): Promise<Session> {
-    const userRoles = await this.userRolesService.findOne({ userId: user.id });
+    const userRoles = await this.userRolesService.findOne([
+      { userId: user.id },
+    ]);
     const payload = { email: user.email, id: user.id, roles: userRoles.roles };
 
     return {
@@ -63,9 +65,11 @@ export class AuthService {
     user.email = user.email.toLocaleLowerCase();
 
     if (
-      await this.userService.findOne({
-        email: user.email,
-      })
+      await this.userService.findOne([
+        {
+          email: user.email,
+        },
+      ])
     ) {
       throw new BadRequestException('Email already exists');
     }

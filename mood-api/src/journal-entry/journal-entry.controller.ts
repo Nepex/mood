@@ -1,35 +1,57 @@
 import {
   Body,
   Controller,
+  forwardRef,
   Get,
+  Inject,
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
 
+import { FilterQueryOpts, KeyVals, Logger, PagedResponse, Util } from '../util';
+import { JournalEntryEntity } from './journal-entry.entity';
 import { JournalEntryModel } from './journal-entry.model';
 import { JournalEntryService } from './journal-entry.service';
-import { KeyVals, Logger, Util } from '../util';
+import { QueryService } from '../query/query.service';
 import { UserGuard } from '../auth/guards/user.guard';
 import { UserJwtPayload } from '../auth/util';
-import { JournalEntryEntity } from './journal-entry.entity';
 
 const logger = new Logger('JournalEntryController');
 
 @UseGuards(UserGuard)
 @Controller('journal-entries')
 export class JournalEntryController {
-  constructor(private readonly journalEntryService: JournalEntryService) {}
+  constructor(
+    private readonly journalEntryService: JournalEntryService,
 
-  // TODO: validate user can only pull their entries
-  // @Get('me')
-  // async search(@Request() req: UserJwtPayload): Promise<UserModel> {
-  //   return await this.userService.toModel(
-  //     await this.userService.findById(req.user.id),
-  //   );
-  // }
+    @Inject(forwardRef(() => QueryService))
+    public queryService: QueryService,
+  ) {}
+
+  @Get('search')
+  async search(
+    @Request() req: UserJwtPayload,
+    @Query() query: { findQuery: FilterQueryOpts<JournalEntryModel> },
+  ): Promise<PagedResponse<JournalEntryModel>> {
+    const findQuery = this.queryService.decodeSearchQuery(
+      query.findQuery as string,
+    );
+
+    findQuery.filters = findQuery.filters.map((filter) => {
+      return { ...filter, userId: req.user.id };
+    });
+
+    const pagedEntities = await this.journalEntryService.search(findQuery);
+
+    return {
+      ...pagedEntities,
+      data: this.journalEntryService.toModelArray(pagedEntities.data),
+    };
+  }
 
   @Post()
   async create(
