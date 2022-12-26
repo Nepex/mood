@@ -79,3 +79,66 @@
     }
   }
 }
+
+.mood-list {
+  width: $SM_BREAKPOINT;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+
+  @media (max-width: $SM_BREAKPOINT) {
+    max-width: 100%;
+  }
+
+  .no-data {
+    @include flex-center();
+    width: 100%;
+  }
+
+  .mood-list-bubble {
+    margin: 0.5rem;
+    padding: 1rem;
+    width: 47.5%;
+    background: $DARK_GRAY_3;
+    border-radius: 25px;
+
+    @media (max-width: $SM_BREAKPOINT) {
+      width: 100%;
+    }
+
+    .mood-list-bubble-dt {
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.9rem;
+    }
+
+    .mood-list-entry {
+      padding: 1rem 0;
+    }
+
+    .mood-list-score {
+      .mood-score-container {
+        display: flex;
+
+        .mood-score {
+          @include flex-center();
+          flex-direction: column;
+          padding: 0.5rem 0.2rem;
+
+          .mood-score-bubble {
+            background: $DARK_GRAY_2;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            margin-bottom: 5px;
+
+            &.active {
+              background: $PRIMARY_COLOR_DARK;
+              transition: 0.2s;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -24,12 +24,44 @@ export type SortOpts<T> = {
   order: 'ASC' | 'DESC';
 };
 
+// List
+export interface ListTextSearchFilter<T> {
+  fields: keyof T | `${QueryOperator}${string & keyof T}`[];
+  value: any;
+}
+
+export interface ListSelectFilter<T> {
+  field: keyof T | `${QueryOperator}${string & keyof T}`;
+  options: Option[];
+  value: any;
+  placeholder: string;
+}
+
+export enum ListDateFilterType {
+  DateOf = 'day-of',
+  AfterDate = 'after-date',
+  BeforeDate = 'before-date',
+}
+
+export interface ListDateFilter<T> {
+  field: keyof T | `${QueryOperator}${string & keyof T}`;
+  value: any;
+  placeholder: string;
+  type: ListDateFilterType;
+}
+
+export interface DynamicListFilters<T> {
+  textFilter: ListTextSearchFilter<T>;
+  selectFilters: ListSelectFilter<T>[];
+  dateFilters?: ListDateFilter<T>[];
+}
+
 export type FilterOpts<T> = {
   [key in keyof T | `${QueryOperator}${string & keyof T}`]?: any;
 };
 
 export interface FilterQueryOpts<T> {
-  filters: FilterOpts<Partial<T>> | FilterOpts<Partial<T>>[];
+  filters: FilterOpts<Partial<T>>[];
   sort?: SortOpts<T>[];
   limit?: number;
   offset?: number;

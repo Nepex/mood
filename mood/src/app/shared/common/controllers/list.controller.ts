@@ -1,4 +1,9 @@
-import { FilterOpts, PagedResponse, SortOpts } from '../types';
+import {
+  DynamicListFilters,
+  FilterOpts,
+  PagedResponse,
+  SortOpts,
+} from '../types';
 
 import { BaseController } from './base.controller';
 import { Logger } from '../logger';
@@ -17,8 +22,8 @@ export abstract class ListController<MODEL = any> extends BaseController {
   isListLoading = false;
 
   sort: SortOpts<MODEL>[] | undefined;
-  filters: FilterOpts<MODEL> | FilterOpts<MODEL>[] | undefined;
   staticFilters: FilterOpts<MODEL> | undefined;
+  dynamicFilters: DynamicListFilters<MODEL> | undefined;
 
   pager: Paginator | undefined;
   pagedResponse: PagedResponse<MODEL> | undefined;
@@ -29,6 +34,17 @@ export abstract class ListController<MODEL = any> extends BaseController {
     public dataService: any
   ) {
     super(baseService);
+  }
+
+  get filters(): FilterOpts<MODEL>[] {
+    if (!this.staticFilters && !this.dynamicFilters) return [];
+
+    const baseFilter = this.staticFilters ? { ...this.staticFilters } : {};
+
+    // TODO: code in dynamic filters
+    const filters = [baseFilter];
+
+    return filters;
   }
 
   async fetchData() {
@@ -52,6 +68,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
       this.scrollToTop();
     }
 
+    logger.info('fetchData(), data', this.data);
     this.isListLoading = false;
   }
 
@@ -67,8 +84,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
     await this.fetchData();
   }
 
-  async applyFilters(filters: FilterOpts<MODEL>) {
-    this.filters = filters;
+  async applyFilters() {
     this.page = 0;
     this.offset = 0;
     this.pager?.changePage(0);

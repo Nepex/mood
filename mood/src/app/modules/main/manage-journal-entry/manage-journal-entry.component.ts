@@ -8,6 +8,7 @@ import {
   FormController,
   Logger,
 } from '@shared';
+import * as dayjs from 'dayjs';
 
 const logger = new Logger('ManageJournalEntryComponent');
 
@@ -22,7 +23,7 @@ export class ManageJournalEntryComponent
 {
   date: string;
   journalEntry = new JournalEntryModel({
-    mood: 'Happy',
+    mood: '',
     score: 0,
     entry: '',
   });
@@ -72,21 +73,19 @@ export class ManageJournalEntryComponent
     this.editor = e.editor;
   }
 
-  combineDateWithTime(date: Date, time: Date) {
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      time.getHours(),
-      time.getMinutes(),
-      time.getSeconds(),
-      time.getMilliseconds()
-    );
+  dateWithCurrentTime(): Date {
+    const currentDate = new Date();
+    const dateString = `${dayjs(this.date).format('ddd, DD MMM YYYY')} ${dayjs(
+      currentDate
+    ).format('HH:mm:ss')} UTC`;
+
+    return new Date(dateString);
   }
 
   submitCustomMood() {
-    this.presetMoods.push(this.customPresetMood);
-    this.journalEntry.mood = this.customPresetMood;
+    if (!this.customPresetMood.trim()) return;
+    this.presetMoods.push(this.customPresetMood.trim());
+    this.journalEntry.mood = this.customPresetMood.trim();
 
     this.customPresetMood = '';
     this.showAddPresetMoodInput = false;
@@ -97,10 +96,7 @@ export class ManageJournalEntryComponent
       async () => {
         // assign a timestamp if creating a new entry
         if (!this.journalEntry.uid) {
-          this.journalEntry.entryAt = this.combineDateWithTime(
-            new Date(this.date),
-            new Date()
-          );
+          this.journalEntry.entryAt = this.dateWithCurrentTime();
         }
 
         await this.journalEntryService.save(this.journalEntry);

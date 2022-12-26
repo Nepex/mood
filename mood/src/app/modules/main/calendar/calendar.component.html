@@ -62,5 +62,46 @@
   <!-- End Add Mood Button -->
 
   <!-- Start Mood List -->
+  <section class="mood-list">
+    <ng-container *ngIf="data?.length; else noData">
+      <div class="mood-list-bubble" *ngFor="let journalEntry of data">
+        <div class="mood-list-bubble-dt">
+          {{
+            isSelectedDayCurrentDay ? "Today" : selectedDayObj?.format("MMM DD")
+          }}
+          at {{ journalEntry.entryAt | date : "hh:mm a" }}
+        </div>
+
+        <div
+          class="mood-list-entry"
+          *ngIf="journalEntry.entry"
+          [innerHTML]="journalEntry.entry"
+        ></div>
+
+        <div class="mood-list-score">
+          Feeling: {{ journalEntry.mood }}
+          <br />
+          Mood Score:
+
+          <div class="mood-score-container">
+            <div
+              *ngFor="let bubble of [].constructor(10); let i = index"
+              class="mood-score"
+            >
+              <div
+                class="mood-score-bubble"
+                [ngClass]="{
+                  active: i + 1 <= journalEntry.score
+                }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noData>
+      <div class="no-data">No entries found</div>
+    </ng-template>
+  </section>
   <!-- End Mood List -->
 </mood-container>

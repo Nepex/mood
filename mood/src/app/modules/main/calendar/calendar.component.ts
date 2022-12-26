@@ -29,12 +29,34 @@ export class CalendarComponent
     public journalEntryService: JournalEntryService
   ) {
     super(baseService, journalEntryService);
+
+    this.limit = 5;
+    this.sort = [
+      {
+        field: 'entryAt',
+        order: 'DESC',
+      },
+    ];
   }
 
   get selectedDayObj(): dayjs.Dayjs | null {
     if (!this.calendarMonth) return null;
     const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
     return dayjs(selectedDay.dayObject);
+  }
+
+  get isSelectedDayCurrentDay(): boolean {
+    const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
+    const currentDate = dayjs().date(dayjs().date());
+
+    if (
+      dayjs(selectedDay.dayObject).format('MM-DD-YYYY') ===
+      currentDate.format('MM-DD-YYYY')
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   async ngOnInit() {
@@ -44,7 +66,7 @@ export class CalendarComponent
       this.loadMonth(this.selectedMonthIndex);
 
       // select current day by default
-      this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth);
+      this.selectDay();
     });
   }
 
@@ -57,13 +79,28 @@ export class CalendarComponent
     logger.info('loadMonth(): currentMonth', this.calendarMonth);
   }
 
-  selectDay(day: CalendarDay) {
-    if (day.monthPosition === MonthPosition.Previous) {
+  // selects current day when no CalendarDay is passed in
+  async selectDay(day?: CalendarDay) {
+    if (day?.monthPosition === MonthPosition.Previous) {
       this.loadMonth(this.selectedMonthIndex - 1);
-    } else if (day.monthPosition === MonthPosition.Next) {
+    } else if (day?.monthPosition === MonthPosition.Next) {
       this.loadMonth(this.selectedMonthIndex + 1);
     }
 
     this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth, day);
+
+    const startOfDay = `${dayjs(this.selectedDayObj).format(
+      'YYYY-MM-DD'
+    )}T00:00:00.411Z`;
+
+    const endOfDay = `${dayjs(this.selectedDayObj).format(
+      'YYYY-MM-DD'
+    )}T23:59:59.411Z`;
+
+    this.staticFilters = {
+      '><entryAt': `${startOfDay},${endOfDay}`,
+    };
+
+    await this.fetchData();
   }
 }

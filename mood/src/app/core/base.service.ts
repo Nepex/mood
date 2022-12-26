@@ -80,7 +80,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
 
   /** Uses findAll, but only returns a number count. */
   async count(
-    filters: FilterOpts<MODEL>,
+    filters: FilterOpts<MODEL>[],
     stateProp?: AppStateKey
   ): Promise<number> {
     const query: FilterQueryOpts<MODEL> = {
@@ -93,7 +93,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
 
   /** Gets a record by filters. */
   async findOne(
-    filters: FilterOpts<MODEL>,
+    filters: FilterOpts<MODEL>[],
     stateProp?: AppStateKey
   ): Promise<MODEL> {
     const params = new HttpParams().set('filters', JSON.stringify(filters));
@@ -116,7 +116,7 @@ export abstract class BaseService<MODEL extends { uid?: string } = any> {
 
   /** Gets a record by UID. */
   async findByUid(uid: string, stateProp?: AppStateKey): Promise<MODEL> {
-    return await this.findOne({ uid } as MODEL, stateProp);
+    return await this.findOne([{ uid } as MODEL], stateProp);
   }
 
   /** Creates a record, or if a uid is present - updates the record. */
