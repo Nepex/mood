@@ -42,7 +42,7 @@ export class CalendarComponent
   get selectedDayObj(): dayjs.Dayjs | null {
     if (!this.calendarMonth) return null;
     const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
-    return dayjs(selectedDay.dayObject);
+    return dayjs(selectedDay?.dayObject);
   }
 
   get isSelectedDayCurrentDay(): boolean {
@@ -64,10 +64,10 @@ export class CalendarComponent
       // select current month by default
       this.selectedMonthIndex = dayjs().month();
       this.loadMonth(this.selectedMonthIndex);
-
-      // select current day by default
-      await this.selectDay();
     });
+
+    // select current day by default
+    await this.selectDay();
   }
 
   loadMonth(monthIndex: number) {

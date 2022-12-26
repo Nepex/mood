@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
+import { Subject, Subscription, throttleTime } from 'rxjs';
 import * as dayjs from 'dayjs';
 
 import { MenuItem as PngMenuItem } from 'primeng/api';
@@ -16,9 +16,20 @@ import { LayoutState } from 'src/app/shared/common/types';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent extends BaseController implements OnDestroy {
+  @ViewChild('navMenuItems', { static: false })
+  navMenuItems: any;
+  @ViewChild('addNavMenuItems', { static: false })
+  addNavMenuItems: any;
+
+  @HostListener('window:scroll', ['$event'])
+  handleWindowScroll() {
+    this.windowScrolledSubject.next(null);
+  }
+
   stateSub: Subscription;
   me: UserModel | undefined;
   layoutState: LayoutState | undefined;
+  windowScrolledSubject = new Subject();
 
   menuItems: PngMenuItem[] = [
     {
@@ -54,6 +65,19 @@ export class HeaderComponent extends BaseController implements OnDestroy {
       this.me = me;
       this.layoutState = layout;
     });
+  }
+
+  async ngAfterViewInit() {
+    // close menus on scroll
+    this.windowScrolledSubject
+      .asObservable()
+      .pipe(throttleTime(100, undefined, { trailing: true }))
+      .subscribe(() => {
+        this.navMenuItems.hide();
+        this.addNavMenuItems.hide();
+      });
+
+    this.windowScrolledSubject.next(null);
   }
 
   ngOnDestroy() {

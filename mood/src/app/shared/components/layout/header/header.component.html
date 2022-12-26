@@ -7,7 +7,6 @@
     <div class="header-left">
       <nav *ngIf="me">
         <i class="las la-bars" (click)="navMenuItems.toggle($event)"></i>
-        <p-menu #navMenuItems [popup]="true" [model]="menuItems"></p-menu>
       </nav>
     </div>
     <!-- End Header Left -->
@@ -24,9 +23,11 @@
     <div class="header-right">
       <nav *ngIf="me">
         <i class="las la-plus" (click)="addNavMenuItems.toggle($event)"></i>
-        <p-menu #addNavMenuItems [popup]="true" [model]="addMenuItems"></p-menu>
       </nav>
     </div>
     <!-- End Header Right-->
   </mood-container>
 </header>
+
+<p-menu #navMenuItems [popup]="true" [model]="menuItems"></p-menu>
+<p-menu #addNavMenuItems [popup]="true" [model]="addMenuItems"></p-menu>
