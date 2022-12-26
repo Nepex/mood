@@ -20,8 +20,6 @@ export class AuthService extends BaseService {
   static STORAGE_KEYS = { TOKEN: 'token' };
   session: Session | undefined;
 
-  test: string;
-
   constructor(
     public http: HttpClient,
     public store: StoreService,

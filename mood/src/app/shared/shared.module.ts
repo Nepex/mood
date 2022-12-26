@@ -14,6 +14,7 @@ import { FormValidationMsgsComponent } from './components/form-validation-msgs.c
 import { HeaderComponent } from './components/layout/header/header.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LoadSpinnerComponent } from './components/load-spinner.component';
+import { SafePipe } from './common/pipes/safe-html.pipe';
 
 const declarations = [
   ContainerComponent,
@@ -22,6 +23,7 @@ const declarations = [
   HeaderComponent,
   LayoutComponent,
   LoadSpinnerComponent,
+  SafePipe,
 ];
 
 @NgModule({

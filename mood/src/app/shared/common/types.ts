@@ -7,7 +7,11 @@ export enum NotifType {
 export interface LoadingOptions {
   successMessage?: string;
   suppressErrors?: boolean;
-  disableLoadingEmits?: boolean;
+  disableGlobalLoad?: boolean;
+}
+
+export interface ListLoadingOptions extends LoadingOptions {
+  loadDelay?: boolean;
 }
 
 export interface Option {

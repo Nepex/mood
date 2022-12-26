@@ -102,7 +102,12 @@ export class ManageJournalEntryComponent
         await this.journalEntryService.save(this.journalEntry);
         await this.baseService.router.navigateByUrl('/calendar');
       },
-      { disableLoadingEmits: true, successMessage: 'Successfully saved entry!' }
+      {
+        disableGlobalLoad: true,
+        successMessage: `Successfully ${
+          this.journalEntry.uid ? 'updated' : 'created'
+        } journal entry!`,
+      }
     );
   }
 }

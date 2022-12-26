@@ -1,6 +1,8 @@
 import {
   DynamicListFilters,
   FilterOpts,
+  ListLoadingOptions,
+  LoadingOptions,
   PagedResponse,
   SortOpts,
 } from '../types';
@@ -9,6 +11,7 @@ import { BaseController } from './base.controller';
 import { Logger } from '../logger';
 import { Paginator } from 'primeng/paginator';
 import { BaseControllerService } from './base.controller.service';
+import { Util } from '../util';
 
 const logger = new Logger('ListController');
 
@@ -45,6 +48,33 @@ export abstract class ListController<MODEL = any> extends BaseController {
     const filters = [baseFilter];
 
     return filters;
+  }
+
+  async handleListLoad(fn: any, options: ListLoadingOptions = {}) {
+    await super.handleLoad(
+      async () => {
+        this.isListLoading = true;
+        try {
+          if (options.loadDelay) {
+            await this.sleep(Util.SOFT_DELAY + 250);
+          }
+
+          await fn();
+          this.isListLoading = false;
+        } catch (err) {
+          this.isListLoading = false;
+          return Promise.reject(err);
+        }
+      },
+      { disableGlobalLoad: true, ...options }
+    );
+  }
+
+  async handleListUpdate(fn: any, options: ListLoadingOptions = {}) {
+    await this.handleListLoad(async () => {
+      await fn();
+      await this.fetchData();
+    }, options);
   }
 
   async fetchData() {

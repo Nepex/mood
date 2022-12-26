@@ -37,7 +37,7 @@ export class LoginComponent extends FormController<Credentials> {
         await this.sleep(Util.SOFT_DELAY);
         await this.handleRedirect();
       },
-      { disableLoadingEmits: true }
+      { disableGlobalLoad: true }
     );
   }
 

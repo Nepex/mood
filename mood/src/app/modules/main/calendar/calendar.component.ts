@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 
-import { BaseControllerService, ListController, Logger } from '@shared';
+import { BaseControllerService, ListController, Logger, Util } from '@shared';
 import { JournalEntryModel, JournalEntryService } from '@core';
 
 import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
@@ -30,7 +30,7 @@ export class CalendarComponent
   ) {
     super(baseService, journalEntryService);
 
-    this.limit = 5;
+    this.limit = 100;
     this.sort = [
       {
         field: 'entryAt',
@@ -66,7 +66,7 @@ export class CalendarComponent
       this.loadMonth(this.selectedMonthIndex);
 
       // select current day by default
-      this.selectDay();
+      await this.selectDay();
     });
   }
 
@@ -76,31 +76,57 @@ export class CalendarComponent
     }
 
     this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
-    logger.info('loadMonth(): currentMonth', this.calendarMonth);
   }
 
   // selects current day when no CalendarDay is passed in
   async selectDay(day?: CalendarDay) {
-    if (day?.monthPosition === MonthPosition.Previous) {
-      this.loadMonth(this.selectedMonthIndex - 1);
-    } else if (day?.monthPosition === MonthPosition.Next) {
-      this.loadMonth(this.selectedMonthIndex + 1);
-    }
+    await this.handleListLoad(
+      async () => {
+        if (day?.monthPosition === MonthPosition.Previous) {
+          this.loadMonth(this.selectedMonthIndex - 1);
+        } else if (day?.monthPosition === MonthPosition.Next) {
+          this.loadMonth(this.selectedMonthIndex + 1);
+        }
 
-    this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth, day);
+        // get day index reference off of calendarMonth
+        this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth, day);
 
-    const startOfDay = `${dayjs(this.selectedDayObj).format(
-      'YYYY-MM-DD'
-    )}T00:00:00.411Z`;
+        // set filters to pull journal entries for this day
+        const startOfDay = `${dayjs(this.selectedDayObj).format(
+          'YYYY-MM-DD'
+        )}T00:00:00.411Z`;
 
-    const endOfDay = `${dayjs(this.selectedDayObj).format(
-      'YYYY-MM-DD'
-    )}T23:59:59.411Z`;
+        const endOfDay = `${dayjs(this.selectedDayObj).format(
+          'YYYY-MM-DD'
+        )}T23:59:59.411Z`;
 
-    this.staticFilters = {
-      '><entryAt': `${startOfDay},${endOfDay}`,
-    };
+        this.staticFilters = {
+          '><entryAt': `${startOfDay},${endOfDay}`,
+        };
 
-    await this.fetchData();
+        await this.fetchData();
+      },
+      { loadDelay: true }
+    );
+  }
+
+  confirmDeleteEntry(event: Event, journalEntry: JournalEntryModel) {
+    this.baseService.confirmationService.confirm({
+      target: event.target as any,
+      message: 'Are you sure that you want to delete this entry?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: async () => {
+        await this.deleteEntry(journalEntry);
+      },
+    });
+  }
+
+  async deleteEntry(journalEntry: JournalEntryModel) {
+    await this.handleListUpdate(
+      async () => {
+        await this.journalEntryService.removeByUid(journalEntry.uid);
+      },
+      { successMessage: 'Successfully removed entry!', loadDelay: true }
+    );
   }
 }

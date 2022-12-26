@@ -54,7 +54,7 @@ export abstract class BaseController {
 
   /** Toggles input variables for loading spinners. */
   async toggleLoadingSpinner(isLoading: boolean, options: LoadingOptions) {
-    if (this.baseService && !options.disableLoadingEmits) {
+    if (this.baseService && !options.disableGlobalLoad) {
       const { loadingProcesses } = await this.baseService.store.get(
         AppStateKey.Layout
       );

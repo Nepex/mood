@@ -194,3 +194,15 @@
     border: none !important;
   }
 }
+
+// Pop Confirm
+.p-confirm-popup {
+  font-family: $FONT_PRIMARY;
+  box-shadow: none !important;
+
+  button {
+    color: $WHITE !important;
+    font-family: $FONT_PRIMARY;
+    font-size: 1rem !important;
+  }
+}

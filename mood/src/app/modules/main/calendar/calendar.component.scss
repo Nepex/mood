@@ -81,14 +81,12 @@
 }
 
 .mood-list {
+  position: relative;
   width: $SM_BREAKPOINT;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 2rem 0;
-
-  @media (max-width: $SM_BREAKPOINT) {
-    max-width: 100%;
-  }
+  padding: 2rem;
+  max-width: 100%;
+  min-height: 300px;
+  transition: 0.2s;
 
   .no-data {
     @include flex-center();
@@ -96,48 +94,94 @@
   }
 
   .mood-list-bubble {
-    margin: 0.5rem;
+    width: 100%;
+    margin: 1rem 0.5rem;
     padding: 1rem;
-    width: 47.5%;
     background: $DARK_GRAY_3;
     border-radius: 25px;
 
-    @media (max-width: $SM_BREAKPOINT) {
-      width: 100%;
-    }
-
-    .mood-list-bubble-dt {
+    .mood-list-bubble-header {
       display: flex;
-      justify-content: flex-end;
-      font-size: 0.9rem;
-    }
+      justify-content: space-between;
+      padding-bottom: 0.25rem;
 
-    .mood-list-entry {
-      padding: 1rem 0;
-    }
+      .mood-list-bubble-actions {
+        i {
+          @include actionable();
+          font-size: 1.5rem;
+          margin-right: 4px;
 
-    .mood-list-score {
-      .mood-score-container {
+          &:hover {
+            @include color-transition($WHITE, $PRIMARY_COLOR);
+          }
+        }
+      }
+      .mood-list-bubble-date-time {
         display: flex;
+        justify-content: flex-end;
+        font-size: 0.9rem;
+      }
+    }
 
-        .mood-score {
-          @include flex-center();
-          flex-direction: column;
-          padding: 0.5rem 0.2rem;
+    .mood-list-bubble-entry {
+      padding: 2rem 0;
+    }
 
-          .mood-score-bubble {
-            background: $DARK_GRAY_2;
-            border-radius: 50%;
-            width: 15px;
-            height: 15px;
-            margin-bottom: 5px;
+    .mood-list-bubble-footer {
+      padding-top: 0.25rem;
 
-            &.active {
-              background: $PRIMARY_COLOR_DARK;
-              transition: 0.2s;
+      .mood-list-bubble-footer-score {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .mood-score-container {
+          display: flex;
+          align-items: center;
+
+          .mood-score {
+            @include flex-center();
+            flex-direction: column;
+            padding: 0.5rem 0.2rem;
+
+            .mood-score-bubble {
+              @include flex-center();
+              background: $DARK_GRAY_2;
+              border-radius: 50%;
+              width: 15px;
+              height: 15px;
+
+              @media (max-width: $SM_BREAKPOINT) {
+                width: 10px;
+                height: 10px;
+              }
+
+              &.active {
+                background: $PRIMARY_COLOR_DARK;
+                transition: 0.2s;
+              }
             }
           }
         }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .mood-list-bubble {
+    .mood-list-bubble-entry {
+      ul,
+      ol {
+        padding-left: 1.5rem;
+      }
+
+      .ql-align-center {
+        text-align: center;
+      }
+
+      .ql-align-right {
+        text-align: right;
       }
     }
   }

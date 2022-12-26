@@ -63,44 +63,82 @@
 
   <!-- Start Mood List -->
   <section class="mood-list">
+    <!-- Start Mood List Loader -->
+    <mood-load-spinner
+      [loading]="isListLoading"
+      positionStyle="absolute"
+      size="sm"
+    ></mood-load-spinner>
+    <!-- End Mood List Loader -->
+
     <ng-container *ngIf="data?.length; else noData">
+      <!-- Start Journal Entry Bubbles -->
       <div class="mood-list-bubble" *ngFor="let journalEntry of data">
-        <div class="mood-list-bubble-dt">
-          {{
-            isSelectedDayCurrentDay ? "Today" : selectedDayObj?.format("MMM DD")
-          }}
-          at {{ journalEntry.entryAt | date : "hh:mm a" }}
+        <!-- Start Journal Entry Header -->
+        <div class="mood-list-bubble-header">
+          <div class="mood-list-bubble-actions">
+            <i
+              class="las la-edit"
+              pTooltip="Edit Entry"
+              routerLink="/entry/edit/{{ journalEntry.uid }}"
+            ></i>
+            <i
+              class="las la-trash-alt"
+              pTooltip="Delete Entry"
+              (click)="confirmDeleteEntry($event, journalEntry)"
+            ></i>
+            <p-confirmPopup></p-confirmPopup>
+          </div>
+
+          <div class="mood-list-bubble-date-time">
+            {{
+              isSelectedDayCurrentDay
+                ? "Today"
+                : selectedDayObj?.format("MMM DD")
+            }}
+            at {{ journalEntry.entryAt | date : "hh:mm a" }}
+          </div>
         </div>
+        <!-- End Journal Entry Header -->
 
+        <!-- Start Journal Entry -->
         <div
-          class="mood-list-entry"
+          class="mood-list-bubble-entry"
           *ngIf="journalEntry.entry"
-          [innerHTML]="journalEntry.entry"
+          [innerHTML]="journalEntry.entry | safe : 'html'"
         ></div>
+        <!-- End Journal Entry -->
 
-        <div class="mood-list-score">
-          Feeling: {{ journalEntry.mood }}
-          <br />
-          Mood Score:
+        <!-- Start Journal Footer -->
+        <div class="mood-list-bubble-footer">
+          <div *ngIf="journalEntry.mood" class="mb-1">
+            Feeling: {{ journalEntry.mood }}
+          </div>
 
-          <div class="mood-score-container">
-            <div
-              *ngFor="let bubble of [].constructor(10); let i = index"
-              class="mood-score"
-            >
+          <div class="mood-list-bubble-footer-score">
+            <span class="mr-2">Mood Score:</span>
+
+            <div class="mood-score-container">
               <div
-                class="mood-score-bubble"
-                [ngClass]="{
-                  active: i + 1 <= journalEntry.score
-                }"
-              ></div>
+                *ngFor="let bubble of [].constructor(10); let i = index"
+                class="mood-score"
+              >
+                <div
+                  class="mood-score-bubble"
+                  [ngClass]="{
+                    active: i + 1 <= journalEntry.score
+                  }"
+                ></div>
+              </div>
             </div>
           </div>
         </div>
+        <!-- End Journal Footer -->
       </div>
+      <!-- Start Journal Entry Bubbles -->
     </ng-container>
     <ng-template #noData>
-      <div class="no-data">No entries found</div>
+      <div class="no-data" *ngIf="!isListLoading">No entries found</div>
     </ng-template>
   </section>
   <!-- End Mood List -->
