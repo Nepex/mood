@@ -33,7 +33,7 @@
         *ngFor="let day of calendarMonth.days; let i = index"
         [ngClass]="{
           'not-current-month-calendar-day': day.monthPosition !== 'current',
-          selected: i === selectedDayIndex
+          selected: i === selectedDayIndex && !isCalendarLoading
         }"
         (click)="selectDay(day)"
         pRipple
@@ -44,22 +44,22 @@
       </div>
     </div>
     <!-- End Calendar Days -->
+
+    <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
+
+    <!-- Start Add Mood Button -->
+    <section class="my-4 w-full flex-center">
+      <button
+        pButton
+        type="button"
+        label="Log your mood!"
+        routerLink="/entry/create/{{ selectedDayObj?.format('MM-DD-YYYY') }}"
+        pRipple
+      ></button>
+    </section>
+    <!-- End Add Mood Button -->
   </section>
   <!-- End Calendar -->
-
-  <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
-
-  <!-- Start Add Mood Button -->
-  <section class="my-4 w-full flex-center">
-    <button
-      pButton
-      type="button"
-      label="Log your mood!"
-      routerLink="/entry/create/{{ selectedDayObj?.format('MM-DD-YYYY') }}"
-      pRipple
-    ></button>
-  </section>
-  <!-- End Add Mood Button -->
 
   <!-- Start Mood List -->
   <section class="mood-list">

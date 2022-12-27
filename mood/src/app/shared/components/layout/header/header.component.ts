@@ -71,7 +71,7 @@ export class HeaderComponent extends BaseController implements OnDestroy {
     // close menus on scroll
     this.windowScrolledSubject
       .asObservable()
-      .pipe(throttleTime(100, undefined, { trailing: true }))
+      .pipe(throttleTime(50, undefined, { trailing: true }))
       .subscribe(() => {
         this.navMenuItems.hide();
         this.addNavMenuItems.hide();
@@ -82,5 +82,6 @@ export class HeaderComponent extends BaseController implements OnDestroy {
 
   ngOnDestroy() {
     this.stateSub.unsubscribe();
+    this.windowScrolledSubject.unsubscribe();
   }
 }

@@ -60,6 +60,7 @@ export class LayoutComponent
 
   ngOnDestroy() {
     this.stateListener.unsubscribe();
+    this.windowViewChanged.unsubscribe();
   }
 
   setLayoutState() {

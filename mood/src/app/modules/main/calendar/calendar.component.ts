@@ -18,6 +18,7 @@ export class CalendarComponent
   extends ListController<JournalEntryModel>
   implements OnInit
 {
+  isCalendarLoading = false;
   calendarMonth: CalendarMonth;
   selectedMonthIndex: number;
   selectedDayIndex: number;
@@ -63,19 +64,24 @@ export class CalendarComponent
     await this.handleLoad(async () => {
       // select current month by default
       this.selectedMonthIndex = dayjs().month();
-      this.loadMonth(this.selectedMonthIndex);
+      await this.loadMonth(this.selectedMonthIndex);
     });
 
     // select current day by default
     await this.selectDay();
   }
 
-  loadMonth(monthIndex: number) {
-    if (this.selectedMonthIndex !== monthIndex) {
-      this.selectedMonthIndex = monthIndex;
-    }
+  async loadMonth(monthIndex: number) {
+    this.isCalendarLoading = true;
 
     this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
+
+    if (this.selectedMonthIndex !== monthIndex) {
+      this.selectedMonthIndex = monthIndex;
+      await this.selectDay();
+    }
+
+    this.isCalendarLoading = false;
   }
 
   // selects current day when no CalendarDay is passed in

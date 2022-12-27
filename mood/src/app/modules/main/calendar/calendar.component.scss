@@ -3,6 +3,7 @@
 
 .calendar {
   width: $SM_BREAKPOINT;
+  position: relative;
 
   @media (max-width: $SM_BREAKPOINT) {
     max-width: 100%;
