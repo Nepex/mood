@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   forwardRef,
   Get,
   Inject,
@@ -12,7 +13,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { FilterQueryOpts, KeyVals, Logger, PagedResponse, Util } from '../util';
+import {
+  FilterOpts,
+  FilterQueryOpts,
+  KeyVals,
+  Logger,
+  PagedResponse,
+  Util,
+} from '../util';
 import { JournalEntryEntity } from './journal-entry.entity';
 import { JournalEntryModel } from './journal-entry.model';
 import { JournalEntryService } from './journal-entry.service';
@@ -53,6 +61,15 @@ export class JournalEntryController {
     };
   }
 
+  @Get('find-one')
+  async findOne(
+    @Query() query: { filters: FilterOpts<JournalEntryModel> },
+  ): Promise<JournalEntryModel> {
+    const filters = JSON.parse(query.filters as string);
+    const journalEntry = await this.journalEntryService.findOne(filters);
+    return this.journalEntryService.toModel(journalEntry);
+  }
+
   @Post()
   async create(
     @Request() req: UserJwtPayload,
@@ -81,5 +98,19 @@ export class JournalEntryController {
 
     journalEntryEntity = await this.journalEntryService.save(payload);
     return this.journalEntryService.toModel(journalEntryEntity);
+  }
+
+  @Delete(':uid')
+  async remove(
+    @Request() req: UserJwtPayload,
+    @Param() params: { uid: string },
+  ) {
+    const journalEntryEntity = await this.journalEntryService.findByUid(
+      params.uid,
+    );
+
+    Util.validateExists(journalEntryEntity);
+    Util.validateUserSelfUpdate(req.user.id, journalEntryEntity.userId);
+    await this.journalEntryService.removeById(journalEntryEntity.id);
   }
 }

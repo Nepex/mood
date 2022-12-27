@@ -33,9 +33,17 @@ export class JournalEntryService extends BaseService<JournalEntryEntity> {
 
   async validate(entity: JournalEntryEntity) {
     console.log(entity);
-
     if (entity.entry) {
-      entity.entry = sanitizeHtml(entity.entry);
+      entity.entry = sanitizeHtml(entity.entry, {
+        allowedAttributes: {
+          p: ['style', 'class'],
+          span: ['style'],
+          li: ['style'],
+          strong: ['style'],
+          u: ['style'],
+          i: ['style'],
+        },
+      });
     }
 
     return entity;
