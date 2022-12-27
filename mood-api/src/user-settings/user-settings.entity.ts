@@ -3,12 +3,11 @@ import {
   Validate,
   IsDate,
   IsNumber,
-  IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { UidValidator } from '../util';
-import { ColorTheme } from './user-settings.model';
 
 @Entity('user_settings')
 export class UserSettingsEntity {
@@ -27,10 +26,10 @@ export class UserSettingsEntity {
   @IsOptional()
   userId: number;
 
-  @Column({ name: 'color_theme' })
+  @Column({ name: 'show_mood_scores_on_calendar' })
   @IsOptional()
-  @IsEnum(ColorTheme)
-  colorTheme: ColorTheme;
+  @IsBoolean()
+  showMoodScoresOnCalendar: boolean;
 
   @Column({ name: 'created_at' })
   @IsDate()
