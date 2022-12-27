@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Injector, Output } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StoreService } from '@core';

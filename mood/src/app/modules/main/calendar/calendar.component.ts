@@ -86,6 +86,7 @@ export class CalendarComponent
 
   // selects current day when no CalendarDay is passed in
   async selectDay(day?: CalendarDay) {
+    this.isCalendarLoading = true;
     await this.handleListLoad(
       async () => {
         if (day?.monthPosition === MonthPosition.Previous) {
@@ -114,6 +115,7 @@ export class CalendarComponent
       },
       { loadDelay: true }
     );
+    this.isCalendarLoading = false;
   }
 
   confirmDeleteEntry(event: Event, journalEntry: JournalEntryModel) {

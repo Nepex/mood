@@ -39,7 +39,7 @@ export class RegisterComponent extends FormController<
         await this.baseService.router.navigateByUrl('/');
       },
       {
-        successMessage: 'Account created successfully!',
+        successMessage: 'Welcome to Moooood!',
         disableGlobalLoad: true,
       }
     );

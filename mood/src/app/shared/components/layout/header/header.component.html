@@ -22,7 +22,12 @@
     <!-- Start Header Right -->
     <div class="header-right">
       <nav *ngIf="me">
-        <i class="las la-plus" (click)="addNavMenuItems.toggle($event)"></i>
+        <i
+          class="las la-plus"
+          [routerLink]="addMoodRouterLink"
+          pTooltip="Create Mood Entry"
+          tooltipPosition="left"
+        ></i>
       </nav>
     </div>
     <!-- End Header Right-->
@@ -30,4 +35,3 @@
 </header>
 
 <p-menu #navMenuItems [popup]="true" [model]="menuItems"></p-menu>
-<p-menu #addNavMenuItems [popup]="true" [model]="addMenuItems"></p-menu>

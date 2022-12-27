@@ -169,9 +169,6 @@
 }
 
 // Tooltip
-.p-tooltip-left {
-  padding-right: 2rem !important;
-}
 
 .p-tooltip-top,
 .p-tooltip-bottom {
@@ -185,7 +182,7 @@
 
   .p-tooltip-text {
     font-family: $FONT_PRIMARY;
-    background: transparentize($DARK_GRAY_3, 0.4) !important;
+    background: $DARK_GRAY_3 !important;
     font-size: 0.9rem;
     border: 1px solid transparentize($DARK_GRAY_3, 0.8);
   }

@@ -1,11 +1,6 @@
-export enum ColorTheme {
-  Light = 'light',
-  Dark = 'dark',
-}
-
 export class UserSettingsModel {
   uid: string;
-  colorTheme: ColorTheme;
+  showMoodScoresOnCalendar: boolean;
   createdTs: Date;
   updatedTs: Date;
 

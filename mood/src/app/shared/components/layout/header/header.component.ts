@@ -18,8 +18,6 @@ import { LayoutState } from 'src/app/shared/common/types';
 export class HeaderComponent extends BaseController implements OnDestroy {
   @ViewChild('navMenuItems', { static: false })
   navMenuItems: any;
-  @ViewChild('addNavMenuItems', { static: false })
-  addNavMenuItems: any;
 
   @HostListener('window:scroll', ['$event'])
   handleWindowScroll() {
@@ -51,7 +49,7 @@ export class HeaderComponent extends BaseController implements OnDestroy {
   addMenuItems: PngMenuItem[] = [
     {
       label: 'Create Mood Entry',
-      routerLink: `/entry/create/${dayjs().format('MM-DD-YYYY')}`,
+      routerLink: ``,
     },
   ];
 
@@ -67,6 +65,10 @@ export class HeaderComponent extends BaseController implements OnDestroy {
     });
   }
 
+  get addMoodRouterLink(): string {
+    return `/entry/create/${dayjs().format('MM-DD-YYYY')}`;
+  }
+
   async ngAfterViewInit() {
     // close menus on scroll
     this.windowScrolledSubject
@@ -74,7 +76,6 @@ export class HeaderComponent extends BaseController implements OnDestroy {
       .pipe(throttleTime(50, undefined, { trailing: true }))
       .subscribe(() => {
         this.navMenuItems.hide();
-        this.addNavMenuItems.hide();
       });
 
     this.windowScrolledSubject.next(null);
