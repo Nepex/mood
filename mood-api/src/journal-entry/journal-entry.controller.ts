@@ -70,6 +70,37 @@ export class JournalEntryController {
     return this.journalEntryService.toModel(journalEntry);
   }
 
+  @Get('average-mood-score-for-day')
+  async getAverageMoodScoreForDay(
+    @Request() req: UserJwtPayload,
+    @Query() query: { date: string },
+  ): Promise<number> {
+    const date = new Date(JSON.parse(query.date));
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const journalEntries = (await this.journalEntryService.findAll({
+      filters: [
+        {
+          userId: req.user.id,
+          '><entryAt': `${startOfDay.toISOString()},${endOfDay.toISOString()}`,
+        },
+      ],
+      fields: ['score'],
+    })) as JournalEntryEntity[];
+
+    const scores = journalEntries.map((entry) => entry.score);
+    const averageScore = scores.reduce(
+      (prev, next) => prev + next / scores.length,
+      0,
+    );
+
+    return +averageScore.toFixed(1);
+  }
+
   @Post()
   async create(
     @Request() req: UserJwtPayload,
