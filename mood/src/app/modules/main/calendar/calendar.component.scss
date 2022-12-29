@@ -132,6 +132,8 @@
     }
 
     .mood-list-bubble-entry {
+      overflow: hidden;
+      text-overflow: ellipsis;
       padding: 2rem 0;
     }
 

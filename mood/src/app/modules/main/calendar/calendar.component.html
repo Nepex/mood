@@ -47,6 +47,9 @@
     <!-- End Calendar Days -->
 
     <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
+    <div class="flex-center mt-2">
+      Avg. Score: {{ averageMoodScoreForDay || "--" }}
+    </div>
 
     <!-- Start Add Mood Button -->
     <section class="my-4 w-full flex-center">

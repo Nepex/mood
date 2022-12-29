@@ -14,7 +14,7 @@ import {
   PagedResponse,
   Util,
 } from '@shared';
-import { AppState, AppStateKey, StoreService } from './store.service';
+import { AppStateKey, StoreService } from './store.service';
 
 const logger = new Logger('BaseService');
 

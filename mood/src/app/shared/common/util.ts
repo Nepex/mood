@@ -112,6 +112,11 @@ export class Util {
     window.scrollTo(0, 0);
   }
 
+  /** Scroll browser to bottom */
+  static scrollToBottom() {
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
   /** Custom form validator for checking if control values match each other. */
   static matchValidator(
     matchTo: string // name of the control to match to

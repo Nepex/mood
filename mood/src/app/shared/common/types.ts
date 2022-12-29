@@ -89,6 +89,7 @@ export enum ErrorPageType {
 export interface LayoutState {
   isMobile: boolean | undefined;
   isScrolled: boolean | undefined;
+  isScrolledToBottom: boolean | undefined;
   colorTheme: ColorTheme;
   loadingProcesses: number;
   headerHeight: number;

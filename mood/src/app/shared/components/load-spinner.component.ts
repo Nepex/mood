@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { Util } from '../common/util';
 
@@ -11,6 +11,7 @@ import { Util } from '../common/util';
       *ngIf="loading"
       [ngStyle]="{ position: positionStyle }"
       [ngClass]="{ sm: size === 'sm' }"
+      [attr.zIndex]="zIndex || 9999"
     >
       <p-progressSpinner></p-progressSpinner>
     </div>
@@ -29,7 +30,6 @@ import { Util } from '../common/util';
           height: 100%;
           background: transparentize($DARK_GRAY, 0.5);
           backdrop-filter: blur(3px);
-          z-index: 9999;
 
           &.sm {
             .p-progress-spinner {
@@ -43,8 +43,16 @@ import { Util } from '../common/util';
   ],
   animations: [Util.getAni('fadeInOut')],
 })
-export class LoadSpinnerComponent {
+export class LoadSpinnerComponent implements OnChanges {
   @Input() loading: boolean;
   @Input() positionStyle: 'absolute' | 'fixed' = 'fixed';
   @Input() size: 'sm' | 'lg' = 'lg';
+
+  zIndex = 9999;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.positionStyle?.currentValue === 'absolute') {
+      this.zIndex = 1;
+    }
+  }
 }

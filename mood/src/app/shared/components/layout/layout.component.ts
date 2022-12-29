@@ -86,5 +86,18 @@ export class LayoutComponent
         isScrolled: false,
       });
     }
+
+    if (
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.body.scrollHeight
+    ) {
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isScrolledToBottom: true,
+      });
+    } else {
+      this.baseService.store.set(AppStateKey.Layout, <LayoutState>{
+        isScrolledToBottom: false,
+      });
+    }
   }
 }

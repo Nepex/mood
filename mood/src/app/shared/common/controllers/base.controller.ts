@@ -126,6 +126,11 @@ export abstract class BaseController {
     Util.scrollToTop();
   }
 
+  /** Scroll browser to bottom */
+  scrollToBottom() {
+    Util.scrollToBottom();
+  }
+
   /** Test if user has specified role */
   // hasRole(user: User, role: Role | any): boolean {
   //   if (!user) {

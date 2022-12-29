@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 
 import { BaseControllerService, ListController, Logger, Util } from '@shared';
@@ -6,6 +6,7 @@ import { JournalEntryModel, JournalEntryService } from '@core';
 
 import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
 import { CalendarUtil } from './utils';
+import { Subscription } from 'rxjs';
 
 const logger = new Logger('CalendarComponent');
 
@@ -16,12 +17,15 @@ const logger = new Logger('CalendarComponent');
 })
 export class CalendarComponent
   extends ListController<JournalEntryModel>
-  implements OnInit
+  implements OnInit, OnDestroy
 {
   isCalendarLoading = false;
+  stateSub: Subscription;
+
   calendarMonth: CalendarMonth;
   selectedMonthIndex: number;
   selectedDayIndex: number;
+  averageMoodScoreForDay: number;
 
   weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
 
@@ -31,7 +35,19 @@ export class CalendarComponent
   ) {
     super(baseService, journalEntryService);
 
-    this.limit = 100;
+    this.stateSub = this.baseService.store.state$.subscribe(() => {
+      if (
+        Math.ceil(window.innerHeight + window.scrollY) >=
+          document.body.scrollHeight &&
+        this.data &&
+        this.data.length < this.totalItems
+      ) {
+        void this.loadItemsOnScroll();
+      }
+    });
+
+    this.scrollTopOnRefresh = false;
+    this.limit = 5;
     this.sort = [
       {
         field: 'entryAt',
@@ -74,6 +90,10 @@ export class CalendarComponent
     );
   }
 
+  ngOnDestroy() {
+    this.stateSub.unsubscribe();
+  }
+
   selectMonth(monthIndex: number) {
     this.isCalendarLoading = true;
 
@@ -104,19 +124,25 @@ export class CalendarComponent
         });
 
         // set filters to pull journal entries for this day
-        const startOfDay = `${dayjs(this.selectedDayObj).format(
-          'YYYY-MM-DD'
-        )}T00:00:00.411Z`;
-
-        const endOfDay = `${dayjs(this.selectedDayObj).format(
-          'YYYY-MM-DD'
-        )}T23:59:59.411Z`;
+        const date = new Date(dayjs(this.selectedDayObj).format('MM-DD-YYYY'));
+        const startOfDay = new Date(date);
+        const endOfDay = new Date(date);
+        startOfDay.setUTCHours(0, 0, 0, 0);
+        endOfDay.setUTCHours(23, 59, 59, 999);
 
         this.staticFilters = {
-          '><entryAt': `${startOfDay},${endOfDay}`,
+          '><entryAt': `${startOfDay.toISOString()},${endOfDay.toISOString()}`,
         };
 
+        const res = await Promise.all([
+          this.fetchData(),
+          this.journalEntryService.getAverageMoodScoreForDay(
+            new Date((<dayjs.Dayjs>this.selectedDayObj).format('MM-DD-YYYY'))
+          ),
+        ]);
+
         await this.fetchData();
+        this.averageMoodScoreForDay = res[1];
       },
       { loadDelay: true }
     );
@@ -127,6 +153,16 @@ export class CalendarComponent
     return (
       dayjs().date(dayjs().date()).format('MM-DD-YYYY') ===
       day.dayObject.format('MM-DD-YYYY')
+    );
+  }
+
+  async loadItemsOnScroll() {
+    await this.handleListLoad(
+      async () => {
+        this.limit = this.limit + 5;
+        await this.fetchData();
+      },
+      { loadDelay: true }
     );
   }
 

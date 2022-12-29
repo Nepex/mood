@@ -50,13 +50,6 @@ export class HeaderComponent extends BaseController implements OnDestroy {
     },
   ];
 
-  addMenuItems: PngMenuItem[] = [
-    {
-      label: 'Create Mood Entry',
-      routerLink: ``,
-    },
-  ];
-
   constructor(
     public baseService: BaseControllerService,
     private readonly authService: AuthService,

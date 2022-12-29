@@ -23,6 +23,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
   totalPages = 0;
   scrollTopOnRefresh = true;
   isListLoading = false;
+  isLoadingData = false;
 
   sort: SortOpts<MODEL>[] | undefined;
   staticFilters: FilterOpts<MODEL> | undefined;
@@ -78,7 +79,8 @@ export abstract class ListController<MODEL = any> extends BaseController {
   }
 
   async fetchData() {
-    this.isListLoading = true;
+    if (this.isLoadingData) return;
+    this.isLoadingData = true;
 
     this.pagedResponse = await this.dataService.search({
       filters: this.filters,
@@ -99,7 +101,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
     }
 
     logger.info('fetchData(), data', this.data);
-    this.isListLoading = false;
+    this.isLoadingData = false;
   }
 
   async applyPageChange(pageNumber: number) {
@@ -111,7 +113,9 @@ export abstract class ListController<MODEL = any> extends BaseController {
     this.page = pageNumber;
     this.offset = pageNumber * this.limit;
 
-    await this.fetchData();
+    this.handleListLoad(async () => {
+      await this.fetchData();
+    });
   }
 
   async applyFilters() {
@@ -119,7 +123,9 @@ export abstract class ListController<MODEL = any> extends BaseController {
     this.offset = 0;
     this.pager?.changePage(0);
 
-    await this.fetchData();
+    this.handleListLoad(async () => {
+      await this.fetchData();
+    });
   }
 
   async applySort(field: keyof MODEL) {
@@ -136,6 +142,9 @@ export abstract class ListController<MODEL = any> extends BaseController {
     }
 
     this.sort[idx].order = order;
-    await this.fetchData();
+
+    this.handleListLoad(async () => {
+      await this.fetchData();
+    });
   }
 }
