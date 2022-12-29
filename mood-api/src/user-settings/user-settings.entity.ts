@@ -26,11 +26,6 @@ export class UserSettingsEntity {
   @IsOptional()
   userId: number;
 
-  @Column({ name: 'show_mood_scores_on_calendar' })
-  @IsOptional()
-  @IsBoolean()
-  showMoodScoresOnCalendar: boolean;
-
   @Column({ name: 'created_at' })
   @IsDate()
   @IsOptional()

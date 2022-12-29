@@ -11,9 +11,6 @@ export class UserSettingsModel {
   readonly uid: string;
 
   @Expose()
-  showMoodScoresOnCalendar: boolean;
-
-  @Expose()
   readonly createdAt: Date;
 
   @Expose()

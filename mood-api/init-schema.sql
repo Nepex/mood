@@ -45,7 +45,6 @@ create table public.user_settings (
 	id serial not null primary key,
 	uid varchar(32) not null default public.uid(),
 	user_id integer not null,
-	show_mood_scores_on_calendar boolean not null default false,
 	created_at timestamptz not null default CURRENT_TIMESTAMP,
 	updated_at timestamptz not null default CURRENT_TIMESTAMP,
 

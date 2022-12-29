@@ -39,7 +39,6 @@ export class JournalDaySettingsEntity {
   @IsOptional()
   notes: string;
 
-  @Column({ name: 'color' })
   @IsHexColor()
   @IsOptional()
   color: string;
