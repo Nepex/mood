@@ -1,6 +1,5 @@
 export class UserSettingsModel {
   uid: string;
-  showMoodScoresOnCalendar: boolean;
   createdTs: Date;
   updatedTs: Date;
 
