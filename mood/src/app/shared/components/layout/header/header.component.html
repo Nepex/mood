@@ -6,7 +6,19 @@
     <!-- Start Header Left -->
     <div class="header-left">
       <nav *ngIf="me">
-        <i class="las la-bars" (click)="navMenuItems.toggle($event)"></i>
+        <i
+          @fadeIn
+          *ngIf="baseService.router.url.includes('calendar')"
+          class="las la-bars"
+          (click)="navMenuItems.toggle($event)"
+        ></i>
+
+        <i
+          @fadeIn
+          *ngIf="!baseService.router.url.includes('calendar')"
+          class="las la-angle-left"
+          routerLink="/calendar"
+        ></i>
       </nav>
     </div>
     <!-- End Header Left -->
@@ -23,8 +35,10 @@
     <div class="header-right">
       <nav *ngIf="me">
         <i
+          @fadeIn
+          *ngIf="!baseService.router.url.includes('entry')"
           class="las la-plus"
-          [routerLink]="addMoodRouterLink"
+          routerLink="/entry"
           pTooltip="Create Mood Entry"
           tooltipPosition="left"
         ></i>

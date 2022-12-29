@@ -19,8 +19,8 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       { path: 'calendar', component: CalendarComponent },
-      { path: 'entry/create/:date', component: ManageJournalEntryComponent },
-      { path: 'entry/edit/:uid', component: ManageJournalEntryComponent },
+      { path: 'entry', component: ManageJournalEntryComponent },
+      { path: 'entry/:uid', component: ManageJournalEntryComponent },
     ],
   },
 ];

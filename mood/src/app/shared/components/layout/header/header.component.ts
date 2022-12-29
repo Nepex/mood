@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { Subject, Subscription, throttleTime } from 'rxjs';
-import * as dayjs from 'dayjs';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 import { MenuItem as PngMenuItem } from 'primeng/api';
 
@@ -14,6 +14,14 @@ import { LayoutState } from 'src/app/shared/common/types';
   selector: 'mood-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: '0' }),
+        animate('300ms ease-in', style({ opacity: '1.0' })),
+      ]),
+    ]),
+  ],
 })
 export class HeaderComponent extends BaseController implements OnDestroy {
   @ViewChild('navMenuItems', { static: false })
@@ -30,10 +38,6 @@ export class HeaderComponent extends BaseController implements OnDestroy {
   windowScrolledSubject = new Subject();
 
   menuItems: PngMenuItem[] = [
-    {
-      label: 'Calendar',
-      routerLink: `/calendar`,
-    },
     {
       label: 'Logout',
       command: async () => {
@@ -63,10 +67,6 @@ export class HeaderComponent extends BaseController implements OnDestroy {
       this.me = me;
       this.layoutState = layout;
     });
-  }
-
-  get addMoodRouterLink(): string {
-    return `/entry/create/${dayjs().format('MM-DD-YYYY')}`;
   }
 
   async ngAfterViewInit() {

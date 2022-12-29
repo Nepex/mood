@@ -26,6 +26,7 @@ export class ManageJournalEntryComponent
     mood: '',
     score: 0,
     entry: '',
+    entryAt: new Date(),
   });
   editor: any;
 
@@ -58,9 +59,7 @@ export class ManageJournalEntryComponent
 
   async ngOnInit() {
     await this.handleLoad(async () => {
-      if (this.route.snapshot.params.date) {
-        this.date = this.route.snapshot.params.date;
-      } else if (this.route.snapshot.params.uid) {
+      if (this.route.snapshot.params.uid) {
         // editting existing entry
         this.journalEntry = await this.journalEntryService.findByUid(
           this.route.snapshot.params.uid
@@ -71,15 +70,6 @@ export class ManageJournalEntryComponent
 
   onEditorCreated(e: any) {
     this.editor = e.editor;
-  }
-
-  dateWithCurrentTime(): Date {
-    const currentDate = new Date();
-    const dateString = `${dayjs(this.date).format('ddd, DD MMM YYYY')} ${dayjs(
-      currentDate
-    ).format('HH:mm:ss')} UTC`;
-
-    return new Date(dateString);
   }
 
   submitCustomMood() {
@@ -94,11 +84,6 @@ export class ManageJournalEntryComponent
   async submit() {
     await this.handleSubmit(
       async () => {
-        // assign a timestamp if creating a new entry
-        if (!this.journalEntry.uid) {
-          this.journalEntry.entryAt = this.dateWithCurrentTime();
-        }
-
         await this.journalEntryService.save(this.journalEntry);
         await this.baseService.router.navigateByUrl('/calendar');
       },

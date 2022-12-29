@@ -54,7 +54,7 @@
         pButton
         type="button"
         label="Log your mood!"
-        routerLink="/entry/create/{{ selectedDayObj?.format('MM-DD-YYYY') }}"
+        routerLink="/entry"
         pRipple
       ></button>
     </section>
@@ -81,7 +81,7 @@
             <i
               class="las la-edit"
               pTooltip="Edit Entry"
-              routerLink="/entry/edit/{{ journalEntry.uid }}"
+              routerLink="/entry/{{ journalEntry.uid }}"
             ></i>
             <i
               class="las la-trash-alt"
