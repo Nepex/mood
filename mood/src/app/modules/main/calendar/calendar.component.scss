@@ -70,10 +70,17 @@
         }
       }
 
+      &.current-date {
+        .calendar-day {
+          color: $WHITE;
+          background: $PRIMARY_COLOR_DARK !important;
+        }
+      }
+
       &.selected {
         .calendar-day {
           color: $WHITE;
-          background: $PRIMARY_COLOR_DARK;
+          background: lighten($DARK_GRAY_3, 5%);
           transition: 0.2s;
         }
       }

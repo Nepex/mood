@@ -61,42 +61,47 @@ export class CalendarComponent
   }
 
   async ngOnInit() {
-    await this.handleLoad(async () => {
-      // select current month by default
-      this.selectedMonthIndex = dayjs().month();
-      await this.loadMonth(this.selectedMonthIndex);
-    });
+    await this.handleLoad(
+      async () => {
+        // select current month by default
+        this.selectedMonthIndex = dayjs().month();
+        this.selectMonth(this.selectedMonthIndex);
 
-    // select current day by default
-    await this.selectDay();
+        // select current day by default
+        await this.selectDay({ loadCurrentDate: true });
+      },
+      { disableGlobalLoad: true }
+    );
   }
 
-  async loadMonth(monthIndex: number) {
+  selectMonth(monthIndex: number) {
     this.isCalendarLoading = true;
 
     this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
 
-    if (this.selectedMonthIndex !== monthIndex) {
-      this.selectedMonthIndex = monthIndex;
-      await this.selectDay();
-    }
-
+    this.selectedMonthIndex = monthIndex;
     this.isCalendarLoading = false;
   }
 
   // selects current day when no CalendarDay is passed in
-  async selectDay(day?: CalendarDay) {
+  async selectDay(args: { day?: CalendarDay; loadCurrentDate?: boolean }) {
     this.isCalendarLoading = true;
+    const { day, loadCurrentDate } = args;
+
     await this.handleListLoad(
       async () => {
         if (day?.monthPosition === MonthPosition.Previous) {
-          this.loadMonth(this.selectedMonthIndex - 1);
+          this.selectMonth(this.selectedMonthIndex - 1);
         } else if (day?.monthPosition === MonthPosition.Next) {
-          this.loadMonth(this.selectedMonthIndex + 1);
+          this.selectMonth(this.selectedMonthIndex + 1);
         }
 
         // get day index reference off of calendarMonth
-        this.selectedDayIndex = CalendarUtil.getDayIdx(this.calendarMonth, day);
+        this.selectedDayIndex = CalendarUtil.getDayIdx({
+          calendarMonth: this.calendarMonth,
+          calendarDay: day,
+          loadCurrentDate,
+        });
 
         // set filters to pull journal entries for this day
         const startOfDay = `${dayjs(this.selectedDayObj).format(
@@ -116,6 +121,13 @@ export class CalendarComponent
       { loadDelay: true }
     );
     this.isCalendarLoading = false;
+  }
+
+  isDateCurrentDate(day: CalendarDay): boolean {
+    return (
+      dayjs().date(dayjs().date()).format('MM-DD-YYYY') ===
+      day.dayObject.format('MM-DD-YYYY')
+    );
   }
 
   confirmDeleteEntry(event: Event, journalEntry: JournalEntryModel) {

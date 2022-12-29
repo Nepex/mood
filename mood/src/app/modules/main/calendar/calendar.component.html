@@ -5,14 +5,14 @@
     <div class="calendar-title-row">
       <i
         class="las la-angle-left"
-        (click)="loadMonth(selectedMonthIndex - 1)"
+        (click)="selectMonth(selectedMonthIndex - 1); selectDay({})"
       ></i>
 
       <h3>{{ calendarMonth.monthName }} {{ calendarMonth.yearNumber }}</h3>
 
       <i
         class="las la-angle-right"
-        (click)="loadMonth(selectedMonthIndex + 1)"
+        (click)="selectMonth(selectedMonthIndex + 1); selectDay({})"
       ></i>
     </div>
     <!-- End Calendar Title -->
@@ -33,9 +33,10 @@
         *ngFor="let day of calendarMonth.days; let i = index"
         [ngClass]="{
           'not-current-month-calendar-day': day.monthPosition !== 'current',
-          selected: i === selectedDayIndex && !isCalendarLoading
+          selected: i === selectedDayIndex && !isCalendarLoading,
+          'current-date': isDateCurrentDate(day)
         }"
-        (click)="selectDay(day)"
+        (click)="selectDay({ day })"
         pRipple
       >
         <div class="calendar-day">

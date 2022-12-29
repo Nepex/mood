@@ -68,12 +68,27 @@ export class CalendarUtil {
     return calendarMonth;
   }
 
-  static getDayIdx(
-    calendarMonth: CalendarMonth,
-    calendarDay?: CalendarDay
-  ): number {
-    // fall back to current date if no day is provided
-    const dayNumber = calendarDay?.dayNumber ?? dayjs().date();
+  static getDayIdx(args: {
+    calendarMonth: CalendarMonth;
+    calendarDay?: CalendarDay;
+    loadCurrentDate?: boolean;
+  }): number {
+    const { calendarMonth, calendarDay, loadCurrentDate } = args;
+    let dayNumber: number;
+
+    if (loadCurrentDate) {
+      // load today's date
+      dayNumber = dayjs().date();
+    } else if (calendarDay) {
+      // load provided calendarDay
+      dayNumber = calendarDay.dayNumber;
+    } else {
+      // load first day of month
+      return calendarMonth.days.findIndex(
+        (day) =>
+          day.dayNumber === 1 && day.monthPosition === MonthPosition.Current
+      );
+    }
 
     return calendarMonth.days.findIndex(
       (day) =>
