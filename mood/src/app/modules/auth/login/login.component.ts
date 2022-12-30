@@ -17,6 +17,7 @@ export class LoginComponent extends FormController<Credentials> {
     private readonly authService: AuthService
   ) {
     super(baseService);
+    this.setSEO({ title: 'Login' });
     this.form = loginForm();
 
     // If user is already logged in, redirect them

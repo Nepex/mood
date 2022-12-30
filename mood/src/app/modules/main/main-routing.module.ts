@@ -6,6 +6,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 
 import { MainComponent } from './main.component';
 import { ManageJournalEntryComponent } from './manage-journal-entry/manage-journal-entry.component';
+import { TrendsComponent } from './trends/trends.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
       { path: 'calendar', component: CalendarComponent },
       { path: 'entry', component: ManageJournalEntryComponent },
       { path: 'entry/:uid', component: ManageJournalEntryComponent },
+      { path: 'trends', component: TrendsComponent },
     ],
   },
 ];

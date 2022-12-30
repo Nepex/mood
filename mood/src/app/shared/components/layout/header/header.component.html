@@ -17,7 +17,7 @@
           @fadeIn
           *ngIf="!baseService.router.url.includes('calendar')"
           class="las la-angle-left"
-          routerLink="/calendar"
+          (click)="location.back()"
         ></i>
       </nav>
     </div>

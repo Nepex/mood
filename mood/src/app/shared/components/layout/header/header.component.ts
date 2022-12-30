@@ -9,6 +9,7 @@ import { BaseController } from '../../../common/controllers/base.controller';
 import { BaseControllerService } from '../../../common/controllers/base.controller.service';
 import { Util } from '../../../common/util';
 import { LayoutState } from 'src/app/shared/common/types';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'mood-header',
@@ -38,6 +39,7 @@ export class HeaderComponent extends BaseController implements OnDestroy {
   windowScrolledSubject = new Subject();
 
   menuItems: PngMenuItem[] = [
+    { label: 'Trends', routerLink: '/trends' },
     {
       label: 'Logout',
       command: async () => {
@@ -53,6 +55,7 @@ export class HeaderComponent extends BaseController implements OnDestroy {
   constructor(
     public baseService: BaseControllerService,
     private readonly authService: AuthService,
+    public location: Location,
     private readonly store: StoreService
   ) {
     super(baseService);

@@ -22,6 +22,7 @@ export class RegisterComponent extends FormController<
     private readonly authService: AuthService
   ) {
     super(baseService);
+    this.setSEO({ title: 'Register' });
     this.form = registerForm();
   }
 
