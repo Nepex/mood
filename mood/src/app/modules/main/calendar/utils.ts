@@ -96,4 +96,14 @@ export class CalendarUtil {
         day.monthPosition === MonthPosition.Current
     );
   }
+
+  static buildCurrentDayFilters(dayObj: dayjs.Dayjs): string {
+    const date = new Date(dayjs(dayObj).format('MM-DD-YYYY'));
+    const startOfDay = new Date(date);
+    const endOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    return `${startOfDay.toISOString()},${endOfDay.toISOString()}`;
+  }
 }

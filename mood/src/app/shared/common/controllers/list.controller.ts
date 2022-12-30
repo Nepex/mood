@@ -27,7 +27,13 @@ export abstract class ListController<MODEL = any> extends BaseController {
 
   sort: SortOpts<MODEL>[] | undefined;
   staticFilters: FilterOpts<MODEL> | undefined;
-  dynamicFilters: DynamicListFilters<MODEL> | undefined;
+  dynamicFilters: DynamicListFilters<MODEL> = {
+    textFilter: {
+      fields: [],
+      value: undefined,
+    },
+    selectFilters: [],
+  };
 
   pager: Paginator | undefined;
   pagedResponse: PagedResponse<MODEL> | undefined;
@@ -42,11 +48,38 @@ export abstract class ListController<MODEL = any> extends BaseController {
 
   get filters(): FilterOpts<MODEL>[] {
     if (!this.staticFilters && !this.dynamicFilters) return [];
-
+    const { textFilter, selectFilters } = this.dynamicFilters;
     const baseFilter = this.staticFilters ? { ...this.staticFilters } : {};
+    const filters = [];
 
-    // TODO: code in dynamic filters
-    const filters = [baseFilter];
+    if (!textFilter.value && !selectFilters.length) {
+      filters.push(baseFilter);
+      return filters;
+    }
+
+    if (textFilter.value) {
+      const fieldFilters = {} as any;
+
+      for (const field of textFilter.fields as string[]) {
+        fieldFilters[field] = textFilter.value;
+      }
+
+      filters.push({
+        ...baseFilter,
+        ...fieldFilters,
+      });
+    }
+
+    if (selectFilters.length) {
+      for (const selectFilter of selectFilters) {
+        if (selectFilter.value) {
+          filters.push({
+            ...baseFilter,
+            [selectFilter.field]: selectFilter.value,
+          });
+        }
+      }
+    }
 
     return filters;
   }
@@ -67,7 +100,7 @@ export abstract class ListController<MODEL = any> extends BaseController {
           return Promise.reject(err);
         }
       },
-      { disableGlobalLoad: true, ...options }
+      { disableGlobalLoad: options.disableGlobalLoad ?? true, ...options }
     );
   }
 

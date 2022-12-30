@@ -69,6 +69,10 @@
   box-shadow: 0 0 0 2px transparentize($color, 0.5);
 }
 
+@mixin boxshadow($color, $transparency) {
+  box-shadow: 0 0 0 2px transparentize($color, $transparency);
+}
+
 @mixin flex-center() {
   display: flex;
   justify-content: center;

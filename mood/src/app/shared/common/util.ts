@@ -163,6 +163,32 @@ export class Util {
           transition('show => hide', [animate('.25s')]),
           transition('hide => show', [animate('.25s')]),
         ]);
+      case 'transformOriginX':
+        return trigger('transformOriginX', [
+          state(
+            'show',
+            style({
+              opacity: 1,
+              transform: 'scaleX(1)',
+              'transform-origin': `${optionalStyle}`,
+              width: 'auto',
+            })
+          ),
+          state(
+            'hide',
+            style({
+              opacity: 0,
+              'transform-origin': `${optionalStyle}`,
+              transform: 'scaleX(0)',
+              width: '0',
+              display: 'block',
+              overflow: 'hidden',
+            })
+          ),
+          transition('show => hide', [animate('.4s ease')]),
+          transition('hide => show', [animate('.4s ease')]),
+        ]);
+
       default:
         return undefined;
     }

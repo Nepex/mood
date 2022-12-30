@@ -11,7 +11,7 @@ import { Util } from '../common/util';
       *ngIf="loading"
       [ngStyle]="{ position: positionStyle }"
       [ngClass]="{ sm: size === 'sm' }"
-      [attr.zIndex]="zIndex || 9999"
+      [attr.zIndex]="zIndex"
     >
       <p-progressSpinner></p-progressSpinner>
     </div>

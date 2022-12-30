@@ -1,7 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as dayjs from 'dayjs';
 
-import { BaseControllerService, ListController, Logger, Util } from '@shared';
+import {
+  BaseControllerService,
+  LayoutState,
+  ListController,
+  Logger,
+  Util,
+} from '@shared';
 import { JournalEntryModel, JournalEntryService } from '@core';
 
 import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
@@ -14,13 +20,14 @@ const logger = new Logger('CalendarComponent');
   selector: 'mood-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
+  animations: [Util.getAni('transformOriginX', 'right')],
 })
 export class CalendarComponent
   extends ListController<JournalEntryModel>
   implements OnInit, OnDestroy
 {
-  isCalendarLoading = false;
   stateSub: Subscription;
+  layoutState: LayoutState | undefined;
 
   calendarMonth: CalendarMonth;
   selectedMonthIndex: number;
@@ -28,6 +35,8 @@ export class CalendarComponent
   averageMoodScoreForDay: number;
 
   weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
+  isSearchMode = false;
+  searchTriggered = false;
 
   constructor(
     public baseService: BaseControllerService,
@@ -35,7 +44,9 @@ export class CalendarComponent
   ) {
     super(baseService, journalEntryService);
 
-    this.stateSub = this.baseService.store.state$.subscribe(() => {
+    this.stateSub = this.baseService.store.state$.subscribe(({ layout }) => {
+      this.layoutState = layout;
+
       if (
         Math.ceil(window.innerHeight + window.scrollY) >=
           document.body.scrollHeight &&
@@ -48,6 +59,14 @@ export class CalendarComponent
 
     this.scrollTopOnRefresh = false;
     this.limit = 5;
+    this.dynamicFilters = {
+      textFilter: {
+        value: '',
+        fields: ['%*entry'],
+      },
+      selectFilters: [],
+    };
+
     this.sort = [
       {
         field: 'entryAt',
@@ -62,18 +81,18 @@ export class CalendarComponent
     return dayjs(selectedDay?.dayObject);
   }
 
-  get isSelectedDayCurrentDay(): boolean {
-    const selectedDay = this.calendarMonth.days[this.selectedDayIndex];
-    const currentDate = dayjs().date(dayjs().date());
+  isDateCurrentDate(day: CalendarDay): boolean {
+    return (
+      dayjs().date(dayjs().date()).format('MM-DD-YYYY') ===
+      day.dayObject.format('MM-DD-YYYY')
+    );
+  }
 
-    if (
-      dayjs(selectedDay.dayObject).format('MM-DD-YYYY') ===
-      currentDate.format('MM-DD-YYYY')
-    ) {
-      return true;
-    }
-
-    return false;
+  isEntryCurrentDate(entryAt: Date): boolean {
+    return (
+      dayjs().date(dayjs().date()).format('MM-DD-YYYY') ===
+      dayjs(entryAt).format('MM-DD-YYYY')
+    );
   }
 
   async ngOnInit() {
@@ -86,7 +105,7 @@ export class CalendarComponent
         // select current day by default
         await this.selectDay({ loadCurrentDate: true });
       },
-      { disableGlobalLoad: true }
+      { disableGlobalLoad: !this.layoutState?.isMobile }
     );
   }
 
@@ -95,45 +114,33 @@ export class CalendarComponent
   }
 
   selectMonth(monthIndex: number) {
-    this.isCalendarLoading = true;
-
     this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
-
     this.selectedMonthIndex = monthIndex;
-    this.isCalendarLoading = false;
   }
 
   // selects current day when no CalendarDay is passed in
   async selectDay(args: { day?: CalendarDay; loadCurrentDate?: boolean }) {
-    this.isCalendarLoading = true;
     const { day, loadCurrentDate } = args;
+    this.limit = 5;
+
+    if (day?.monthPosition === MonthPosition.Previous) {
+      this.selectMonth(this.selectedMonthIndex - 1);
+    } else if (day?.monthPosition === MonthPosition.Next) {
+      this.selectMonth(this.selectedMonthIndex + 1);
+    }
+
+    // get day index reference off of calendarMonth
+    this.selectedDayIndex = CalendarUtil.getDayIdx({
+      calendarMonth: this.calendarMonth,
+      calendarDay: day,
+      loadCurrentDate,
+    });
+
+    // set filters to pull journal entries for this day
+    this.setSelectedDateFilters();
 
     await this.handleListLoad(
       async () => {
-        if (day?.monthPosition === MonthPosition.Previous) {
-          this.selectMonth(this.selectedMonthIndex - 1);
-        } else if (day?.monthPosition === MonthPosition.Next) {
-          this.selectMonth(this.selectedMonthIndex + 1);
-        }
-
-        // get day index reference off of calendarMonth
-        this.selectedDayIndex = CalendarUtil.getDayIdx({
-          calendarMonth: this.calendarMonth,
-          calendarDay: day,
-          loadCurrentDate,
-        });
-
-        // set filters to pull journal entries for this day
-        const date = new Date(dayjs(this.selectedDayObj).format('MM-DD-YYYY'));
-        const startOfDay = new Date(date);
-        const endOfDay = new Date(date);
-        startOfDay.setUTCHours(0, 0, 0, 0);
-        endOfDay.setUTCHours(23, 59, 59, 999);
-
-        this.staticFilters = {
-          '><entryAt': `${startOfDay.toISOString()},${endOfDay.toISOString()}`,
-        };
-
         const res = await Promise.all([
           this.fetchData(),
           this.journalEntryService.getAverageMoodScoreForDay(
@@ -141,19 +148,70 @@ export class CalendarComponent
           ),
         ]);
 
-        await this.fetchData();
         this.averageMoodScoreForDay = res[1];
       },
-      { loadDelay: true }
+      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
     );
-    this.isCalendarLoading = false;
   }
 
-  isDateCurrentDate(day: CalendarDay): boolean {
-    return (
-      dayjs().date(dayjs().date()).format('MM-DD-YYYY') ===
-      day.dayObject.format('MM-DD-YYYY')
+  setSelectedDateFilters() {
+    if (this.selectedDayObj) {
+      this.staticFilters = {
+        '><entryAt': CalendarUtil.buildCurrentDayFilters(this.selectedDayObj),
+      };
+    }
+  }
+
+  async triggerSearch() {
+    this.limit = 5;
+
+    if (!this.dynamicFilters.textFilter.value) {
+      await this.clearSearch();
+      this.searchTriggered = false;
+      return;
+    }
+
+    await this.handleListLoad(
+      async () => {
+        this.staticFilters = {};
+        await this.fetchData();
+        this.highlightSearchedTerms();
+        this.searchTriggered = true;
+      },
+      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
     );
+  }
+
+  async clearSearch() {
+    this.limit = 5;
+
+    if (!this.dynamicFilters.textFilter.value) {
+      return;
+    }
+
+    await this.handleListLoad(
+      async () => {
+        this.dynamicFilters.textFilter.value = '';
+        this.setSelectedDateFilters();
+        await this.fetchData();
+        this.searchTriggered = false;
+      },
+      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
+    );
+  }
+
+  highlightSearchedTerms() {
+    if (this.data) {
+      this.data = this.data.map((d) => {
+        return {
+          ...d,
+          entry: d.entry.replace(
+            new RegExp(this.dynamicFilters.textFilter.value, 'gi'),
+            `<b style="background-color: #a582e0; color: #fff">$&<\/b>`
+          ),
+        };
+      });
+    }
   }
 
   async loadItemsOnScroll() {
@@ -161,6 +219,10 @@ export class CalendarComponent
       async () => {
         this.limit = this.limit + 5;
         await this.fetchData();
+
+        if (this.searchTriggered) {
+          this.highlightSearchedTerms();
+        }
       },
       { loadDelay: true }
     );

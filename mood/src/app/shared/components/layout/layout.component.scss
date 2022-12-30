@@ -7,7 +7,6 @@
 
   .content {
     padding-top: calc($HEADER_HEIGHT + 2rem);
-    padding-bottom: 2rem;
     min-height: calc(100vh - $HEADER_HEIGHT);
     position: relative;
   }
