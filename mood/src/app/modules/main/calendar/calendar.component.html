@@ -46,6 +46,7 @@
     </div>
     <!-- End Calendar Days -->
 
+    <!-- Start Selected Day Title -->
     <ng-container *ngIf="!searchTriggered; else searchResults">
       <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
       <div class="flex-center mt-2">
@@ -55,9 +56,10 @@
     <ng-template #searchResults>
       <h3 class="mt-6">Search Results</h3>
     </ng-template>
+    <!-- End Selected Day Title -->
 
     <!-- Start Add Mood Button -->
-    <section class="my-4 w-full flex-center">
+    <div class="my-4 w-full flex-center">
       <button
         pButton
         type="button"
@@ -65,7 +67,7 @@
         routerLink="/entry"
         pRipple
       ></button>
-    </section>
+    </div>
     <!-- End Add Mood Button -->
   </section>
   <!-- End Calendar -->
@@ -144,21 +146,25 @@
         </div>
         <!-- End Journal Footer -->
       </div>
-      <!-- Start Journal Entry Bubbles -->
+      <!-- End Journal Entry Bubbles -->
     </ng-container>
+
+    <!-- Start No Data Display -->
     <ng-template #noData>
       <div class="no-data" *ngIf="!isListLoading">No entries found</div>
     </ng-template>
+    <!-- End No Data Display -->
   </section>
   <!-- End Mood List -->
 
+  <!-- Start Search -->
   <div class="search-btn-container">
     <div
       class="search-btn"
       (click)="
         isSearchMode = !isSearchMode; !isSearchMode ? clearSearch() : null
       "
-      [pTooltip]="isSearchMode ? 'Clear Search' : 'Search Moods'"
+      [pTooltip]="isSearchMode ? 'Clear Search' : 'Search All Moods'"
       pRipple
     >
       <i
@@ -182,4 +188,5 @@
       />
     </div>
   </div>
+  <!-- End Search -->
 </mood-container>

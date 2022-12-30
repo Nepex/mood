@@ -1,9 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Params, Router } from '@angular/router';
 
-import { AppStateKey } from '@core';
+import { AppStateKey, Role, UserModel } from '@core';
 import { BaseControllerService } from './base.controller.service';
-import { LayoutState, LoadingOptions, NotifType } from '../types';
+import {
+  DefaultSEOImgs,
+  LayoutState,
+  LoadingOptions,
+  NotifType,
+  SiteMetaDataOverrides,
+} from '../types';
 import { Logger } from '../logger';
 import { Util } from '../util';
 
@@ -81,6 +87,16 @@ export abstract class BaseController {
     );
   }
 
+  /** Sets SEO Meta data, if used, should be overwritten on a page by page basis */
+  setSEO(
+    seoOverrides: SiteMetaDataOverrides = {},
+    defaultImgs?: DefaultSEOImgs
+  ) {
+    if (this.baseService) {
+      this.baseService.seoService.setSEO(seoOverrides, defaultImgs);
+    }
+  }
+
   /** Parses slug to titlecase (test-string -> Test String). */
   slugToTitlecase(str: string): string {
     return Util.slugToTitlecase(str);
@@ -111,16 +127,6 @@ export abstract class BaseController {
     return Util.stripHtml(str);
   }
 
-  /** Called from component markup, emits on accepted */
-  // confirmPopOver(event: Event, uid: string, message?: string) {
-  //   this.baseService.confirmationService.confirm({
-  //     target: event.target,
-  //     message: message ?? 'Are you sure you want to do this?',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => this.baseService.popOverConfirmed.emit(uid),
-  //   });
-  // }
-
   /** Scroll browser to top */
   scrollToTop() {
     Util.scrollToTop();
@@ -132,11 +138,11 @@ export abstract class BaseController {
   }
 
   /** Test if user has specified role */
-  // hasRole(user: User, role: Role | any): boolean {
-  //   if (!user) {
-  //     return false;
-  //   }
+  hasRole(user: UserModel, role: Role): boolean {
+    if (!user) {
+      return false;
+    }
 
-  //   return user.roles.indexOf(role) > -1;
-  // }
+    return user.roles.indexOf(role) > -1;
+  }
 }

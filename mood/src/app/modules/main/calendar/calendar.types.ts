@@ -17,7 +17,6 @@ export interface CalendarDay {
   dayObject: dayjs.Dayjs;
   monthPosition: MonthPosition;
   settings?: JournalDaySettingsModel;
-  entries?: JournalEntryModel[];
 }
 
 export enum MonthPosition {

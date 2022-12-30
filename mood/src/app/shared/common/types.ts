@@ -1,3 +1,5 @@
+import { MetaDefinition } from '@angular/platform-browser';
+
 // Generic
 export enum NotifType {
   Success = 'success',
@@ -142,4 +144,26 @@ export interface MenuItem {
   url?: string;
   queryParams?: GenericObject;
   active?: boolean;
+}
+
+// SEO
+export interface SiteMetaDataOverrides {
+  description?: string;
+  lang?: string;
+  meta?: MetaDefinition[];
+  title?: string;
+  customImg?: string | null;
+}
+
+export interface SiteMetaData {
+  title: string;
+  siteUrl: string;
+  description: string;
+  author: string;
+  twitterUsername: string;
+}
+
+export interface DefaultSEOImgs {
+  ogImg?: any;
+  twitterImg?: any;
 }

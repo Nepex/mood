@@ -1,3 +1,4 @@
+import { JournalEntryModel } from '@core';
 import * as dayjs from 'dayjs';
 import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
 
@@ -5,8 +6,9 @@ dayjs.extend(require('dayjs/plugin/localeData'));
 
 export class CalendarUtil {
   static WEEKDAY_HEADER_LABELS: string[] = (<any>dayjs).weekdaysShort();
+  static DEFAULT_LIMIT = 5;
 
-  static createCalendarData(monthIndex: number): CalendarMonth {
+  static createCalendarMonthData(monthIndex: number): CalendarMonth {
     const previousMonth = this.getMonthData(
       monthIndex - 1,
       MonthPosition.Previous
@@ -105,5 +107,22 @@ export class CalendarUtil {
     endOfDay.setUTCHours(23, 59, 59, 999);
 
     return `${startOfDay.toISOString()},${endOfDay.toISOString()}`;
+  }
+
+  static highlightSearchedTerms(
+    data: JournalEntryModel[] | undefined,
+    term: string
+  ): JournalEntryModel[] {
+    if (!data) return [];
+
+    return data.map((d) => {
+      return {
+        ...d,
+        entry: d.entry.replace(
+          new RegExp(term, 'gi'),
+          `<b style="background-color: #a582e0; color: #fff">$&<\/b>`
+        ),
+      };
+    });
   }
 }

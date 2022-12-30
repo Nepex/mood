@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import * as dayjs from 'dayjs';
 
 import {
@@ -12,7 +13,6 @@ import { JournalEntryModel, JournalEntryService } from '@core';
 
 import { CalendarDay, CalendarMonth, MonthPosition } from './calendar.types';
 import { CalendarUtil } from './utils';
-import { Subscription } from 'rxjs';
 
 const logger = new Logger('CalendarComponent');
 
@@ -29,12 +29,12 @@ export class CalendarComponent
   stateSub: Subscription;
   layoutState: LayoutState | undefined;
 
+  weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
   calendarMonth: CalendarMonth;
   selectedMonthIndex: number;
   selectedDayIndex: number;
   averageMoodScoreForDay: number;
 
-  weekdayHeaderLabels = CalendarUtil.WEEKDAY_HEADER_LABELS;
   isSearchMode = false;
   searchTriggered = false;
 
@@ -43,7 +43,9 @@ export class CalendarComponent
     public journalEntryService: JournalEntryService
   ) {
     super(baseService, journalEntryService);
+    this.setSEO({ title: 'Calendar' });
 
+    this.scrollTopOnRefresh = false;
     this.stateSub = this.baseService.store.state$.subscribe(({ layout }) => {
       this.layoutState = layout;
 
@@ -57,8 +59,7 @@ export class CalendarComponent
       }
     });
 
-    this.scrollTopOnRefresh = false;
-    this.limit = 5;
+    this.limit = CalendarUtil.DEFAULT_LIMIT;
     this.dynamicFilters = {
       textFilter: {
         value: '',
@@ -98,11 +99,8 @@ export class CalendarComponent
   async ngOnInit() {
     await this.handleLoad(
       async () => {
-        // select current month by default
         this.selectedMonthIndex = dayjs().month();
         this.selectMonth(this.selectedMonthIndex);
-
-        // select current day by default
         await this.selectDay({ loadCurrentDate: true });
       },
       { disableGlobalLoad: !this.layoutState?.isMobile }
@@ -114,14 +112,13 @@ export class CalendarComponent
   }
 
   selectMonth(monthIndex: number) {
-    this.calendarMonth = CalendarUtil.createCalendarData(monthIndex);
+    this.calendarMonth = CalendarUtil.createCalendarMonthData(monthIndex);
     this.selectedMonthIndex = monthIndex;
   }
 
-  // selects current day when no CalendarDay is passed in
   async selectDay(args: { day?: CalendarDay; loadCurrentDate?: boolean }) {
+    this.limit = CalendarUtil.DEFAULT_LIMIT;
     const { day, loadCurrentDate } = args;
-    this.limit = 5;
 
     if (day?.monthPosition === MonthPosition.Previous) {
       this.selectMonth(this.selectedMonthIndex - 1);
@@ -136,8 +133,11 @@ export class CalendarComponent
       loadCurrentDate,
     });
 
-    // set filters to pull journal entries for this day
-    this.setSelectedDateFilters();
+    if (this.selectedDayObj) {
+      this.staticFilters = {
+        '><entryAt': CalendarUtil.buildCurrentDayFilters(this.selectedDayObj),
+      };
+    }
 
     await this.handleListLoad(
       async () => {
@@ -154,16 +154,8 @@ export class CalendarComponent
     );
   }
 
-  setSelectedDateFilters() {
-    if (this.selectedDayObj) {
-      this.staticFilters = {
-        '><entryAt': CalendarUtil.buildCurrentDayFilters(this.selectedDayObj),
-      };
-    }
-  }
-
   async triggerSearch() {
-    this.limit = 5;
+    this.limit = CalendarUtil.DEFAULT_LIMIT;
     window.scrollTo(0, 500);
 
     if (!this.dynamicFilters.textFilter.value) {
@@ -176,7 +168,10 @@ export class CalendarComponent
       async () => {
         this.staticFilters = {};
         await this.fetchData();
-        this.highlightSearchedTerms();
+        CalendarUtil.highlightSearchedTerms(
+          this.data,
+          this.dynamicFilters.textFilter.value
+        );
         this.searchTriggered = true;
       },
       { loadDelay: true }
@@ -184,36 +179,30 @@ export class CalendarComponent
   }
 
   async clearSearch() {
-    this.limit = 5;
-    window.scrollTo(0, 500);
-
     if (!this.dynamicFilters.textFilter.value) {
       return;
     }
 
+    this.limit = CalendarUtil.DEFAULT_LIMIT;
+    window.scrollTo(0, 500);
+
     await this.handleListLoad(
       async () => {
         this.dynamicFilters.textFilter.value = '';
-        this.setSelectedDateFilters();
+
+        if (this.selectedDayObj) {
+          this.staticFilters = {
+            '><entryAt': CalendarUtil.buildCurrentDayFilters(
+              this.selectedDayObj
+            ),
+          };
+        }
+
         await this.fetchData();
         this.searchTriggered = false;
       },
       { loadDelay: true }
     );
-  }
-
-  highlightSearchedTerms() {
-    if (this.data) {
-      this.data = this.data.map((d) => {
-        return {
-          ...d,
-          entry: d.entry.replace(
-            new RegExp(this.dynamicFilters.textFilter.value, 'gi'),
-            `<b style="background-color: #a582e0; color: #fff">$&<\/b>`
-          ),
-        };
-      });
-    }
   }
 
   async loadItemsOnScroll() {
@@ -223,7 +212,10 @@ export class CalendarComponent
         await this.fetchData();
 
         if (this.searchTriggered) {
-          this.highlightSearchedTerms();
+          CalendarUtil.highlightSearchedTerms(
+            this.data,
+            this.dynamicFilters.textFilter.value
+          );
         }
       },
       { loadDelay: true }
@@ -236,17 +228,13 @@ export class CalendarComponent
       message: 'Are you sure that you want to delete this entry?',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        await this.deleteEntry(journalEntry);
+        await this.handleListUpdate(
+          async () => {
+            await this.journalEntryService.removeByUid(journalEntry.uid);
+          },
+          { successMessage: 'Successfully removed entry!', loadDelay: true }
+        );
       },
     });
-  }
-
-  async deleteEntry(journalEntry: JournalEntryModel) {
-    await this.handleListUpdate(
-      async () => {
-        await this.journalEntryService.removeByUid(journalEntry.uid);
-      },
-      { successMessage: 'Successfully removed entry!', loadDelay: true }
-    );
   }
 }

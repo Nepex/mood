@@ -5,6 +5,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { StoreService } from '@core';
 
 import { Logger } from '../logger';
+import { SEOService } from '../services/seo.service';
 
 const logger = new Logger('BaseControllerService');
 
@@ -15,6 +16,7 @@ export class BaseControllerService {
   @Output() actionTriggered = new EventEmitter<any>();
   @Output() listRefreshed = new EventEmitter<boolean | undefined>();
 
+  seoService: SEOService;
   notificationService: MessageService;
   confirmationService: ConfirmationService;
   store: StoreService;
@@ -22,6 +24,7 @@ export class BaseControllerService {
   router: Router;
 
   constructor(public injector: Injector) {
+    this.seoService = this.injector.get(SEOService);
     this.notificationService = this.injector.get(MessageService);
     this.confirmationService = this.injector.get(ConfirmationService);
     this.store = this.injector.get(StoreService);

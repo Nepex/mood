@@ -55,6 +55,7 @@ export class ManageJournalEntryComponent
     private readonly route: ActivatedRoute
   ) {
     super(baseService);
+    this.setSEO({ title: 'Entry' });
   }
 
   async ngOnInit() {
