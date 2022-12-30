@@ -28,17 +28,14 @@ export class LoginComponent extends FormController<Credentials> {
 
   /** Validates user credentials, creates new session if valid, then redirects. */
   async attemptLogin() {
-    await this.handleSubmit(
-      async () => {
-        const { email, password } = this.form.getValues();
-        await this.authService.login({ email, password });
+    await this.handleSubmit(async () => {
+      const { email, password } = this.form.getValues();
+      await this.authService.login({ email, password });
 
-        logger.success('User authenticated!');
-        await this.sleep(Util.SOFT_DELAY);
-        await this.handleRedirect();
-      },
-      { disableGlobalLoad: true }
-    );
+      logger.success('User authenticated!');
+      await this.sleep(Util.SOFT_DELAY);
+      await this.handleRedirect();
+    });
   }
 
   /** Redirects user to appropriate screen depending on current registration step saved. */

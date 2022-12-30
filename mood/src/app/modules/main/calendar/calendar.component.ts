@@ -164,6 +164,7 @@ export class CalendarComponent
 
   async triggerSearch() {
     this.limit = 5;
+    window.scrollTo(0, 500);
 
     if (!this.dynamicFilters.textFilter.value) {
       await this.clearSearch();
@@ -178,12 +179,13 @@ export class CalendarComponent
         this.highlightSearchedTerms();
         this.searchTriggered = true;
       },
-      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
+      { loadDelay: true }
     );
   }
 
   async clearSearch() {
     this.limit = 5;
+    window.scrollTo(0, 500);
 
     if (!this.dynamicFilters.textFilter.value) {
       return;
@@ -196,7 +198,7 @@ export class CalendarComponent
         await this.fetchData();
         this.searchTriggered = false;
       },
-      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
+      { loadDelay: true }
     );
   }
 
