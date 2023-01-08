@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { EditorModule } from 'primeng/editor';
@@ -21,6 +22,7 @@ import { TrendsComponent } from './trends/trends.component';
 @NgModule({
   imports: [
     ButtonModule,
+    CalendarModule,
     ChartModule,
     CommonModule,
     ConfirmPopupModule,

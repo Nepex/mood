@@ -1,4 +1,4 @@
-export enum Emoji {}
+import { Emoji } from './journal-entry.types';
 
 export class JournalEntryModel {
   uid: string;

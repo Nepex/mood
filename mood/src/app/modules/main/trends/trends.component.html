@@ -2,6 +2,15 @@
   <section class="trends-container">
     <h3>Mood Trends</h3>
 
+    <div class="p-field">
+      <p-calendar
+        [(ngModel)]="monthFilter"
+        [readonlyInput]="true"
+        view="month"
+        dateFormat="mm-yy"
+      ></p-calendar>
+    </div>
+
     <p-chart type="line" [data]="data"></p-chart>
   </section>
 </mood-container>

@@ -2,13 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { JournalEntryModel, JournalEntryService } from '@core';
-import {
-  BaseController,
-  BaseControllerService,
-  FormController,
-  Logger,
-} from '@shared';
-import * as dayjs from 'dayjs';
+import { BaseControllerService, FormController, Logger } from '@shared';
 
 const logger = new Logger('ManageJournalEntryComponent');
 

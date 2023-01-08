@@ -1,14 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { JournalEntryService } from '@core';
+import { BaseController, BaseControllerService, Logger } from '@shared';
+
+const logger = new Logger('TrendsComponent');
 
 @Component({
   selector: 'mood-trends',
   templateUrl: './trends.component.html',
   styleUrls: ['./trends.component.scss'],
 })
-export class TrendsComponent {
+export class TrendsComponent extends BaseController implements OnInit {
   data: any;
+  monthFilter = new Date();
 
-  constructor() {
+  constructor(
+    public baseService: BaseControllerService,
+    private readonly journalEntryService: JournalEntryService
+  ) {
+    super(baseService);
+
     this.data = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
@@ -22,5 +32,22 @@ export class TrendsComponent {
         },
       ],
     };
+  }
+
+  async ngOnInit() {
+    await this.handleLoad(
+      async () => {
+        await this.loadMonthTrends();
+      },
+      { disableGlobalLoad: true }
+    );
+  }
+
+  async loadMonthTrends() {
+    const trendData = await this.journalEntryService.getTrendDataForMonth(
+      this.monthFilter
+    );
+
+    logger.info('loadMonthTrends(): trendData', trendData);
   }
 }

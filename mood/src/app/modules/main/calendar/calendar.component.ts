@@ -113,6 +113,7 @@ export class CalendarComponent
 
   selectMonth(monthIndex: number) {
     this.calendarMonth = CalendarUtil.createCalendarMonthData(monthIndex);
+    logger.debug('calendarMonth', this.calendarMonth);
     this.selectedMonthIndex = monthIndex;
   }
 
@@ -168,7 +169,7 @@ export class CalendarComponent
       async () => {
         this.staticFilters = {};
         await this.fetchData();
-        CalendarUtil.highlightSearchedTerms(
+        this.data = CalendarUtil.highlightSearchedTerms(
           this.data,
           this.dynamicFilters.textFilter.value
         );
@@ -212,7 +213,7 @@ export class CalendarComponent
         await this.fetchData();
 
         if (this.searchTriggered) {
-          CalendarUtil.highlightSearchedTerms(
+          this.data = CalendarUtil.highlightSearchedTerms(
             this.data,
             this.dynamicFilters.textFilter.value
           );

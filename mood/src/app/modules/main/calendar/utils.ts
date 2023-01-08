@@ -14,7 +14,7 @@ export class CalendarUtil {
       MonthPosition.Previous
     );
     const currentMonth = this.getMonthData(monthIndex, MonthPosition.Current);
-    const nextMonth = this.getMonthData(monthIndex, MonthPosition.Next);
+    const nextMonth = this.getMonthData(monthIndex + 1, MonthPosition.Next);
 
     // TODO: probably append day settings and entries to current month here
 

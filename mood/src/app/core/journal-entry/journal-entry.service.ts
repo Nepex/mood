@@ -11,6 +11,7 @@ import { Util } from '@shared';
 import { BaseService } from '../base.service';
 import { JournalEntryModel } from './journal-entry.model';
 import { StoreService } from '../store.service';
+import { DayTrendData } from './journal-entry.types';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,19 @@ export class JournalEntryService extends BaseService<JournalEntryModel> {
       const params = new HttpParams().set('date', JSON.stringify(date));
       const response = this.http.get<number>(
         `${this.baseUrl}/average-mood-score-for-day`,
+        { params }
+      );
+      return lastValueFrom(response);
+    } catch (error) {
+      throw new Error(Util.parseError(error as HttpErrorResponse));
+    }
+  }
+
+  async getTrendDataForMonth(date: Date): Promise<DayTrendData[]> {
+    try {
+      const params = new HttpParams().set('date', JSON.stringify(date));
+      const response = this.http.get<DayTrendData[]>(
+        `${this.baseUrl}/trend-data-for-month`,
         { params }
       );
       return lastValueFrom(response);

@@ -8,8 +8,9 @@ export * from './auth/auth.model';
 export * from './journal-day-settings/journal-day-settings.service';
 export * from './journal-day-settings/journal-day-settings.model';
 
-export * from './journal-entry/journal-entry.service';
 export * from './journal-entry/journal-entry.model';
+export * from './journal-entry/journal-entry.service';
+export * from './journal-entry/journal-entry.types';
 
 export * from './user-roles/user-roles.model';
 export * from './user-roles/user-roles.service';
