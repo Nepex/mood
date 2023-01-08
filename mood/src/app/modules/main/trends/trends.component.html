@@ -2,15 +2,27 @@
   <section class="trends-container">
     <h3>Mood Trends</h3>
 
-    <div class="p-field">
+    <div class="p-field mt-4">
+      Month:
       <p-calendar
         [(ngModel)]="monthFilter"
         [readonlyInput]="true"
         view="month"
         dateFormat="mm-yy"
+        (ngModelChange)="loadMonthTrends()"
       ></p-calendar>
     </div>
 
-    <p-chart type="line" [data]="data"></p-chart>
+    <section class="chart-container mt-4">
+      <!-- Start Mood List Loader -->
+      <mood-load-spinner
+        [loading]="isLoading"
+        positionStyle="absolute"
+        size="sm"
+      ></mood-load-spinner>
+      <!-- End Mood List Loader -->
+
+      <p-chart type="line" [data]="data" [options]="options"></p-chart>
+    </section>
   </section>
 </mood-container>

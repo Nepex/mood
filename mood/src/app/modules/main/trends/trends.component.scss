@@ -4,5 +4,31 @@
 .trends-container {
   @include flex-center();
   flex-direction: column;
-  width: 500px;
+  width: 100%;
+
+  @media (min-width: $XL_BREAKPOINT) {
+    padding: 0 2rem;
+  }
+
+  @media (max-width: $SM_BREAKPOINT) {
+    max-width: 100%;
+  }
+
+  .chart-container {
+    position: relative;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+::ng-deep {
+  .trends-container {
+    .chart-container {
+      canvas {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
+  }
 }

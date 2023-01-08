@@ -1,8 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { JournalEntryService } from '@core';
-import { BaseController, BaseControllerService, Logger } from '@shared';
+import { BaseController, BaseControllerService, Logger, Util } from '@shared';
 
 const logger = new Logger('TrendsComponent');
+
+type ChartData = {
+  labels: string[];
+  datasets: {
+    label?: string;
+    data: number[];
+    tension?: number;
+    borderColor?: string;
+  }[];
+};
 
 @Component({
   selector: 'mood-trends',
@@ -10,7 +20,27 @@ const logger = new Logger('TrendsComponent');
   styleUrls: ['./trends.component.scss'],
 })
 export class TrendsComponent extends BaseController implements OnInit {
-  data: any;
+  data: ChartData;
+  options = {
+    scales: {
+      y: {
+        min: 0,
+        max: 10,
+        ticks: {
+          color: '#d3dadd',
+        },
+      },
+      x: {
+        ticks: {
+          color: '#d3dadd',
+          stepSize: 1,
+        },
+      },
+    },
+    plugins: {
+      legend: false,
+    },
+  };
   monthFilter = new Date();
 
   constructor(
@@ -18,36 +48,42 @@ export class TrendsComponent extends BaseController implements OnInit {
     private readonly journalEntryService: JournalEntryService
   ) {
     super(baseService);
-
-    this.data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'First Dataset',
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-        {
-          label: 'Second Dataset',
-          data: [28, 48, 40, 19, 86, 27, 90],
-        },
-      ],
-    };
   }
 
   async ngOnInit() {
-    await this.handleLoad(
-      async () => {
-        await this.loadMonthTrends();
-      },
-      { disableGlobalLoad: true }
-    );
+    await this.loadMonthTrends();
   }
 
   async loadMonthTrends() {
-    const trendData = await this.journalEntryService.getTrendDataForMonth(
-      this.monthFilter
-    );
+    await this.handleLoad(
+      async () => {
+        await this.sleep(Util.SOFT_DELAY);
+        const trendData = await this.journalEntryService.getTrendDataForMonth(
+          this.monthFilter
+        );
 
-    logger.info('loadMonthTrends(): trendData', trendData);
+        logger.info('loadMonthTrends(): trendData', trendData);
+
+        const data: ChartData = {
+          labels: [],
+          datasets: [
+            {
+              label: 'Score',
+              data: [],
+              tension: 0.4,
+              borderColor: '#C2ABEA',
+            },
+          ],
+        };
+
+        for (const dayData of trendData) {
+          data.labels.push(dayData.dayNumber.toString());
+          data.datasets[0].data.push(dayData.score);
+        }
+
+        this.data = data;
+      },
+      { disableGlobalLoad: true }
+    );
   }
 }

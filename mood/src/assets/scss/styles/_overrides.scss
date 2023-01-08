@@ -203,3 +203,24 @@
     font-size: 1rem !important;
   }
 }
+
+// Datepicker
+.p-datepicker,
+.p-datepicker-header {
+  color: $TEXT_COLOR !important;
+  background: $DARK_GRAY_3 !important;
+
+  .p-ink {
+    background: transparentize($WHITE, 0.6) !important;
+  }
+
+  .p-element,
+  span,
+  button {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: $TEXT_COLOR !important;
+    background: $DARK_GRAY_3 !important;
+  }
+}
