@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm';
 
-import { Emoji } from './journal-entry.model';
+import { Emoji } from './journal-entry.types';
 import { UidValidator } from '../util';
 
 @Entity('journal_entry')

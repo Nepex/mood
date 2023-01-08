@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-
-export enum Emoji {}
+import { Emoji } from './journal-entry.types';
 
 @Exclude()
 export class JournalEntryModel {

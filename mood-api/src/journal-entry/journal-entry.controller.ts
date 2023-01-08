@@ -12,6 +12,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import * as dayjs from 'dayjs';
 
 import {
   FilterOpts,
@@ -21,6 +22,7 @@ import {
   PagedResponse,
   Util,
 } from '../util';
+import { DayTrendData } from './journal-entry.types';
 import { JournalEntryEntity } from './journal-entry.entity';
 import { JournalEntryModel } from './journal-entry.model';
 import { JournalEntryService } from './journal-entry.service';
@@ -76,29 +78,45 @@ export class JournalEntryController {
     @Query() query: { date: string },
   ): Promise<number> {
     const date = new Date(JSON.parse(query.date));
-    const startOfDay = new Date(date);
-    startOfDay.setUTCHours(0, 0, 0, 0);
+    return await this.journalEntryService.getAverageMoodScoreForDay(
+      date,
+      req.user.id,
+    );
+  }
 
-    const endOfDay = new Date(date);
-    endOfDay.setUTCHours(23, 59, 59, 999);
+  @Get('trend-data-for-month')
+  async getTrendDataForMonth(
+    @Request() req: UserJwtPayload,
+    @Query() query: { date: string },
+  ): Promise<DayTrendData[]> {
+    const date = new Date(JSON.parse(query.date));
+    const monthTrendData: DayTrendData[] = [];
 
-    const journalEntries = (await this.journalEntryService.findAll({
-      filters: [
-        {
-          userId: req.user.id,
-          '><entryAt': `${startOfDay.toISOString()},${endOfDay.toISOString()}`,
-        },
-      ],
-      fields: ['score'],
-    })) as JournalEntryEntity[];
+    // get scores for each day in parallel
+    const daysInMonth = dayjs(dayjs(date)).daysInMonth();
+    await Promise.all(
+      [...Array(daysInMonth).keys()].map(async (val: any, i: number) => {
+        const dayDate = new Date(
+          dayjs(date)
+            .date(i + 1)
+            .format('MM-DD-YYYY'),
+        );
 
-    const scores = journalEntries.map((entry) => entry.score);
-    const averageScore = scores.reduce(
-      (prev, next) => prev + next / scores.length,
-      0,
+        const score = await this.journalEntryService.getAverageMoodScoreForDay(
+          dayDate,
+          req.user.id,
+        );
+
+        monthTrendData.push({
+          dayNumber: i + 1,
+          score: score ?? 0,
+          dayObject: dayjs(date).date(i),
+        });
+      }),
     );
 
-    return +averageScore.toFixed(1);
+    // make sure to sort by day number before sending back
+    return monthTrendData.sort((a, b) => a.dayNumber - b.dayNumber);
   }
 
   @Post()

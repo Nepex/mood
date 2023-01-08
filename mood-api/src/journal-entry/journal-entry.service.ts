@@ -32,7 +32,6 @@ export class JournalEntryService extends BaseService<JournalEntryEntity> {
   }
 
   async validate(entity: JournalEntryEntity) {
-    console.log(entity);
     if (entity.entry) {
       entity.entry = sanitizeHtml(entity.entry, {
         allowedAttributes: {
@@ -47,5 +46,31 @@ export class JournalEntryService extends BaseService<JournalEntryEntity> {
     }
 
     return entity;
+  }
+
+  async getAverageMoodScoreForDay(date: Date, userId: number): Promise<number> {
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const journalEntries = (await this.findAll({
+      filters: [
+        {
+          userId: userId,
+          '><entryAt': `${startOfDay.toISOString()},${endOfDay.toISOString()}`,
+        },
+      ],
+      fields: ['score'],
+    })) as JournalEntryEntity[];
+
+    const scores = journalEntries.map((entry) => entry.score);
+    const averageScore = scores.reduce(
+      (prev, next) => prev + next / scores.length,
+      0,
+    );
+
+    return +averageScore.toFixed(1);
   }
 }
