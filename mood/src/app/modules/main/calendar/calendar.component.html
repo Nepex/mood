@@ -49,8 +49,9 @@
     <!-- Start Selected Day Title -->
     <ng-container *ngIf="!searchTriggered; else searchResults">
       <h3 class="mt-6">{{ selectedDayObj?.format("MMM DD, YYYY") }}</h3>
-      <div class="flex-center mt-2">
-        Avg. Score: {{ averageMoodScoreForDay || "--" }}
+      <div class="selected-day-meta-data">
+        <span>Entries: {{ totalItems || 0 }}</span>
+        <span>Avg. Score: {{ averageMoodScoreForDay || 0 }}</span>
       </div>
     </ng-container>
     <ng-template #searchResults>

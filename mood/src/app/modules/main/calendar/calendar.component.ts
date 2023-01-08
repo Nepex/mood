@@ -103,7 +103,7 @@ export class CalendarComponent
         this.selectMonth(this.selectedMonthIndex);
         await this.selectDay({ loadCurrentDate: true });
       },
-      { disableGlobalLoad: !this.layoutState?.isMobile }
+      { disableGlobalLoad: true }
     );
   }
 
@@ -151,7 +151,7 @@ export class CalendarComponent
 
         this.averageMoodScoreForDay = res[1];
       },
-      { loadDelay: true, disableGlobalLoad: !this.layoutState?.isMobile }
+      { loadDelay: true, disableGlobalLoad: true }
     );
   }
 

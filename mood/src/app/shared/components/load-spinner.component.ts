@@ -28,7 +28,7 @@ import { Util } from '../common/util';
           left: 0;
           width: 100%;
           height: 100%;
-          background: transparentize($DARK_GRAY, 0.5);
+          background: transparentize($OFF_BLACK, 0.95);
           backdrop-filter: blur(3px);
 
           &.sm {

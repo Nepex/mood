@@ -88,6 +88,25 @@
   }
 }
 
+.selected-day-meta-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+
+  span {
+    margin: 0 1rem;
+  }
+
+  @media (max-width: $SM_BREAKPOINT) {
+    flex-direction: column;
+    span {
+      margin: 0.25rem 1rem;
+    }
+  }
+}
+
 .mood-list {
   position: relative;
   width: $SM_BREAKPOINT;
