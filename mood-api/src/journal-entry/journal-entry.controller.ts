@@ -110,7 +110,7 @@ export class JournalEntryController {
         monthTrendData.push({
           dayNumber: i + 1,
           score: score ?? 0,
-          dateString: dayjs(dayDate).date(i),
+          dateString: dayjs(dayDate).date(i).toISOString(),
         });
       }),
     );
